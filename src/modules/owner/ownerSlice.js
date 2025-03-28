@@ -1,24 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { shopPayload } from "./shopPayload";
+import { ownerPayload } from "./ownerPayload";
 
-const shopSlice = createSlice({
-    name: 'shop',
+const ownerSlice = createSlice({
+    name: 'discount',
     initialState: {
-        shops: [],
-        shop: null,
-        paginateParams: shopPayload.paginateParams
+        owners: [],
+        owner: null,
+        paginateParams : ownerPayload.paginateParams,
+        total : 0
     },
     reducers: {
         index: (state, action) => {
-            state.shops = action.payload;
+            state.owners = action.payload;
             return state;
         },
         update: (state, action) => {
-            state.shop = action.payload;
+            state.owner = action.payload;
             return state;
         },
         show: (state, action) => {
-            state.shop = action.payload;
+            state.owner = action.payload;
             return state;
         },
         setPaginate: (state, action) => {
@@ -28,5 +29,5 @@ const shopSlice = createSlice({
     }
 });
 
-export const { index, update, show, setPaginate } = shopSlice.actions;
-export default shopSlice.reducer;
+export const { index, update, show, setPaginate } = ownerSlice.actions;
+export default ownerSlice.reducer;

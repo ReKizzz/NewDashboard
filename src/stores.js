@@ -11,7 +11,6 @@ import pointSlice from "./modules/point/pointSlice";
 import orderSlice from "./modules/order/orderSlice";
 import faqSlice from "./modules/faq/faqSlice";
 import regionSlice from "./modules/region/regionSlice";
-import shopSlice from "./modules/shop/shopSlice";
 import dashboardSlice from "./modules/dashboard/dashboardSlice";
 import authorizationSlice from "./modules/authorization/authorizationSlice";
 import settingSlice from "./modules/setting/settingSlice";
@@ -22,7 +21,8 @@ import memberOrderSlice from "./modules/memberOrder/memberOrderSlice";
 import countrySlice from "./modules/country/countrySlice";
 import regionAndStateSlice from "./modules/regionAndState/regionAndStateSlice";
 import citySlice from "./modules/city/citySlice";
-import townshipSlice from "./modules/township/townshipSlice";
+import ownerSlice from "./modules/owner/ownerSlice"
+import ownerAccSlice from "./modules/ownerAccCreate/ownerAccSlice"
 
 export const stores = configureStore({
    reducer: {
@@ -38,7 +38,6 @@ export const stores = configureStore({
     order: orderSlice,
     faq: faqSlice,
     region: regionSlice,
-    shop: shopSlice,
     dashboard: dashboardSlice,
     auth : authorizationSlice,
     setting: settingSlice,
@@ -49,7 +48,8 @@ export const stores = configureStore({
     country: countrySlice,
     regionAndState: regionAndStateSlice,
     city: citySlice,
-    township: townshipSlice
+    owner: ownerSlice,
+    ownerAcc: ownerAccSlice
    },
    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
       serializableCheck: false

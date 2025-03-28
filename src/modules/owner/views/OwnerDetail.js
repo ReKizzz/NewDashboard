@@ -1,8 +1,8 @@
 import React from 'react'
 import { BreadCrumb } from '../../../shares/BreadCrumb';
-import CategoryUpdate from '../entry/CategoryUpdate';
+import { OwnerUpdate } from '../entry/OwnerUpdate';
 
-const CategoryDetail = () => {
+const OwnerDetail = () => {
 
   return (
     <div className=' grid'>
@@ -11,12 +11,12 @@ const CategoryDetail = () => {
             <BreadCrumb />
         </div>
 
-        <div className=' col-12'>
-            <CategoryUpdate />
+        <div className='col-12'>
+            <OwnerUpdate />
         </div>
 
     </div>
   )
 }
 
-export default CategoryDetail
+export default OwnerDetail

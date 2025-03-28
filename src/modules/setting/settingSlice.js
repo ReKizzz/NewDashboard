@@ -4,7 +4,7 @@ import en from "../../assets/i18n/en.json";
 import mm from "../../assets/i18n/mm.json";
 import cn from "../../assets/i18n/cn.json";
 
-const getDefaultLanguage = defaultLanguage.code.toLowerCase()
+const getDefaultLanguage = defaultLanguage.code?.toLowerCase()
 const settingSlice = createSlice({
     name: 'setting',
     initialState: {

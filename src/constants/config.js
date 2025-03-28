@@ -6,7 +6,7 @@ const paginatorLeft = <Button type="button" icon="pi pi-refresh" text />;
 
 export const env = [
     'http://localhost:8000',
-    'https://api.gscexport.com',
+    'http://127.0.0.1:8000/api',
 ];
 
 export const paginateOptions = {

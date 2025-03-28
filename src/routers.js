@@ -13,7 +13,6 @@ import { pointRoutes } from "./modules/point/pointRoutes";
 import { orderRoutes } from "./modules/order/orderRoutes";
 import { faqRoutes } from "./modules/faq/faqRoutes";
 import { regionRoutes } from "./modules/region/regionRoutes";
-import { shopRoutes } from "./modules/shop/shopRoutes";
 import { categoryRoutes } from "./modules/category/categoryRoutes";
 import { dashbardRoutes } from "./modules/dashboard/dashboardRoutes";
 import { authorizationRoute } from "./modules/authorization/authorizationRoute";
@@ -25,7 +24,8 @@ import { memberOrderRoutes } from "./modules/memberOrder/memberOrderRoute";
 import { countryRoutes } from "./modules/country/countryRoutes";
 import { regionAndStateRoutes } from "./modules/regionAndState/regionAndStateRoutes";
 import { cityRoutes } from "./modules/city/cityRoutes";
-import { townshipRoutes } from "./modules/township/townshipRoutes";
+import { ownerRoutes } from "./modules/owner/ownerRoute";
+import { ownerAccRoutes } from "./modules/ownerAccCreate/ownerAccRoutes";
 
 export const routers = createBrowserRouter([
     {
@@ -45,7 +45,6 @@ export const routers = createBrowserRouter([
             ...orderRoutes,
             ...faqRoutes,
             ...regionRoutes,
-            ...shopRoutes,
             ...discountRoutes,
             ...memberCardRoutes,
             ...memberRoutes,
@@ -55,7 +54,8 @@ export const routers = createBrowserRouter([
             ...countryRoutes,
             ...regionAndStateRoutes,
             ...cityRoutes,
-            ...townshipRoutes
+            ...ownerRoutes,
+            ...ownerAccRoutes
         ]
     },
     {

@@ -2,6 +2,18 @@ export const paths = {
 
     dashboard: "/dashboard",
 
+    ownerList: "/owner-list",
+    ownerCreate: "/owner-create",
+    ownerAccCreate: "/owner-acc-create",
+    cornerCreate: "/corner-create",
+    cityCreate: "/city-create",
+    townshipCreate: "/township-create",
+    wardCreate: "/ward-create",
+    streetCreate: "/street-create",
+    wifiCreate: "/wifi-create",
+    landCreate: "/land-create",
+    renterCreate: "/renter-create",
+
     admin: "/admin",
     adminCreate: "/admin/new",
     adminLogout: "/auth/login",
@@ -9,14 +21,6 @@ export const paths = {
     country: "/country",
     countryCreate: "/country/new",
     countryDetail: "/country/:id",
-
-    city: "/city",
-    cityCreate: "/city/new",
-    cityDetail: "/city/:id",
-
-    township: "/township",
-    townshipCreate: "/township/new",
-    townshipDetail: "/township/:id",
 
     regionAndState: "/regionAndState",
     regionAndStateCreate: "/regionAndState/new",

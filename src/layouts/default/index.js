@@ -21,7 +21,7 @@ export const DefaultLayout = () => {
 
     const authRedirect = useCallback(async () => {
         if(token && location.pathname === '/') {
-            navigate('/dashboard');
+            navigate('/category');
         }
 
         if(!token) {
@@ -38,15 +38,19 @@ export const DefaultLayout = () => {
             { token && (
                 <PrimeReactProvider value={layoutOptions}>
                     <Notification />
-                    <div className="wrapper">
-                        <AppToolbar />
-                        <div className='app-container'>
-                        <AppSidebar />
-                            <div className='app-content'>
-                                <Outlet />
-                            </div>
+                    
+                         <div className="grid">
+                        {/* Sidebar - Takes 2 columns */}
+                       
+                            <AppSidebar />
+                        
+
+                        {/* Main Content - Takes 10 columns */}
+                        <div className="col-10">
+                            <Outlet />
                         </div>
                     </div>
+                        
                 </PrimeReactProvider>
             )}
         </>

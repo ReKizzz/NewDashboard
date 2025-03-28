@@ -5,7 +5,7 @@ import { baseURL } from './endpoints';
 
 
 const http = axios.create({
-    baseURL: `${baseURL}/dashboard`
+    baseURL: `${baseURL}`
 });
 
 http.interceptors.request.use(

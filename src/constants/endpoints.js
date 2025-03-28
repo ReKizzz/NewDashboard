@@ -38,5 +38,6 @@ export const endpoints = {
     exportCategory : 'export-category',
     exportOrder : 'export-order',
     exportShop : 'export-shop',
-    exportUser : 'export-user'
+    exportUser : 'export-user',
+    owner : 'ownerdata'
 }
