@@ -697,33 +697,50 @@ h1,h2,h3,h4,h5,h6{
     border-radius: 50%;
 }
 .custom-data-table {
-    background-color: #f8f9fa !important; /* Light background */
-    color: #333 !important; /* Dark text */
+    background-color: #f8f9fa !important;
+    color: #333 !important;
+    height: 55vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.custom-data-table .p-datatable-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 100%;
 }
 
 .custom-data-table .p-datatable-header {
-    background-color: #1c6ff3 !important; /* Blue header */
+    background-color: #1c6ff3 !important;
     color: white !important;
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
 
 .custom-data-table .p-datatable-thead > tr > th {
-    background-color: #1c6ff3 !important; /* Darker blue for table headers */
+    background-color: #1c6ff3 !important;
     color: white !important;
     border-bottom: 2px solid #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
 .custom-data-table .p-datatable-tbody > tr {
-    background-color: #ffffff !important; /* Row background */
+    background-color: #ffffff !important; 
     color: #000 !important;
 }
 
 .custom-data-table .p-datatable-tbody > tr:nth-child(even) {
-    background-color: #f2f2f2 !important; /* Alternate row color */
+    background-color: #f2f2f2 !important;
 }
 
 .custom-data-table .p-datatable-tbody > tr:hover {
-    background-color: #cce5ff !important; /* Hover effect */
+    background-color: #cce5ff !important;
 }
+
+
 .ownerCreateButton {
     background-color: #1c6ff3;
     border: none;

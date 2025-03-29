@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { ownerAccPayload } from '../ownerAccPayload';
-import { ownerAccService } from '../ownerAccService';
+import { townshipPayload } from '../townshipPayload';
+import { townshipService } from '../townshipService';
 import { Card } from 'primereact/card';
 import { ValidationMessage } from '../../../shares/ValidationMessage';
 import { InputText } from 'primereact/inputtext';
@@ -11,10 +11,10 @@ import { tooltipOptions } from '../../../constants/config';
 import { paths } from '../../../constants/paths';
 import { formBuilder } from '../../../helpers/formBuilder';
 
-const OwnerAccCreate = () => {
+const TownshipCreate = () => {
 
     const [loading, setLoading] = useState(false);
-    const [payload, setPayload] = useState(ownerAccPayload.create);
+    const [payload, setPayload] = useState(townshipPayload.create);
     const { translate } = useSelector(state => state.setting);
     
 
@@ -24,11 +24,11 @@ const OwnerAccCreate = () => {
     const submitCreateOwner = async () => {
         setLoading(true);
         
-        const formData = formBuilder(payload, ownerAccPayload.create);
-        const result = await ownerAccService.store(formData, dispatch);
+        const formData = formBuilder(payload, townshipPayload.create);
+        const result = await townshipService.store(formData, dispatch);
 
         if (result.status === 200) {
-            navigate(`${paths.ownerAcc}/${result.data.id}`);
+            navigate(`${paths.township}/${result.data.id}`);
         }
 
         setLoading(false);
@@ -38,11 +38,11 @@ const OwnerAccCreate = () => {
         <div className='col-4'>
             <Card>
                 <div className=" py-3">
-                            <label htmlFor="email" className='input-label text-black'>{translate.owner} <span>(required*)</span> </label>
+                            <label htmlFor="email" className='input-label text-black'>{translate.township} <span>(required*)</span> </label>
                             <div className="p-inputgroup mt-2">
                             <InputText 
                                 id="owner-acc"
-                                name="ownerAcc"
+                                name="township"
                                 autoComplete="off"
                                 className="p-inputtext-sm"
                                 keyfilter="alpha"
@@ -57,7 +57,7 @@ const OwnerAccCreate = () => {
                             />
 
                             </div>
-                            <ValidationMessage field="ownerAcc" />
+                            <ValidationMessage field="township" />
                         </div>
                         <button className='ownerCreateButton' onClick={submitCreateOwner} disabled={loading}>
                             {loading ? "Submitting..." : translate.create}
@@ -68,4 +68,4 @@ const OwnerAccCreate = () => {
     )
 }
 
-export default OwnerAccCreate
+export default TownshipCreate

@@ -40,5 +40,13 @@ export const endpoints = {
     exportShop : 'export-shop',
     exportUser : 'export-user',
     owner : 'ownerdata',
-    ownerAcc: 'owner'
+    ownerAcc: 'owner',
+    corner: 'corner',
+    city: 'city',
+    township: 'township',
+    ward: 'ward',
+    street: 'street',
+    wifi: 'wifi',
+    land: 'land',
+    renter: 'renter'
 }

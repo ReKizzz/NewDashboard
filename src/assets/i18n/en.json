@@ -197,18 +197,38 @@
     "township_list" : "Township List",
     "township_create" : "Township Create",
     "township_update" : "Township Update",
+    "ward": "Ward",
+    "ward_list": "Ward List",
+    "ward_update": "Ward Update",
+    "street": "Street",
+    "street_list": "Street List",
+    "street_update": "Street Update",
     "cover_photo": "Cover photo",
     "log_out": "Log Out",
     "owner_list": "Owner List",
     "owner_acc_list": "Owner Account List",
     "owner_acc_update": "Owner Account Update",
     "owner": "Owner",
+
     "renter": "Renter",
     "renter_list": "Renter List",
+    "renter_update": "Renter Update",
+
     "wifi": "Wifi",
     "wifi_list": "Wifi List",
+    "wifi_update": "Wifi Update",
+
+    "land": "Land",
+    "land_list": "Land List",
+    "land_update": "Land Update",
+
     "meter": "Meter",
     "meter_list": "Meter List",
+
+    "corner": "Corner",
+    "corner_list": "Corner List",
+    "corner_update": "Corner Update",
+
     "menu_owners_create": "Owners",
     "menu_corners_create": "Corners",
     "menu_cities_create": "Cities",

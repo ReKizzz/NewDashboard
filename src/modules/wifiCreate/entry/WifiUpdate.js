@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { ownerAccPayload } from '../ownerAccPayload';
+import { wifiPayload } from '../wifiPayload';
 import { Card } from 'primereact/card';
 import { InputText } from 'primereact/inputtext';
 import { tooltipOptions } from '../../../constants/config';
@@ -7,18 +7,18 @@ import { payloadHandler } from '../../../helpers/handler';
 import { ValidationMessage } from '../../../shares/ValidationMessage';
 import { Button } from 'primereact/button';
 import { paths } from '../../../constants/paths';
-import { ownerAccService } from '../ownerAccService';
+import { wifiService } from '../wifiService';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loading } from '../../../shares/Loading';
 import { formBuilder } from '../../../helpers/formBuilder';
 
-const OwnerAccUpdate = () => {
+const WifiUpdate = () => {
 
     const { translate } = useSelector((state) => state.setting);
     const params = useParams();
     const [loading, setLoading] = useState(false);
-    const [payload, setPayload] = useState(ownerAccPayload.update);
+    const [payload, setPayload] = useState(wifiPayload.update);
     const { owner } = useSelector((state) => state.owner);
     console.log(owner,"acc")
     const dispatch = useDispatch();
@@ -26,7 +26,7 @@ const OwnerAccUpdate = () => {
 
     const loadingData = useCallback(async () => {
             setLoading(true);
-            await ownerAccService.show(dispatch, params.id);
+            await wifiService.show(dispatch, params.id);
             setLoading(false);
         }, [params.id, dispatch])
     
@@ -40,16 +40,16 @@ const OwnerAccUpdate = () => {
         }
     }, [owner])
 
-    const submitUpdateownerAcc = async () => {
+    const submitUpdatewifi = async () => {
         setLoading(true);
-        const formData = formBuilder(payload, ownerAccPayload.update);
-        await ownerAccService.update(dispatch, payload?.id, formData);
+        const formData = formBuilder(payload, wifiPayload.update);
+        await wifiService.update(dispatch, payload?.id, formData);
         setLoading(false);
     }
 
     return (
         <Card
-            title={translate.owner_acc_update}
+            title={translate.wifi_update}
         >
             <Loading loading={loading} />
 
@@ -61,9 +61,9 @@ const OwnerAccUpdate = () => {
                             className="p-inputtext-sm text-black"
                             id="name"
                             aria-describedby="title-help"
-                            tooltip='ownerAcc name'
+                            tooltip='wifi name'
                             tooltipOptions={{ ...tooltipOptions }}
-                            placeholder='Enter ownerAcc name'
+                            placeholder='Enter wifi name'
                             disabled={loading}
                             value={payload.name ? payload.name : ""}
                             onChange={(e) => payloadHandler(payload, e.target.value, 'name', (updateValue) => {
@@ -83,7 +83,7 @@ const OwnerAccUpdate = () => {
                             outlined
                             size='small'
                             disabled={loading}
-                            onClick={() => navigate(paths.ownerAccCreate)}
+                            onClick={() => navigate(paths.wifiCreate)}
                         />
 
                         <Button
@@ -92,7 +92,7 @@ const OwnerAccUpdate = () => {
                             severity="danger"
                             size='small'
                             disabled={loading}
-                            onClick={() => submitUpdateownerAcc()}
+                            onClick={() => submitUpdatewifi()}
                         />
                     </div>
                 </div>
@@ -102,4 +102,4 @@ const OwnerAccUpdate = () => {
     )
 }
 
-export default OwnerAccUpdate;
+export default WifiUpdate;

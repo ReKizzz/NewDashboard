@@ -6,25 +6,27 @@ import { Login } from "./modules/auth/entry/Login";
 import { promotionRoutes } from "./modules/promotion/promotionRoutes";
 import { userRoutes } from "./modules/user/userRoutes";
 import { adminRoutes } from "./modules/admin/adminRoutes";
-import { itemRoutes } from "./modules/item/itemRoutes";
 import { deliveryRoutes } from "./modules/delivery/deliveryRoutes";
 import { mediaRoutes } from "./modules/media/mediaRoute";
-import { pointRoutes } from "./modules/point/pointRoutes";
 import { orderRoutes } from "./modules/order/orderRoutes";
-import { faqRoutes } from "./modules/faq/faqRoutes";
-import { regionRoutes } from "./modules/region/regionRoutes";
 import { categoryRoutes } from "./modules/category/categoryRoutes";
 import { dashbardRoutes } from "./modules/dashboard/dashboardRoutes";
 import { authorizationRoute } from "./modules/authorization/authorizationRoute";
 import { settingRoutes } from "./modules/setting/settingRoutes";
 import { discountRoutes } from "./modules/discount/discountRoutes";
-import { memberCardRoutes } from "./modules/memberCard/memberCardRoute";
 import { memberOrderRoutes } from "./modules/memberOrder/memberOrderRoute";
 import { countryRoutes } from "./modules/country/countryRoutes";
 import { regionAndStateRoutes } from "./modules/regionAndState/regionAndStateRoutes";
-import { cityRoutes } from "./modules/city/cityRoutes";
 import { ownerRoutes } from "./modules/owner/ownerRoute";
 import { ownerAccRoutes } from "./modules/ownerAccCreate/ownerAccRoutes";
+import { cornerRoutes } from "./modules/cornerCreate/cornerRoutes";
+import { cityRoutes } from "./modules/cityCreate/cityRoutes";
+import { townshipRoutes } from "./modules/townshipCreate/townshipRoutes";
+import { wardRoutes } from "./modules/wardCreate/wardRoutes";
+import { streetRoutes } from "./modules/streetCreate/streetRoutes";
+import { wifiRoutes } from "./modules/wifiCreate/wifiRoutes";
+import { landRoutes } from "./modules/landCreate/landRoutes";
+import { renterRoutes } from "./modules/renterCreate/renterRoutes";
 
 export const routers = createBrowserRouter([
     {
@@ -37,23 +39,25 @@ export const routers = createBrowserRouter([
             ...userRoutes,
             ...adminRoutes,
             ...categoryRoutes,
-            ...itemRoutes,
             ...deliveryRoutes,
             ...mediaRoutes,
-            ...pointRoutes,
             ...orderRoutes,
-            ...faqRoutes,
-            ...regionRoutes,
             ...discountRoutes,
-            ...memberCardRoutes,
             ...memberOrderRoutes,
             ...authorizationRoute,
             ...settingRoutes,
             ...countryRoutes,
             ...regionAndStateRoutes,
-            ...cityRoutes,
             ...ownerRoutes,
-            ...ownerAccRoutes
+            ...ownerAccRoutes,
+            ...cornerRoutes,
+            ...cityRoutes,
+            ...townshipRoutes,
+            ...wardRoutes,
+            ...streetRoutes,
+            ...wifiRoutes,
+            ...landRoutes,
+            ...renterRoutes
         ]
     },
     {

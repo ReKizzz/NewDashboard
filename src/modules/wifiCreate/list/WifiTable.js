@@ -1,21 +1,21 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ownerAccPayload } from "../ownerAccPayload";
-import OwnerAccCreate from "../entry/OwnerAccCreate";
-import { ownerAccService } from "../ownerAccService";
+import { wifiPayload } from "../wifiPayload";
+import WifiCreate from "../entry/WifiCreate";
+import { wifiService } from "../wifiService";
 import { Button } from "primereact/button";
 import { DataTable } from "primereact/datatable";
 import { paginateOptions } from "../../../constants/config";
 import { Column } from "primereact/column";
 import { paths } from "../../../constants/paths";
 import { Card } from "primereact/card";
-import { setPaginate } from "../ownerAccSlice";
+import { setPaginate } from "../wifiSlice";
 import { useNavigate } from "react-router-dom"; // Importing useNavigate hook
 
-export const OwnerAccTable = () => {
+export const WifiTable = () => {
   const dispatch = useDispatch();
 
-  const { ownerAccPaginateParams, owners } = useSelector((state) => state.owner);
+  const { wifiPaginateParams, owners } = useSelector((state) => state.owner);
   console.log(owners, "data");
   const { translate } = useSelector((state) => state.setting);
   const [loading, setLoading] = useState(false);
@@ -23,14 +23,14 @@ export const OwnerAccTable = () => {
 
 
   const total = useRef(0);
-  const columns = useRef(ownerAccPayload.ownerAccColumns);
+  const columns = useRef(wifiPayload.wifiColumns);
   const showColumns = useRef(columns.current?.filter((col) => col.show === true));
 
   const onSort = (event) => {
     const sortOrder = event.sortOrder === 1 ? "ASC" : "DESC";
     dispatch(
       setPaginate({
-        ...ownerAccPaginateParams,
+        ...wifiPaginateParams,
         sort: sortOrder,
         order: event.sortField,
       })
@@ -39,21 +39,21 @@ export const OwnerAccTable = () => {
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const response = await ownerAccService.index(dispatch, ownerAccPaginateParams);
+    const response = await wifiService.index(dispatch, wifiPaginateParams);
     if (response.status === 200) {
       total.current = response.data.total || response.data.length;
     }
     setLoading(false);
-  }, [dispatch, ownerAccPaginateParams]);
+  }, [dispatch, wifiPaginateParams]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
   const handleDelete = async (id) => {
-    const confirmation = window.confirm("Are you sure you want to delete this account?");
+    const confirmation = window.confirm("Are you sure you want to delete this wifi?");
     if (confirmation) {
-      const response = await ownerAccService.delete(dispatch, id);
+      const response = await wifiService.delete(dispatch, id);
       if (response.status === 200) {
         fetchData();
       }
@@ -62,19 +62,19 @@ export const OwnerAccTable = () => {
 
   return (
     <div className="grid">
-      <h1 className="col-12">{translate.owner_acc_list}</h1>
-      <OwnerAccCreate />
+      <h1 className="col-12">{translate.wifi_list}</h1>
+      <WifiCreate />
       <Card className="col-8">
         <DataTable
           className="custom-data-table"
           dataKey="id"
           size="normal"
           value={owners}
-          sortField={ownerAccPaginateParams?.order}
+          sortField={wifiPaginateParams?.order}
           sortOrder={
-            ownerAccPaginateParams?.sort === "DESC"
+            wifiPaginateParams?.sort === "DESC"
               ? 1
-              : ownerAccPaginateParams?.sort === "ASC"
+              : wifiPaginateParams?.sort === "ASC"
               ? -1
               : 0
           }
@@ -83,7 +83,7 @@ export const OwnerAccTable = () => {
           loading={loading}
           resizableColumns={paginateOptions.resizableColumns}
           emptyMessage="No admin accounts found."
-          globalFilterFields={ownerAccPayload.columns}
+          globalFilterFields={wifiPayload.columns}
         >
           {showColumns.current.map((col, index) => {
             return (
@@ -107,7 +107,7 @@ export const OwnerAccTable = () => {
                           <Button
                             label="Edit"
                             className="p-button-success btn-edit"
-                            onClick={() => navigate(`${paths.ownerAccUpdate}/${rowData.id}`)}
+                            onClick={() => navigate(`${paths.wifiUpdate}/${rowData.id}`)}
                           />
                           <Button
                             label="Delete"

@@ -1,25 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { categoryPayload } from "../categoryPayload";
-import { categoryService } from "../categoryService";
-import { Search } from "../../../shares/Search";
-import { Button } from "primereact/button";
-import { DataTable } from "primereact/datatable";
-import { auditColumns, paginateOptions } from "../../../constants/config";
-import { PaginatorRight } from "../../../shares/PaginatorRight";
-import { Column } from "primereact/column";
-import { Status } from "../../../shares/Status";
 import { paths } from "../../../constants/paths";
-import { Paginator } from "primereact/paginator";
-import { Avatar } from "primereact/avatar";
-import { NavigateId } from "../../../shares/NavigateId";
-import { endpoints } from "../../../constants/endpoints";
-import { AuditColumn } from "../../../shares/AuditColumn";
-import { setPaginate } from "../categorySlice";
-import { setDateFilter, setStatusFilter } from "../../../shares/shareSlice";
-import { getRequest } from "../../../helpers/api";
-import { FilterByStatus } from "../../../shares/FilterByStatus";
-import { FilterByDate } from "../../../shares/FilterByDate";
 import { Link } from "react-router-dom";
 
 import moment from "moment";
