@@ -2,39 +2,32 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ownerAccPayload } from "./ownerAccPayload";
 
 const ownerAccSlice = createSlice({
-    name: 'ownerAcc',
+    name: 'discount',
     initialState: {
-        ownerAcc: [],
-        mainownerAcc: null,
-        subownerAcc: [],
-        subownerAcc: null,
-        ownerAccPaginateParams: ownerAccPayload.ownerAccPaginateParams,
+        owners: [],
+        owner: null,
+        paginateParams : ownerAccPayload.ownerAccPaginateParams,
+        total : 0
     },
     reducers: {
         index: (state, action) => {
-            state.ownerAcc = action.payload;
+            state.owners = action.payload;
             return state;
         },
         update: (state, action) => {
-            state.ownerAcc = action.payload;
+            state.owner = action.payload;
             return state;
         },
-        show:( state,action) => {
-            state.ownerAcc = action.payload;
+        show: (state, action) => {
+            state.owner = action.payload;
             return state;
         },
         setPaginate: (state, action) => {
-            state.ownerAccPaginateParams = action.payload;
+            state.paginateParams = action.payload;
             return state;
-        },
+        }
     }
 });
 
-export const { 
-    index,
-    update, 
-    show,
-    setPaginate,
-} = ownerAccSlice.actions;
-
+export const { index, update, show, setPaginate } = ownerAccSlice.actions;
 export default ownerAccSlice.reducer;

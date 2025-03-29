@@ -43,47 +43,30 @@ const OwnerAccCreate = () => {
         setLoading(false);
     }
 
-    /**
-    * Loading Data
-    */
-    const loadingData = useCallback(async () => {
-        setLoading(true);
-
-        const result = await getRequest(`${endpoints.status}?type=apptype`);
-        if (result.status === 200) {
-            setAppType(result.data.apptype);
-        }
-
-        setLoading(false);
-    }, []);
-
-    useEffect(() => {
-        loadingData()
-    }, [loadingData])
-
     return (
         <div className='col-4'>
             <Card>
                 <div className=" py-3">
                             <label htmlFor="email" className='input-label text-black'>{translate.owner} <span>(required*)</span> </label>
                             <div className="p-inputgroup mt-2">
-                                <InputText 
-                                    id="owner acc"
-                                    name="owner acc"
-                                    autoComplete="owner acc"
-                                    className="p-inputtext-sm"
-                                    keyfilter={'owner acc'}
-                                    aria-describedby="owner-acc-help"
-                                    placeholder="Enter your owner acc"
-                                    value={payload.ownerAcc}
-                                    tooltipOptions={{...tooltipOptions}}
-                                    disabled={loading}
-                                    onChange={(e) => payloadHandler(payload, e.target.value, 'ownerAcc', (updateValue) => {
-                                        setPayload(updateValue);
-                                    })}
-                                />
+                            <InputText 
+                                id="owner-acc"
+                                name="ownerAcc"
+                                autoComplete="off"
+                                className="p-inputtext-sm"
+                                keyfilter="alpha"
+                                aria-describedby="owner-acc-help"
+                                placeholder="Enter your owner acc"
+                                value={payload.name}
+                                tooltipOptions={{...tooltipOptions}}
+                                disabled={loading}
+                                onChange={(e) => payloadHandler(payload, e.target.value, 'name', (updateValue) => {
+                                setPayload(updateValue);
+                                })}
+                            />
+
                             </div>
-                            <ValidationMessage field="email" />
+                            <ValidationMessage field="ownerAcc" />
                         </div>
                         <button className='ownerCreateButton' onClick={submitCreateOwner} disabled={loading}>
                             {loading ? "Submitting..." : translate.create}

@@ -39,5 +39,6 @@ export const endpoints = {
     exportOrder : 'export-order',
     exportShop : 'export-shop',
     exportUser : 'export-user',
-    owner : 'ownerdata'
+    owner : 'ownerdata',
+    ownerAcc: 'owner'
 }

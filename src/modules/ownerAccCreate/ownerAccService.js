@@ -1,5 +1,5 @@
 import { endpoints } from "../../constants/endpoints";
-import { getRequest, postRequest } from "../../helpers/api";
+import { getRequest, postRequest, delRequest } from "../../helpers/api";
 import { httpServiceHandler } from "../../helpers/handler";
 import { updateNotification } from "../../shares/shareSlice";
 import { index, show } from "./ownerAccSlice";
@@ -48,6 +48,24 @@ export const ownerAccService = {
 
   update: async (dispatch, id, payload) => {
     const response = await postRequest(`${endpoints.ownerAcc}/${id}`, payload);
+    await httpServiceHandler(dispatch, response);
+
+    if (response.status === 200) {
+      dispatch(
+        updateNotification({
+          show: true,
+          summary: "Success",
+          severity: "success",
+          detail: response.message,
+        })
+      );
+    }
+
+    return response;
+  },
+
+  delete: async (dispatch, id) => {
+    const response = await delRequest(`${endpoints.ownerAcc}/delete/${id}`);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {

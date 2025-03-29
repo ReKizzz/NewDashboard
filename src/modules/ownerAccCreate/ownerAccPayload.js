@@ -9,8 +9,9 @@ export const ownerAccPayload = {
     date:""
   },
   ownerAccColumns: [
+    { field: "id", header: "No", sortable: true, show: true },
     { field: "name", header: "Name", sortable: true, show: true, width: 200 },
-    { field: "date", header: "Date", sortable: true, show: true, width: 200 },
+    { field: "created_at", header: "Date", sortable: true, show: true, width: 200 },
     { field: "action", header: "Action", sortable: false, show: true}
   ],
   ownerAccPaginateParams: {

@@ -3,112 +3,132 @@ import { useDispatch, useSelector } from "react-redux";
 import { ownerAccPayload } from "../ownerAccPayload";
 import OwnerAccCreate from "../entry/OwnerAccCreate";
 import { FormMainAction } from "../../../shares/FormMainAction";
-
+import { dateFormat } from "../../../helpers/datetime";
 import { ownerAccService } from "../ownerAccService";
-import { Search } from "../../../shares/Search";
 import { Button } from "primereact/button";
 import { DataTable } from "primereact/datatable";
-import { auditColumns, paginateOptions } from "../../../constants/config";
-import { PaginatorRight } from "../../../shares/PaginatorRight";
+import { paginateOptions } from "../../../constants/config";
 import { Column } from "primereact/column";
-import { Status } from "../../../shares/Status";
 import { paths } from "../../../constants/paths";
-import { Paginator } from "primereact/paginator";
-import { Avatar } from "primereact/avatar";
-import { NavigateId } from "../../../shares/NavigateId";
-import { endpoints } from "../../../constants/endpoints";
-import { AuditColumn } from "../../../shares/AuditColumn";
-import { setPaginate } from "../ownerAccSlice";
-import { setDateFilter, setStatusFilter } from "../../../shares/shareSlice";
-import { getRequest } from "../../../helpers/api";
-import { Link } from "react-router-dom";
-
-import moment from "moment";
 import { Card } from "primereact/card";
+import { setPaginate } from "../ownerAccSlice";
+import { NavigateId } from "../../../shares/NavigateId";
 
 export const OwnerAccTable = () => {
   const dispatch = useDispatch();
 
-  const { ownerAccPaginateParams, owners } = useSelector(
-    (state) => state.owner
-  );
+  const { ownerAccPaginateParams, owners } = useSelector((state) => state.owner);
+  console.log(owners, "data");
   const { translate } = useSelector((state) => state.setting);
   const [loading, setLoading] = useState(false);
-  const [showAuditColumn, setShowAuditColumn] = useState(false);
 
   const total = useRef(0);
-  const first = useRef(0);
-  const ownerAccStatus = useRef(["ALL"]);
   const columns = useRef(ownerAccPayload.ownerAccColumns);
-  const showColumns = useRef(
-    columns.current?.filter((col) => col.show === true)
-  );
+  const showColumns = useRef(columns.current?.filter((col) => col.show === true));
 
   const onSort = (event) => {
-      const sortOrder = event.sortOrder === 1 ? "DESC" : "ASC";
-      dispatch(
-        setPaginate({
-          ...ownerAccPaginateParams,
-          sort: sortOrder,
-          order: event.sortField,
-        })
-      );
-    };
+    const sortOrder = event.sortOrder === 1 ? "ASC" : "DESC";
+    dispatch(
+      setPaginate({
+        ...ownerAccPaginateParams,
+        sort: sortOrder,
+        order: event.sortField,
+      })
+    );
+  };
 
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    const response = await ownerAccService.index(dispatch, ownerAccPaginateParams);
+    if (response.status === 200) {
+      total.current = response.data.total || response.data.length;
+    }
+    setLoading(false);
+  }, [dispatch, ownerAccPaginateParams]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handleEdit = (rowData) => {
+    NavigateId(paths.ownerAccEdit(rowData.id));
+  };
+
+  const handleDelete = async (id) => {
+    const confirmation = window.confirm("Are you sure you want to delete this account?");
+    if (confirmation) {
+      const response = await ownerAccService.delete(dispatch, id);
+      if (response.status === 200) {
+        fetchData();
+      }
+    }
+  };
 
   return (
     <div className="grid">
       <h1 className="col-12">{translate.owner_acc_list}</h1>
-      <OwnerAccCreate/>
+      <OwnerAccCreate />
       <Card className="col-8">
         <DataTable
-                dataKey="id"
-                size="normal"
-                value={owners}
-                sortField={ownerAccPaginateParams?.order}
-                sortOrder={
-                  ownerAccPaginateParams?.sort === "DESC"
-                    ? 1
-                    : ownerAccPaginateParams?.sort === "ASC"
-                      ? -1
-                      : 0
-                }
-                onSort={onSort}
-                lazy={paginateOptions.lazy}
-                loading={loading}
-                resizableColumns={paginateOptions.resizableColumns}
-                emptyMessage="No admin accounts found."
-                globalFilterFields={ownerAccPayload.columns}
-              >
-                {showColumns.current.map((col, index) => {
-                  return (
-                    <Column
-                      key={`admin_col_index_${index}`}
-                      style={{ minWidth: "250px" }}
-                      field={col.field}
-                      header={col.header}
-                      sortable
-                      body={(value) => {
-                        switch (col.field) {
-                          case "id":
-                            return (
-                              <NavigateId
-                                url={`${paths.admin}/${value[col.field]}`}
-                                value={value[col.field]}
-                              />
-                            );
-                          case "status":
-                            return <Status status={value[col.field]} />;
-                          default:
-                            return value[col.field];
-                        }
-                      }}
-                    />
-                  );
-                })}
-              </DataTable>
+          dataKey="id"
+          size="normal"
+          value={owners}
+          sortField={ownerAccPaginateParams?.order}
+          sortOrder={
+            ownerAccPaginateParams?.sort === "DESC"
+              ? 1
+              : ownerAccPaginateParams?.sort === "ASC"
+              ? -1
+              : 0
+          }
+          onSort={onSort}
+          lazy={paginateOptions.lazy}
+          loading={loading}
+          resizableColumns={paginateOptions.resizableColumns}
+          emptyMessage="No admin accounts found."
+          globalFilterFields={ownerAccPayload.columns}
+        >
+          {showColumns.current.map((col, index) => {
+            return (
+              <Column
+                key={`admin_col_index_${index}`}
+                style={{ minWidth: "250px" }}
+                field={col.field}
+                header={col.header}
+                sortable
+                body={(rowData) => {
+                  switch (col.field) {
+                    case "no":
+                      return rowData[col.field];
+                    case "name":
+                      return rowData[col.field];
+                    case "created_at":
+                      return rowData[col.field];
+                    case "action":
+                      return (
+                        <div className="flex flex-column col-6">
+                          <Button
+                            label="Edit"
+                            className="p-button-success btn-edit"
+                            onClick={() => handleEdit(rowData)}
+                          />
+                          <Button
+                            label="Delete"
+                            className="p-button-danger btn-edit"
+                            style={{ marginTop: "10px" }}
+                            onClick={() => handleDelete(rowData.id)}
+                          />
+                        </div>
+                      );
+                    default:
+                      return rowData[col.field];
+                  }
+                }}
+              />
+            );
+          })}
+        </DataTable>
       </Card>
-      
     </div>
   );
 };
