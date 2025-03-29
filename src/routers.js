@@ -19,7 +19,6 @@ import { authorizationRoute } from "./modules/authorization/authorizationRoute";
 import { settingRoutes } from "./modules/setting/settingRoutes";
 import { discountRoutes } from "./modules/discount/discountRoutes";
 import { memberCardRoutes } from "./modules/memberCard/memberCardRoute";
-import { memberRoutes } from "./modules/member/memberRoute";
 import { memberOrderRoutes } from "./modules/memberOrder/memberOrderRoute";
 import { countryRoutes } from "./modules/country/countryRoutes";
 import { regionAndStateRoutes } from "./modules/regionAndState/regionAndStateRoutes";
@@ -47,7 +46,6 @@ export const routers = createBrowserRouter([
             ...regionRoutes,
             ...discountRoutes,
             ...memberCardRoutes,
-            ...memberRoutes,
             ...memberOrderRoutes,
             ...authorizationRoute,
             ...settingRoutes,

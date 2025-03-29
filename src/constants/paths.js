@@ -5,6 +5,7 @@ export const paths = {
     ownerList: "/owner-list",
     ownerCreate: "/owner-create",
     ownerAccCreate: "/owner-acc-create",
+    ownerAccUpdate: "/owner-acc-update",
     cornerCreate: "/corner-create",
     cityCreate: "/city-create",
     townshipCreate: "/township-create",

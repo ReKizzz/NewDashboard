@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { InputText } from 'primereact/inputtext';
@@ -15,6 +15,7 @@ import moment from 'moment';
 import { Dropdown } from 'primereact/dropdown';
 import { ownerPayload } from '../ownerPayload';
 import { ownerService } from '../ownerService';
+import { ownerAccService } from '../../ownerAccCreate/ownerAccService';
 // import { ownerCardService } from '../../ownerCard/ownerService';
 import { AppEditor } from '../../../shares/AppEditor';
 import { getRequest } from '../../../helpers/api';
@@ -25,7 +26,8 @@ export const OwnerCreate = () => {
     const [payload, setPayload] = useState(ownerPayload.create);
     const [desc, setDesc] = useState('');
     const [ownerList, setOwnerList] = useState([]);
-
+    const total = useRef(0);
+    
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { translate } = useSelector(state => state.setting);
@@ -33,25 +35,23 @@ export const OwnerCreate = () => {
     /**
     * Loading user Data
     */
+    const fetchData = useCallback(async () => {
+        setLoading(true);
+        const response = await ownerAccService.index(dispatch);  // Fetch the data
+        if (response.status === 200) {
+            // Assuming response.data is an array of owner objects
+            setOwnerList(response.data.map(owner => ({
+                label: owner.name,  // Adjust to the correct field name for owner name
+                value: owner.id,    // Adjust to the correct field name for owner id
+            })));
+            total.current = response.data.total || response.data.length;
+        }
+        setLoading(false);
+    }, [dispatch]);
 
-
-    // const loadingownerNextIds = useCallback(async () => {
-    //     setLoading(true);
-
-    //     const result = await getRequest(paths.ownerNextId);
-    //     if(result.status === 200){
-    //         setPayload({
-    //             ...payload,
-    //             owner_id : result.data
-    //         })
-    //     }
-    //     setLoading(false);
-    // }, [])
-
-    // useEffect(() => {
-    //     loadingownerNextIds()
-    // }, [loadingownerNextIds])
-
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
 
     const submitOwnerCreate = async () => {
         setLoading(true);

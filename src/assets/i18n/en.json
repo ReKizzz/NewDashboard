@@ -201,6 +201,7 @@
     "log_out": "Log Out",
     "owner_list": "Owner List",
     "owner_acc_list": "Owner Account List",
+    "owner_acc_update": "Owner Account Update",
     "owner": "Owner",
     "renter": "Renter",
     "renter_list": "Renter List",

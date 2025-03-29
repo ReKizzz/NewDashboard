@@ -16,7 +16,6 @@ import authorizationSlice from "./modules/authorization/authorizationSlice";
 import settingSlice from "./modules/setting/settingSlice";
 import discountSlice from "./modules/discount/discountSlice";
 import memberCardSlice from "./modules/memberCard/memberCardSlice"
-import memberSlice from "./modules/member/memberSlice";
 import memberOrderSlice from "./modules/memberOrder/memberOrderSlice";
 import countrySlice from "./modules/country/countrySlice";
 import regionAndStateSlice from "./modules/regionAndState/regionAndStateSlice";
@@ -43,7 +42,6 @@ export const stores = configureStore({
     setting: settingSlice,
     discount: discountSlice,
     memberCard: memberCardSlice,
-    member: memberSlice,
     memberOrder: memberOrderSlice,
     country: countrySlice,
     regionAndState: regionAndStateSlice,

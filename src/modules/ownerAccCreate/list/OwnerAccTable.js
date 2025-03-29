@@ -12,7 +12,7 @@ import { Column } from "primereact/column";
 import { paths } from "../../../constants/paths";
 import { Card } from "primereact/card";
 import { setPaginate } from "../ownerAccSlice";
-import { NavigateId } from "../../../shares/NavigateId";
+import { useNavigate } from "react-router-dom"; // Importing useNavigate hook
 
 export const OwnerAccTable = () => {
   const dispatch = useDispatch();
@@ -21,6 +21,8 @@ export const OwnerAccTable = () => {
   console.log(owners, "data");
   const { translate } = useSelector((state) => state.setting);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); // Hook for navigation
+
 
   const total = useRef(0);
   const columns = useRef(ownerAccPayload.ownerAccColumns);
@@ -49,10 +51,6 @@ export const OwnerAccTable = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-  const handleEdit = (rowData) => {
-    NavigateId(paths.ownerAccEdit(rowData.id));
-  };
 
   const handleDelete = async (id) => {
     const confirmation = window.confirm("Are you sure you want to delete this account?");
@@ -110,7 +108,7 @@ export const OwnerAccTable = () => {
                           <Button
                             label="Edit"
                             className="p-button-success btn-edit"
-                            onClick={() => handleEdit(rowData)}
+                            onClick={() => navigate(`${paths.ownerAccUpdate}/${rowData.id}`)}
                           />
                           <Button
                             label="Delete"
