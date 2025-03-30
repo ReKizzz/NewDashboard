@@ -145,7 +145,7 @@ export const OwnerTableView = () => {
                                                 case "owner_id":
                                                     return (
                                                         <NavigateId
-                                                            url={`${paths.owner}/${value['id']}`}
+                                                            url={`${paths.ownerDetail}/${value['id']}`}
                                                             value={value[col.field]}
                                                         />
                                                     );

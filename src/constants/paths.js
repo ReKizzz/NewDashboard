@@ -4,6 +4,7 @@ export const paths = {
 
     ownerList: "/owner-list",
     ownerCreate: "/owner-create",
+    ownerDetail: "/owner-detail",
     ownerAccCreate: "/owner-acc-create",
     ownerAccUpdate: "/owner-acc-update",
     cornerCreate: "/corner-create",

@@ -28,7 +28,7 @@ const WardCreate = () => {
         const result = await wardService.store(formData, dispatch);
 
         if (result.status === 200) {
-            navigate(`${paths.ward}/${result.data.id}`);
+            setPayload(wardPayload.create)
         }
 
         setLoading(false);

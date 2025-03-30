@@ -28,7 +28,7 @@ const RenterCreate = () => {
         const result = await renterService.store(formData, dispatch);
 
         if (result.status === 200) {
-            navigate(`${paths.renter}/${result.data.id}`);
+            setPayload(renterPayload.create)
         }
 
         setLoading(false);

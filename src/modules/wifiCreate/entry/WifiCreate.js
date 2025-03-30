@@ -28,7 +28,7 @@ const WifiCreate = () => {
         const result = await wifiService.store(formData, dispatch);
 
         if (result.status === 200) {
-            navigate(`${paths.wifi}/${result.data.id}`);
+            setPayload(wifiPayload.create)
         }
 
         setLoading(false);

@@ -14,7 +14,7 @@ export const authorizationRoute = [
             return {
                 breadcrumbs: [
                     { label: "Dashboard", url: "/" },
-                    { label: "List", url: paths.role },
+                    { label: "Create", url: paths.roleCreate },
                 ],
                 role: ['ADMINISTRATOR']
             }

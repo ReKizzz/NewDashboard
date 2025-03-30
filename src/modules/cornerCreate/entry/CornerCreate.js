@@ -28,7 +28,7 @@ const CornerCreate = () => {
         const result = await cornerService.store(formData, dispatch);
 
         if (result.status === 200) {
-            navigate(`${paths.corner}/${result.data.id}`);
+            setPayload(cornerPayload.create)
         }
 
         setLoading(false);

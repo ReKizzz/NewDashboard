@@ -28,7 +28,7 @@ const LandCreate = () => {
         const result = await landService.store(formData, dispatch);
 
         if (result.status === 200) {
-            navigate(`${paths.land}/${result.data.id}`);
+            setPayload(landPayload.create)
         }
 
         setLoading(false);

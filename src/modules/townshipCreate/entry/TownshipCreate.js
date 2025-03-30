@@ -28,7 +28,7 @@ const TownshipCreate = () => {
         const result = await townshipService.store(formData, dispatch);
 
         if (result.status === 200) {
-            navigate(`${paths.township}/${result.data.id}`);
+            setPayload(townshipPayload.create)
         }
 
         setLoading(false);

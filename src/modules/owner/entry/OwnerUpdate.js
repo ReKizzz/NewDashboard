@@ -15,7 +15,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { ownerPayload } from '../ownerPayload';
 import { userService } from '../../user/userService';
 import { ownerService } from '../ownerService';
-import { ownerCardService } from '../../ownerCard/ownerCardService';
+// import { ownerCardService } from '../../ownerCard/ownerCardService';
 import { getRequest } from '../../../helpers/api';
 import { endpoints } from '../../../constants/endpoints';
 import { AppEditor } from '../../../shares/AppEditor';
@@ -77,16 +77,16 @@ export const OwnerUpdate = () => {
     const loadingownerCardData = useCallback(async () => {
         setLoading(true);
 
-        const result = await ownerCardService.index(dispatch);
-        if (result.status === 200) {
-            const formatData = result.data?.map((region) => {
-                return {
-                    label: region?.label,
-                    value: region?.id
-                }
-            })
-            setOwnerList(formatData);
-        }
+        // const result = await ownerCardService.index(dispatch);
+        // if (result.status === 200) {
+        //     const formatData = result.data?.map((region) => {
+        //         return {
+        //             label: region?.label,
+        //             value: region?.id
+        //         }
+        //     })
+        //     setOwnerList(formatData);
+        // }
 
         setLoading(false);
     }, [dispatch]);

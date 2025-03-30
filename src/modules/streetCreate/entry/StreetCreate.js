@@ -28,7 +28,7 @@ const StreetCreate = () => {
         const result = await streetService.store(formData, dispatch);
 
         if (result.status === 200) {
-            navigate(`${paths.street}/${result.data.id}`);
+            setPayload(streetPayload.create)
         }
 
         setLoading(false);

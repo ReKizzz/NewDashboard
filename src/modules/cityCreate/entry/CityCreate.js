@@ -28,7 +28,7 @@ const CityCreate = () => {
         const result = await cityService.store(formData, dispatch);
 
         if (result.status === 200) {
-            navigate(`${paths.city}/${result.data.id}`);
+            setPayload(cityPayload.create)
         }
 
         setLoading(false);

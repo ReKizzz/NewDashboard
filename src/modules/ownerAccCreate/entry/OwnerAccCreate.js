@@ -28,7 +28,7 @@ const OwnerAccCreate = () => {
         const result = await ownerAccService.store(formData, dispatch);
 
         if (result.status === 200) {
-            navigate(`${paths.ownerAcc}/${result.data.id}`);
+            setPayload(ownerAccPayload.create)
         }
 
         setLoading(false);

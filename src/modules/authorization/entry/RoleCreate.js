@@ -73,7 +73,7 @@ export const RoleCreate = () => {
                             <ValidationMessage field="name" />
                         </div>
 
-                        <div className="col-12 md:col-4 lg:col-4 my-3 py-3">
+                        <div className="col-12 md:col-4 lg:col-4 py-3">
                             <label htmlFor="description" className='input-label'>{translate.description}</label>
                             <div className="p-inputgroup mt-2">
                                 <InputText

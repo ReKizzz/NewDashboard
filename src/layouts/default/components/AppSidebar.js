@@ -11,7 +11,6 @@ import { items } from "../defaultPaths";
 import { paths } from "../../../constants/paths";
 import { removeAllData } from "../../../helpers/localstorage";
 
-
 export const AppSidebar = () => {
   let itemList = [];
 
@@ -39,10 +38,10 @@ export const AppSidebar = () => {
     return <label>{translate[label]}</label>;
   };
 
-   const logout = async () => {
-          removeAllData();
-          navigate(paths.adminLogout);
-      }
+  const logout = async () => {
+    removeAllData();
+    navigate(paths.adminLogout);
+  };
 
   return (
     <div className="sidebar col-2 d-flex flex-column justify-content-between">
@@ -60,12 +59,12 @@ export const AppSidebar = () => {
         }}
       />
 
-<Button
-  label={translate["log_out"]}
-  className="logout"
-  onClick={() => logout()}
-/>
-
+      <Button
+        label={translate["log_out"]}
+        className="p-button-text p-button-plain logout"
+        style={{ color: "gray", width: "80%" }}
+        onClick={() => logout()}
+      />
     </div>
   );
 };
