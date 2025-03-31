@@ -10,7 +10,6 @@ import { deliveryRoutes } from "./modules/delivery/deliveryRoutes";
 import { mediaRoutes } from "./modules/media/mediaRoute";
 import { orderRoutes } from "./modules/order/orderRoutes";
 import { categoryRoutes } from "./modules/category/categoryRoutes";
-import { dashbardRoutes } from "./modules/dashboard/dashboardRoutes";
 import { authorizationRoute } from "./modules/authorization/authorizationRoute";
 import { settingRoutes } from "./modules/setting/settingRoutes";
 import { discountRoutes } from "./modules/discount/discountRoutes";
@@ -34,7 +33,6 @@ export const routers = createBrowserRouter([
         element: <DefaultLayout />,
         errorElement: <NotFound />,
         children: [
-            ...dashbardRoutes,
             ...promotionRoutes,
             ...userRoutes,
             ...adminRoutes,

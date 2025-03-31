@@ -16,7 +16,6 @@ export const userRoutes = [
             const permission = getData(keys.PERMISSION);
             return{
                 breadcrumbs: [
-                    { label: "Dashboard", url: paths.dashboard },
                     { label: "Create", url: paths.userCreate },
                 ],
                 role: role,
@@ -31,7 +30,6 @@ export const userRoutes = [
         loader: () => {
             return{
                 breadcrumbs: [
-                    { label: "Dashboard", url: paths.dashboard },
                     { label: "List", url: paths.user },
                 ],
                 role: ['ADMINISTRATOR']
@@ -45,7 +43,6 @@ export const userRoutes = [
         loader: () => {
             return{
                 breadcrumbs: [
-                    { label: "Dashboard", url: paths.dashboard },
                     { label: "List", url: paths.user },
                     { label: "Create", url: paths.userCreate },
                 ],

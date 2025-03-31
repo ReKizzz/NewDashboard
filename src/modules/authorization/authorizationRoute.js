@@ -13,7 +13,6 @@ export const authorizationRoute = [
         loader: () => {
             return {
                 breadcrumbs: [
-                    { label: "Dashboard", url: "/" },
                     { label: "Create", url: paths.roleCreate },
                 ],
                 role: ['ADMINISTRATOR']
@@ -27,7 +26,6 @@ export const authorizationRoute = [
         loader: () => {
             return {
                 breadcrumbs: [
-                    { label: 'Dashboard', url : '/' },
                     { label : "List", url: paths.role }
                 ]
             }
@@ -40,7 +38,6 @@ export const authorizationRoute = [
         loader: () => {
             return {
                 breadcrumbs: [
-                    { label: "Dashboard", url: "/" },
                     { label: "List", url: paths.role }
                 ]
             }
@@ -53,7 +50,6 @@ export const authorizationRoute = [
         loader: () => {
             return {
                 breadcrumbs: [
-                    { label: "Dashboard", url: "/" },
                     { label: "List", url: paths.permission },
                 ],
                 role: ['ADMINISTRATOR']

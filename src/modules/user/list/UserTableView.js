@@ -162,16 +162,6 @@ export const UserTableView = () => {
             <div className=' flex items-center justify-content-between'>
                 <div>{translate.total} - <span style={{ color: "#4338CA" }}> {total.current > 0 ? total.current : 0}</span></div>
                 <div className=' flex align-items-center gap-3'>
-                    <Button
-                        outlined
-                        icon="pi pi-refresh"
-                        size="small"
-                        onClick={() => {
-                            dispatch(setPaginate(userPayload.paginateParams));
-                            dispatch(setStatusFilter("ALL"));
-                            dispatch(setDateFilter({ startDate: "", endDate: "" }));
-                        }}
-                    />
                     <PaginatorRight
                         show={showAuditColumn}
                         onHandler={(e) => setShowAuditColumn(e)}
@@ -195,7 +185,7 @@ export const UserTableView = () => {
                     label={translate.press_enter_key_to_search}
                 />
 
-                <div className=' flex flex-column md:flex-row align-items-start md:align-items-end justify-content-center gap-3'>
+                {/* <div className=' flex flex-column md:flex-row align-items-start md:align-items-end justify-content-center gap-3'>
                     <FilterByStatus
                         status={userStatus.current}
                         onFilter={(e) => onFilter(e)}
@@ -210,7 +200,7 @@ export const UserTableView = () => {
                     <ExportExcel
                         url={endpoints.exportUser}
                     />
-                </div>
+                </div> */}
             </div>
         )
     }

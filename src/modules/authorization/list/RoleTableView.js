@@ -113,15 +113,6 @@ export const RoleTableView = () => {
             <div className=' flex items-center justify-content-between'>
                 <div>{translate.total} - <span style={{ color: "#4338CA" }}>{total ? total.current : 0}</span></div>
                 <div className=' flex align-items-center gap-3'>
-                    <Button
-                        outlined
-                        icon="pi pi-refresh"
-                        size="small"
-                        onClick={() => {
-                            dispatch(setRolePaginate(authorizationPayload.rolePaginateParams));
-                            dispatch(setDateFilter({ startDate: "", endDate: "" }));
-                        }}
-                    />
                     <PaginatorRight
                         show={showAuditColumn}
                         onHandler={(e) => setShowAuditColumn(e)}
@@ -145,7 +136,7 @@ export const RoleTableView = () => {
                     label={translate.press_enter_key_to_search}
                 />
 
-                <FilterByDate onFilter={(e) => onFilterByDate(e)} label={translate.filter_by} />
+                {/* <FilterByDate onFilter={(e) => onFilterByDate(e)} label={translate.filter_by} /> */}
 
             </div>
         )
