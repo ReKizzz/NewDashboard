@@ -2,14 +2,18 @@ import { paginateOptions } from "../../constants/config";
 
 export const ownerPayload = {
     create: {
-        user_id: "",
-        owner_card_id: "",
         owner_id: "",
-        amount: 0,
-        expired_at: "",
-        status: "PENDING",
-        description: "",
-        created_by: "",
+        corner_id: "",
+        city_id: "",
+        township_id: "",
+        ward_id: "",
+        street_id: "",
+        land_no:"",
+        house_no: "",
+        property: "",
+        meter_no: "",
+        meter_bill_code: "",
+        
     },
     update: {
         user_id: "",

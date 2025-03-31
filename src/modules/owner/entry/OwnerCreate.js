@@ -19,6 +19,13 @@ import { ownerAccService } from '../../ownerAccCreate/ownerAccService';
 // import { ownerCardService } from '../../ownerCard/ownerService';
 import { AppEditor } from '../../../shares/AppEditor';
 import { getRequest } from '../../../helpers/api';
+import { cornerService } from '../../cornerCreate/cornerService';
+import { cityService } from '../../cityCreate/cityService';
+import { townshipService } from '../../townshipCreate/townshipService';
+import { wardService } from '../../wardCreate/wardService';
+import { streetService } from '../../streetCreate/streetService';
+import { landService } from '../../landCreate/landService';
+import { wifiService } from '../../wifiCreate/wifiService'
 
 export const OwnerCreate = () => {
 
@@ -26,6 +33,13 @@ export const OwnerCreate = () => {
     const [payload, setPayload] = useState(ownerPayload.create);
     const [desc, setDesc] = useState('');
     const [ownerList, setOwnerList] = useState([]);
+    const [cornerList, setCornerList] = useState([]);
+    const [cityList, setCityList] = useState([]);
+    const [townshipList, setTownshipList] = useState([]);
+    const [wardList, setWardList] = useState([]);
+    const [streetList, setStreetList] = useState([]);
+    const [landList, setLandList] = useState([]);
+    const [wifiList, setWifiList] = useState([]);
     const total = useRef(0);
     
     const navigate = useNavigate();
@@ -37,12 +51,11 @@ export const OwnerCreate = () => {
     */
     const fetchData = useCallback(async () => {
         setLoading(true);
-        const response = await ownerAccService.index(dispatch);  // Fetch the data
+        const response = await ownerAccService.index(dispatch);
         if (response.status === 200) {
-            // Assuming response.data is an array of owner objects
             setOwnerList(response.data.map(owner => ({
-                label: owner.name,  // Adjust to the correct field name for owner name
-                value: owner.id,    // Adjust to the correct field name for owner id
+                label: owner.name,
+                value: owner.id,
             })));
             total.current = response.data.total || response.data.length;
         }
@@ -53,6 +66,126 @@ export const OwnerCreate = () => {
         fetchData();
     }, [fetchData]);
 
+    const cornerData = useCallback(async () => {
+        setLoading(true);
+        const response = await cornerService.index(dispatch);
+        if (response.status === 200) {
+            setCornerList(response.data.map(corner => ({
+                label: corner.name,
+                value: corner.id,
+            })));
+            total.current = response.data.total || response.data.length;
+        }
+        setLoading(false);
+    }, [dispatch]);
+
+    useEffect(() => {
+        cornerData();
+    }, [cornerData]);
+
+    const cityData = useCallback(async () => {
+        setLoading(true);
+        const response = await cityService.index(dispatch);
+        if (response.status === 200) {
+            setCityList(response.data.map(city => ({
+                label: city.name,
+                value: city.id,
+            })));
+            total.current = response.data.total || response.data.length;
+        }
+        setLoading(false);
+    }, [dispatch]);
+
+    useEffect(() => {
+        cityData();
+    }, [cityData]);
+
+    const townshipData = useCallback(async () => {
+        setLoading(true);
+        const response = await townshipService.index(dispatch);
+        if (response.status === 200) {
+   
+            setTownshipList(response.data.map(township => ({
+                label: township.name,
+                value: township.id,
+            })));
+            total.current = response.data.total || response.data.length;
+        }
+        setLoading(false);
+    }, [dispatch]);
+
+    useEffect(() => {
+        townshipData();
+    }, [townshipData]);
+
+    const wardData = useCallback(async () => {
+        setLoading(true);
+        const response = await wardService.index(dispatch);
+        if (response.status === 200) {
+            setWardList(response.data.map(ward => ({
+                label: ward.name,
+                value: ward.id,
+            })));
+            total.current = response.data.total || response.data.length;
+        }
+        setLoading(false);
+    }, [dispatch]);
+
+    useEffect(() => {
+        wardData();
+    }, [wardData]);
+
+    const streetData = useCallback(async () => {
+        setLoading(true);
+        const response = await streetService.index(dispatch);
+        if (response.status === 200) {
+            setStreetList(response.data.map(street => ({
+                label: street.name,
+                value: street.id,
+            })));
+            total.current = response.data.total || response.data.length;
+        }
+        setLoading(false);
+    }, [dispatch]);
+
+    useEffect(() => {
+        streetData();
+    }, [streetData]);
+
+    const landData = useCallback(async () => {
+        setLoading(true);
+        const response = await landService.index(dispatch);
+        if (response.status === 200) {
+            setLandList(response.data.map(land => ({
+                label: land.name,
+                value: land.id,
+            })));
+            total.current = response.data.total || response.data.length;
+        }
+        setLoading(false);
+    }, [dispatch]);
+
+    useEffect(() => {
+        landData();
+    }, [landData]);
+
+    const wifiData = useCallback(async () => {
+        setLoading(true);
+        const response = await wifiService.index(dispatch);
+        if (response.status === 200) {
+            setWifiList(response.data.map(wifi => ({
+                label: wifi.name,
+                value: wifi.id,
+            })));
+            total.current = response.data.total || response.data.length;
+        }
+        setLoading(false);
+    }, [dispatch]);
+
+    useEffect(() => {
+        wifiData();
+    }, [wifiData]);
+
     const submitOwnerCreate = async () => {
         setLoading(true);
         let updatePayload = { ...payload };
@@ -60,7 +193,7 @@ export const OwnerCreate = () => {
 
         const result = await ownerService.store(updatePayload, dispatch);
         if(result.data) {
-            navigate(`${paths.owner}/${result.data.id}`)
+            navigate(`${paths.owner}`)
         }
         setLoading(false);
     }
@@ -107,93 +240,283 @@ export const OwnerCreate = () => {
                             </div>
 
                             <div className="col-12 md:col-4 lg:col-4 py-3">
-                                <label htmlFor="owner_card" className='input-label'>{translate.owner_card} (required*) </label>
+                                <label htmlFor="corner" className='input-label'>{translate.corner} (required*) </label>
                                 <div className="p-inputgroup mt-2">
                                     <Dropdown
-                                        inputId='owner_card'
-                                        autoComplete='owner card'
-                                        name='owner card'
+                                        inputId='corner'
+                                        autoComplete='corner'
+                                        name='corner'
                                         filter
-                                        value={payload.ownercard_id}
-                                        onChange={(e) => payloadHandler(payload, e.value, 'ownercard_id', (updateValue) => {
+                                        value={payload.corner_id}
+                                        onChange={(e) => payloadHandler(payload, e.value, 'corner_id', (updateValue) => {
                                             setPayload(updateValue);
                                         })}
-                                        options={ownerList}
-                                        placeholder="Select a owner card"
+                                        options={cornerList}
+                                        placeholder="Select a corner"
                                         disabled={loading}
                                         className="p-inputtext-sm"
                                     />
                                 </div>
-                                <ValidationMessage field="ownercard_id" />
+                                <ValidationMessage field="corner_id" />
                             </div>
+
+                            <div className="col-12 md:col-4 lg:col-4 py-3">
+                                <label htmlFor="city" className='input-label'>{translate.city} (required*) </label>
+                                <div className="p-inputgroup mt-2">
+                                    <Dropdown
+                                        inputId='city'
+                                        autoComplete='city'
+                                        name='city'
+                                        filter
+                                        value={payload.city_id}
+                                        onChange={(e) => payloadHandler(payload, e.value, 'city_id', (updateValue) => {
+                                            setPayload(updateValue);
+                                        })}
+                                        options={cityList}
+                                        placeholder="Select a city"
+                                        disabled={loading}
+                                        className="p-inputtext-sm"
+                                    />
+                                </div>
+                                <ValidationMessage field="city_id" />
+                            </div>
+
+                            <div className="col-12 md:col-4 lg:col-4 py-3">
+                                <label htmlFor="township" className='input-label'>{translate.township} (required*) </label>
+                                <div className="p-inputgroup mt-2">
+                                    <Dropdown
+                                        inputId='township'
+                                        autoComplete='township'
+                                        name='township'
+                                        filter
+                                        value={payload.township_id}
+                                        onChange={(e) => payloadHandler(payload, e.value, 'township_id', (updateValue) => {
+                                            setPayload(updateValue);
+                                        })}
+                                        options={townshipList}
+                                        placeholder="Select a township"
+                                        disabled={loading}
+                                        className="p-inputtext-sm"
+                                    />
+                                </div>
+                                <ValidationMessage field="township_id" />
+                            </div>
+
+                            <div className="col-12 md:col-4 lg:col-4 py-3">
+                                <label htmlFor="ward" className='input-label'>{translate.ward} (required*) </label>
+                                <div className="p-inputgroup mt-2">
+                                    <Dropdown
+                                        inputId='ward'
+                                        autoComplete='ward'
+                                        name='ward'
+                                        filter
+                                        value={payload.ward_id}
+                                        onChange={(e) => payloadHandler(payload, e.value, 'ward_id', (updateValue) => {
+                                            setPayload(updateValue);
+                                        })}
+                                        options={wardList}
+                                        placeholder="Select a ward"
+                                        disabled={loading}
+                                        className="p-inputtext-sm"
+                                    />
+                                </div>
+                                <ValidationMessage field="ward_id" />
+                            </div>
+
+                            <div className="col-12 md:col-4 lg:col-4 py-3">
+                                <label htmlFor="street" className='input-label'>{translate.street} (required*) </label>
+                                <div className="p-inputgroup mt-2">
+                                    <Dropdown
+                                        inputId='street'
+                                        autoComplete='street'
+                                        name='street'
+                                        filter
+                                        value={payload.street_id}
+                                        onChange={(e) => payloadHandler(payload, e.value, 'street_id', (updateValue) => {
+                                            setPayload(updateValue);
+                                        })}
+                                        options={streetList}
+                                        placeholder="Select a street"
+                                        disabled={loading}
+                                        className="p-inputtext-sm"
+                                    />
+                                </div>
+                                <ValidationMessage field="street_id" />
+                            </div>
+
+                            {/* <div className="col-12 md:col-4 lg:col-4 py-3">
+                                <label htmlFor="land" className='input-label'>{translate.land} (required*) </label>
+                                <div className="p-inputgroup mt-2">
+                                    <Dropdown
+                                        inputId='land'
+                                        autoComplete='land'
+                                        name='land'
+                                        filter
+                                        value={payload.land_no}
+                                        onChange={(e) => payloadHandler(payload, e.value, 'land_no', (updateValue) => {
+                                            setPayload(updateValue);
+                                        })}
+                                        options={landList}
+                                        placeholder="Select a land"
+                                        disabled={loading}
+                                        className="p-inputtext-sm"
+                                    />
+                                </div>
+                                <ValidationMessage field="land_id" />
+                            </div> */}
 
                             <div className=' col-12 md:col-6 lg:col-4 py-3'>
                                 <div className="flex flex-column gap-2">
-                                    <label htmlFor="owner_id" className=' text-black'>{translate.owner_id} (required*)</label>
+                                    <label htmlFor="land_no" className=' text-black'>{translate.land} (required*)</label>
                                     <InputText
                                         className="p-inputtext-sm text-black"
-                                        id="owner_id"
-                                        name="owner_id"
-                                        autoComplete='name'
-                                        aria-describedby="name-help"
-                                        tooltip='owner id label'
+                                        id="land_no"
+                                        name="land_no"
+                                        autoComplete='land_no'
+                                        aria-describedby="land_no-help"
+                                        tooltip='land_no'
                                         tooltipOptions={{ ...tooltipOptions }}
-                                        placeholder='Enter owner id'
+                                        placeholder='Enter your land number'
                                         disabled={loading}
-                                        value={payload.owner_id ? payload.owner_id : ''}
-                                        onChange={(e) => payloadHandler(payload,e.target.value, 'owner_id', (updateValue) => {
+                                        value={payload.land_no}
+                                        onChange={(e) => payloadHandler(payload, e.target.value, 'land_no', (updateValue) => {
                                             setPayload(updateValue);
                                         })}
                                     />
-                                    <ValidationMessage field={"owner_id"} />
+                                    <ValidationMessage field={"land_no"} />
                                 </div>
                             </div>
 
                             <div className=' col-12 md:col-6 lg:col-4 py-3'>
                                 <div className="flex flex-column gap-2">
-                                    <label htmlFor="amount" className=' text-black'>{translate.amount} (required*)</label>
+                                    <label htmlFor="house_no" className=' text-black'>{translate.house_no} (required*)</label>
                                     <InputText
                                         className="p-inputtext-sm text-black"
-                                        id="amount"
-                                        name="amount"
-                                        autoComplete='amont'
-                                        aria-describedby="amount help"
-                                        tooltip='owner id label'
+                                        id="house_no"
+                                        name="house_no"
+                                        autoComplete='house_no'
+                                        aria-describedby="house_no-help"
+                                        tooltip='house_no'
                                         tooltipOptions={{ ...tooltipOptions }}
-                                        placeholder='Enter amount'
+                                        placeholder='Enter your house number'
                                         disabled={loading}
-                                        value={payload.amount}
-                                        onChange={(e) => payloadHandler(payload, e.target.value, 'amount', (updateValue) => {
+                                        value={payload.house_no}
+                                        onChange={(e) => payloadHandler(payload, e.target.value, 'house_no', (updateValue) => {
                                             setPayload(updateValue);
                                         })}
                                     />
-                                    <ValidationMessage field={"amount"} />
+                                    <ValidationMessage field={"house_no"} />
                                 </div>
                             </div>
 
-                            <div className=" col-12 md:col-6 lg:col-4 py-3">
+                            <div className=' col-12 md:col-6 lg:col-4 py-3'>
                                 <div className="flex flex-column gap-2">
-                                    <label htmlFor="expired_at" className=" text-black">
-                                        {translate.expired_at}
-                                    </label>
-                                    <Calendar
-                                        name='expired_at'
-                                        className="p-inputtext-sm sm:w-full mt-3 md:mt-0"
-                                        placeholder="Select expired at"
-                                        selectionMode={"single"}
-                                        onChange={(e) =>
-                                            payloadHandler(
-                                                payload,
-                                                moment(e.target.value).format("yy-MM-DD"),
-                                                "expired_at",
-                                                (updateValue) => {
-                                                    setPayload(updateValue);
-                                                }
-                                            )
-                                        }
+                                    <label htmlFor="property" className=' text-black'>{translate.property} (required*)</label>
+                                    <InputText
+                                        className="p-inputtext-sm text-black"
+                                        id="property"
+                                        name="property"
+                                        autoComplete='property'
+                                        aria-describedby="property-help"
+                                        tooltip='property'
+                                        tooltipOptions={{ ...tooltipOptions }}
+                                        placeholder='Vacant / Home / Shop'
+                                        disabled={loading}
+                                        value={payload.property}
+                                        onChange={(e) => payloadHandler(payload, e.target.value, 'property', (updateValue) => {
+                                            setPayload(updateValue);
+                                        })}
                                     />
+                                    <ValidationMessage field={"property"} />
+                                </div>
+                            </div>
 
-                                    <ValidationMessage field={"expired_at"} />
+                            <div className=' col-12 md:col-6 lg:col-4 py-3'>
+                                <div className="flex flex-column gap-2">
+                                    <label htmlFor="meter_no" className=' text-black'>{translate.meter_no} (required*)</label>
+                                    <InputText
+                                        className="p-inputtext-sm text-black"
+                                        id="meter_no"
+                                        name="meter_no"
+                                        autoComplete='meter_no'
+                                        aria-describedby="meter_no-help"
+                                        tooltip='meter_no'
+                                        tooltipOptions={{ ...tooltipOptions }}
+                                        placeholder='Enter your meter no'
+                                        disabled={loading}
+                                        value={payload.meter_no}
+                                        onChange={(e) => payloadHandler(payload, e.target.value, 'meter_no', (updateValue) => {
+                                            setPayload(updateValue);
+                                        })}
+                                    />
+                                    <ValidationMessage field={"meter_no"} />
+                                </div>
+                            </div>
+
+                            <div className=' col-12 md:col-6 lg:col-4 py-3'>
+                                <div className="flex flex-column gap-2">
+                                    <label htmlFor="meter_bill_code" className=' text-black'>{translate.meter_bill_code} (required*)</label>
+                                    <InputText
+                                        className="p-inputtext-sm text-black"
+                                        id="meter_bill_code"
+                                        name="meter_bill_code"
+                                        autoComplete='meter_bill_code'
+                                        aria-describedby="meter_bill_code-help"
+                                        tooltip='meter_bill_code'
+                                        tooltipOptions={{ ...tooltipOptions }}
+                                        placeholder='Enter your meter bill code'
+                                        disabled={loading}
+                                        value={payload.meter_bill_code}
+                                        onChange={(e) => payloadHandler(payload, e.target.value, 'meter_bill_code', (updateValue) => {
+                                            setPayload(updateValue);
+                                        })}
+                                    />
+                                    <ValidationMessage field={"meter_bill_code"} />
+                                </div>
+                            </div>
+
+                            <div className='flex col-12'>
+                            <div className="col-12 md:col-4 lg:col-4 py-3">
+                                <label htmlFor="wifi" className='input-label'>{translate.wifi} (required*) </label>
+                                <div className="p-inputgroup mt-2">
+                                    <Dropdown
+                                        inputId='wifi'
+                                        autoComplete='wifi'
+                                        name='wifi'
+                                        filter
+                                        value={payload.wifi_id}
+                                        onChange={(e) => payloadHandler(payload, e.value, 'wifi_id', (updateValue) => {
+                                            setPayload(updateValue);
+                                        })}
+                                        options={wifiList}
+                                        placeholder="Select a wifi"
+                                        disabled={loading}
+                                        className="p-inputtext-sm"
+                                    />
+                                </div>
+                                <ValidationMessage field="wifi_id" />
+                            </div>
+                            
+                            <div className=' col-12 md:col-6 lg:col-4 py-3'>
+                                <div className="flex flex-column gap-2">
+                                    <label htmlFor="wifi_user_id" className=' text-black'>{translate.wifi_user_id} (required*)</label>
+                                    <InputText
+                                        className="p-inputtext-sm text-black"
+                                        id="wifi_user_id"
+                                        name="wifi_user_id"
+                                        autoComplete='wifi_user_id'
+                                        aria-describedby="wifi_user_id-help"
+                                        tooltip='wifi_user_id'
+                                        tooltipOptions={{ ...tooltipOptions }}
+                                        placeholder='Enter your wifi user id'
+                                        disabled={loading}
+                                        value={payload.wifi_user_id}
+                                        onChange={(e) => payloadHandler(payload, e.target.value, 'wifi_user_id', (updateValue) => {
+                                            setPayload(updateValue);
+                                        })}
+                                    />
+                                        <ValidationMessage field={"wifi_user_id"} />
+                                    </div>
                                 </div>
                             </div>
 

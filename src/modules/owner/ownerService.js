@@ -29,6 +29,15 @@ export const ownerService = {
         }
         return response;
     },
+    corner: async (dispatch, params) => {
+        const response = await getRequest(endpoints.corner,params);
+        await httpServiceHandler(dispatch, response);
+
+        if(response.status === 200) {
+            dispatch(index(response.data.data ? response.data.data : response.data));
+        }
+        return response;
+    },
 
     update: async (dispatch, id, payload) => {
         const response = await putRequest(`${endpoints.owner}/${id}`, payload);

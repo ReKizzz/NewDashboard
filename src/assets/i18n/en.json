@@ -238,6 +238,11 @@
     "menu_wifis_create": "Wifis",
     "menu_lands_create": "Lands",
     "menu_renters_create": "Renters",
-    "create": "Create"
+    "create": "Create",
 
+    "house_no": "House No",
+    "property": "Property",
+    "meter_no": "Meter No",
+    "meter_bill_code": "Meter Bill Code",
+    "wifi_user_id": "Wifi User Id"
 }
