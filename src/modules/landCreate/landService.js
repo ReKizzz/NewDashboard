@@ -65,7 +65,7 @@ export const landService = {
   },
 
   delete: async (dispatch, id) => {
-    const response = await delRequest(`${endpoints.land}/delete/${id}`);
+    const response = await delRequest(`${endpoints.land}/${id}`);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {

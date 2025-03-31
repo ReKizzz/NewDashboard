@@ -65,7 +65,7 @@ export const wifiService = {
   },
 
   delete: async (dispatch, id) => {
-    const response = await delRequest(`${endpoints.wifi}/delete/${id}`);
+    const response = await delRequest(`${endpoints.wifi}/${id}`);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {

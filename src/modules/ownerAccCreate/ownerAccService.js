@@ -65,7 +65,7 @@ export const ownerAccService = {
   },
 
   delete: async (dispatch, id) => {
-    const response = await delRequest(`${endpoints.ownerAcc}/delete/${id}`);
+    const response = await delRequest(`${endpoints.ownerAcc}/${id}`);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {

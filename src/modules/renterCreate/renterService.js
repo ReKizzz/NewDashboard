@@ -65,7 +65,7 @@ export const renterService = {
   },
 
   delete: async (dispatch, id) => {
-    const response = await delRequest(`${endpoints.renter}/delete/${id}`);
+    const response = await delRequest(`${endpoints.renter}/${id}`);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {

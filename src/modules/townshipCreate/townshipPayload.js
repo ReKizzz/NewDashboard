@@ -6,18 +6,16 @@ export const townshipPayload = {
   },
   update: {
     name: "",
-    date:""
   },
   townshipColumns: [
-    { field: "id", header: "No", sortable: true, show: true },
+    { field: "index", header: "No", sortable: false, show: true, width: 100 },
     { field: "name", header: "Name", sortable: true, show: true, width: 200 },
-    { field: "created_at", header: "Date", sortable: true, show: true, width: 200 },
     { field: "action", header: "Action", sortable: false, show: true}
   ],
   townshipPaginateParams: {
     page: 1,
     per_page: paginateOptions.rows,
-    columns: "name,date",
+    columns: "name",
     search: "",
     order: "",
     sort: "DESC",

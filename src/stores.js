@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-import promotionSlice from "./modules/promotion/promotionSlice";
 import shareSlice from "./shares/shareSlice";
 import adminSlice from "./modules/admin/adminSlice";
 import userSlice from "./modules/user/userSlice";
@@ -12,7 +11,6 @@ import settingSlice from "./modules/setting/settingSlice";
 import discountSlice from "./modules/discount/discountSlice";
 import memberOrderSlice from "./modules/memberOrder/memberOrderSlice";
 import countrySlice from "./modules/country/countrySlice";
-import regionAndStateSlice from "./modules/regionAndState/regionAndStateSlice";
 import ownerSlice from "./modules/owner/ownerSlice";
 import ownerAccSlice from "./modules/ownerAccCreate/ownerAccSlice";
 import cornerSlice from "./modules/cornerCreate/cornerSlice";
@@ -26,7 +24,6 @@ import renterSlice from "./modules/renterCreate/renterSlice"
 
 export const stores = configureStore({
    reducer: {
-    promotion: promotionSlice,
     share: shareSlice,
     admin: adminSlice,
     user: userSlice,
@@ -39,7 +36,6 @@ export const stores = configureStore({
     discount: discountSlice,
     memberOrder: memberOrderSlice,
     country: countrySlice,
-    regionAndState: regionAndStateSlice,
     owner: ownerSlice,
     ownerAcc: ownerAccSlice,
     corner: cornerSlice,

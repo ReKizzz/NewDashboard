@@ -65,7 +65,7 @@ export const wardService = {
   },
 
   delete: async (dispatch, id) => {
-    const response = await delRequest(`${endpoints.ward}/delete/${id}`);
+    const response = await delRequest(`${endpoints.ward}/${id}`);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {

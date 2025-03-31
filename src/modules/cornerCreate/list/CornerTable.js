@@ -92,11 +92,10 @@ export const CornerTable = () => {
                 style={{ minWidth: "250px" }}
                 field={col.field}
                 header={col.header}
-                sortable
-                body={(rowData) => {
+                body={(rowData, {rowIndex} ) => {
                   switch (col.field) {
-                    case "no":
-                      return rowData[col.field];
+                    case "index":
+                      return rowIndex + 1;
                     case "name":
                       return rowData[col.field];
                     case "created_at":
@@ -105,12 +104,12 @@ export const CornerTable = () => {
                       return (
                         <div className="flex flex-column col-6">
                           <Button
-                            label="Edit"
+                            icon="pi pi-pencil"
                             className="p-button-success btn-edit"
                             onClick={() => navigate(`${paths.cornerUpdate}/${rowData.id}`)}
                           />
                           <Button
-                            label="Delete"
+                            icon="pi pi-trash"
                             className="p-button-danger btn-edit"
                             style={{ marginTop: "10px" }}
                             onClick={() => handleDelete(rowData.id)}

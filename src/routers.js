@@ -3,7 +3,6 @@ import { DefaultLayout } from "./layouts/default";
 import { NotFound } from "./layouts/default/pages/NotFound";
 import { BlankTemplate } from "./layouts/default/pages/BlankTemplate";
 import { Login } from "./modules/auth/entry/Login";
-import { promotionRoutes } from "./modules/promotion/promotionRoutes";
 import { userRoutes } from "./modules/user/userRoutes";
 import { adminRoutes } from "./modules/admin/adminRoutes";
 import { deliveryRoutes } from "./modules/delivery/deliveryRoutes";
@@ -15,7 +14,6 @@ import { settingRoutes } from "./modules/setting/settingRoutes";
 import { discountRoutes } from "./modules/discount/discountRoutes";
 import { memberOrderRoutes } from "./modules/memberOrder/memberOrderRoute";
 import { countryRoutes } from "./modules/country/countryRoutes";
-import { regionAndStateRoutes } from "./modules/regionAndState/regionAndStateRoutes";
 import { ownerRoutes } from "./modules/owner/ownerRoute";
 import { ownerAccRoutes } from "./modules/ownerAccCreate/ownerAccRoutes";
 import { cornerRoutes } from "./modules/cornerCreate/cornerRoutes";
@@ -33,7 +31,6 @@ export const routers = createBrowserRouter([
         element: <DefaultLayout />,
         errorElement: <NotFound />,
         children: [
-            ...promotionRoutes,
             ...userRoutes,
             ...adminRoutes,
             ...categoryRoutes,
@@ -45,7 +42,6 @@ export const routers = createBrowserRouter([
             ...authorizationRoute,
             ...settingRoutes,
             ...countryRoutes,
-            ...regionAndStateRoutes,
             ...ownerRoutes,
             ...ownerAccRoutes,
             ...cornerRoutes,

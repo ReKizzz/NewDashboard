@@ -29,47 +29,47 @@ export const items = [
         children: [
             {
                 key: 'menu_owners_create',
-                label: 'menu_owners_create',
+                label: 'owner',
                 url: paths.ownerAccCreate
             },
             {
                 key: 'menu_corners_create',
-                label: 'menu_corners_create',
+                label: 'corner',
                 url: paths.cornerCreate
             },
             {
                 key: 'menu_cities_create',
-                label: 'menu_cities_create',
+                label: 'city',
                 url: paths.cityCreate
             },
             {
                 key: 'menu_townships_create',
-                label: 'menu_townships_create',
+                label: 'township',
                 url: paths.townshipCreate
             },
             {
                 key: 'menu_wards_create',
-                label: 'menu_wards_create',
+                label: 'ward',
                 url: paths.wardCreate
             },
             {
                 key: 'menu_streets_create',
-                label: 'menu_streets_create',
+                label: 'street',
                 url: paths.streetCreate
             },
             {
                 key: 'menu_wifis_create',
-                label: 'menu_wifis_create',
+                label: 'wifi',
                 url: paths.wifiCreate
             },
             {
                 key: 'menu_lands_create',
-                label: 'menu_lands_create',
+                label: 'land',
                 url: paths.landCreate
             },
             {
                 key: 'menu_renters_create',
-                label: 'menu_renters_create',
+                label: 'renter',
                 url: paths.renterCreate
             },
         ]

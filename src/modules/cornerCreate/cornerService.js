@@ -65,7 +65,7 @@ export const cornerService = {
   },
 
   delete: async (dispatch, id) => {
-    const response = await delRequest(`${endpoints.corner}/delete/${id}`);
+    const response = await delRequest(`${endpoints.corner}/${id}`);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {

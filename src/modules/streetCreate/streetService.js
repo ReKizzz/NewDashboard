@@ -65,7 +65,7 @@ export const streetService = {
   },
 
   delete: async (dispatch, id) => {
-    const response = await delRequest(`${endpoints.street}/delete/${id}`);
+    const response = await delRequest(`${endpoints.street}/${id}`);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
