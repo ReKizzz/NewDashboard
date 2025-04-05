@@ -244,5 +244,6 @@
     "property": "Property",
     "meter_no": "Meter No",
     "meter_bill_code": "Meter Bill Code",
-    "wifi_user_id": "Wifi User Id"
+    "wifi_user_id": "Wifi User Id",
+    "land_title": "Land Title"
 }

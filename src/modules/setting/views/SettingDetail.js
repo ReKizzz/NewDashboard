@@ -1,6 +1,7 @@
 import React from "react";
 import { Card } from "primereact/card";
 import { LanguageUpdate } from "../entry/LanguageUpdate";
+import { ColorUpdate } from "../entry/ColorUpdate";
 import { useSelector } from "react-redux";
 
 export const SettingDetail = () => {
@@ -16,6 +17,7 @@ export const SettingDetail = () => {
         >
           <div className="col-12 md:col-3">
             <LanguageUpdate />
+            <ColorUpdate/>
           </div>
         </Card>
       </div>

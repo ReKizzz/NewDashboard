@@ -38,7 +38,7 @@ export const ownerRoutes = [
         loader: () => {
             return {
                 breadcrumbs: [
-                    { label: "List", url: paths.owner },
+                    { label: "List", url: paths.ownerList },
                     { label: "Create", url: paths.ownerCreate}
                 ]
             }

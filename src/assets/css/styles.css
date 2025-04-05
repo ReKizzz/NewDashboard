@@ -6,15 +6,15 @@ body{
     font-family: 'Noto Sans Myanmar', sans-serif;
 }
 .sidebar {
-    height: 100vh;
-    background-color: #1c6ff3;
+    background-color: var(--sidebar, #1c6ff3);
     color: white;
     top: 0;
     left: 0;
     padding-top: 20px;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     z-index: 999999;
-  }
+}
+
 
 .logout {
     background-color: #1c6ff3;

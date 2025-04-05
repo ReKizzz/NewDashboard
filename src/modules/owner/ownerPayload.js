@@ -31,7 +31,7 @@ export const ownerPayload = {
         reason: "",
     },
     columns: [
-        { field: "id", header: "ID", sortable: true, show: true, width: 100 },
+        { field: "index", header: "No", sortable: false, show: true, width: 100 },
         { field: "owner_id", header: "Owner ID", sortable: true, show: true, width: 250 },
         { field: "corner_id", header: "Corner ID", sortable: true, show: true, width: 250 },
         { field: "city_id", header: "City ID", sortable: true, show: true, width: 250 },

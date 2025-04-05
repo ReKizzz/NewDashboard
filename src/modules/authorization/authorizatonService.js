@@ -31,7 +31,7 @@ export const authorizationService = {
         return response;
     },
     roleUpdate: async (dispatch, id, payload) => {
-        const response = await putRequest(`${endpoints.role}/${id}`, payload);
+        const response = await postRequest(`${endpoints.role}/${id}`, payload);
         await httpServiceHandler(dispatch, response);
 
         if(response.status === 200) {

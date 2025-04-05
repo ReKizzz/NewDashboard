@@ -2,7 +2,6 @@ import { Button } from "primereact/button";
 import { getData } from "../helpers/localstorage";
 
 const paginatorLeft = <Button type="button" icon="pi pi-refresh" text />;
-// const paginatorRight = <Button type="button" icon="pi pi-download" text />;
 
 export const env = [
     'http://localhost:8000',
@@ -11,7 +10,7 @@ export const env = [
 
 export const paginateOptions = {
     rows: 10,
-    rowsPerPageOptions: [10,50,100,150,500,1000],
+    rowsPerPageOptions: [10, 50, 100, 150, 500, 1000],
     total: 0,
     paginatorTemplate: "RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink",
     currentPageReportTemplate: "{first} to {last} of {totalRecords}",
@@ -19,22 +18,19 @@ export const paginateOptions = {
     sortMode: "single",
     resizableColumns: true,
     lazy: true
-}
+};
 
 export const keys = {
     API_TOKEN: "TOKEN",
     USER: "USER",
     PERMISSION: "PERMISSION",
     ROLE: "ROLE",
-    LANGUAGE: "LANGUAGE"
-}
+    LANGUAGE: "LANGUAGE",
+    COLOR: "COLOR"  // Added this for color selection
+};
 
 /**
  * Notification Options
- * serverity ["error" | "success" | "info" | "warn"]
- * sticky [boolean | default -> true ]
- * life [number]
- * closeable [boolean | default -> true]
  */
 export const notificationOptions = {
     severity: "info",
@@ -42,7 +38,7 @@ export const notificationOptions = {
     life: 2000,
     closable: true,
     icon: "pi pi-info-circle",
-}
+};
 
 export const statusOptions = [
     { status: "ACTIVE", color: "chip-success" },
@@ -58,7 +54,7 @@ export const statusOptions = [
 
 export const tooltipOptions = {
    position: 'top'
-}
+};
 
 export const auditColumns = [
     { field: "created_by", header: "Created By" },
@@ -69,27 +65,18 @@ export const auditColumns = [
 ];
 
 export const responsiveOptions = [
-    {
-        breakpoint: '991px',
-        numVisible: 4
-    },
-    {
-        breakpoint: '767px',
-        numVisible: 3
-    },
-    {
-        breakpoint: '575px',
-        numVisible: 1
-    }
+    { breakpoint: '991px', numVisible: 4 },
+    { breakpoint: '767px', numVisible: 3 },
+    { breakpoint: '575px', numVisible: 1 }
 ];
 
 export const itemTemplate = (item) => {
     return <img src={item?.itemImageSrc} alt={'GSC Export'} style={{ width: '100%', minHeight: '368px', display: 'block' }} />;
-}
+};
 
 export const thumbnailTemplate = (item) => {
     return <img width={100} height={80} src={item.thumbnailImageSrc} alt={item.alt} style={{ display: 'block' }} />;
-}
+};
 
 /**
  * Language / Region / Country
@@ -100,6 +87,20 @@ export const countries = [
     { name: 'English', code: 'UK' }
 ];
 export const defaultLanguage = getData(keys.LANGUAGE) ? getData(keys.LANGUAGE) : countries[1];
+
+/**
+ * Color Options
+ */
+export const colors = [
+    { name: 'Red', code: '#FF0000' },
+    { name: 'Green', code: '#00FF00' },
+    { name: 'Blue', code: '#0000FF' },
+    { name: 'Yellow', code: '#FFFF00' },
+    { name: 'Black', code: '#000000' },
+    { name: 'White', code: '#ffffff' }
+];
+
+export const defaultColor = getData(keys.COLOR) ? getData(keys.COLOR) : colors[2]; // Default to Blue
 
 export const renderHeader = () => {
     return (

@@ -199,7 +199,11 @@ export const RoleTableView = () => {
                             body={(value) => {
                                 if (col.field === 'created_at' || col.field === 'updated_at' || col.field === 'deleted_at') {
                                     return <label> {datetime.long(value[col.field])} </label>
-                                } else {
+                                } 
+                                else if (col.field === 'created_by' || col.field === 'updated_by'){
+                                    return <label>{value[col.field]}</label>
+                                } 
+                                else {
                                     return <label> {value[col.field] && value[col.field].name} </label>
                                 }
                             }}

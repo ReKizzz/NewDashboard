@@ -1,25 +1,15 @@
 import { DataTable } from "primereact/datatable"
 import { Column } from "primereact/column";
-import { Search } from "../../../shares/Search";
-import { Button } from "primereact/button";
-import { auditColumns, paginateOptions } from "../../../constants/config";
+import { paginateOptions } from "../../../constants/config";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { PaginatorRight } from "../../../shares/PaginatorRight";
 import { useDispatch, useSelector } from "react-redux";
 import { Paginator } from "primereact/paginator";
-import { Status } from "../../../shares/Status";
 import { paths } from "../../../constants/paths";
-import { datetime } from "../../../helpers/datetime";
-import { setDateFilter, setStatusFilter } from "../../../shares/shareSlice";
-import moment from "moment";
-import { FilterByDate } from "../../../shares/FilterByDate";
 import { Card } from "primereact/card";
 import { NavigateId } from "../../../shares/NavigateId";
 import { ownerPayload } from "../ownerPayload";
 import { setPaginate } from "../ownerSlice";
 import { ownerService } from "../ownerService";
-import { getRequest } from "../../../helpers/api";
-import { endpoints } from "../../../constants/endpoints";
 
 export const OwnerTableView = () => {
 
@@ -28,7 +18,7 @@ export const OwnerTableView = () => {
     const { translate } = useSelector(state => state.setting);
 
     const [loading, setLoading] = useState(false);
-    const [showAuditColumn, setShowAuditColumn] = useState(false);
+    // const [showAuditColumn, setShowAuditColumn] = useState(false);
     const columns = useRef(ownerPayload.columns);
     const showColumns = useRef(columns.current.filter(col => col.show === true));
     const first = useRef(0);
@@ -54,14 +44,14 @@ export const OwnerTableView = () => {
      * Event - Search
      * @param {*} event 
      */
-    const onSearchChange = (event) => {
-        dispatch(
-            setPaginate({
-                ...paginateParams,
-                search: event,
-            })
-        );
-    };
+    // const onSearchChange = (event) => {
+    //     dispatch(
+    //         setPaginate({
+    //             ...paginateParams,
+    //             search: event,
+    //         })
+    //     );
+    // };
 
     /**
  * Event - Column sorting "DESC | ASC"
@@ -89,25 +79,6 @@ export const OwnerTableView = () => {
         }
         setLoading(false);
     }, [dispatch, paginateParams]);
-
-    /**
-    * loading User Status
-    */
-    // const loadingStatus = useCallback(async () => {
-    //     const status = await getRequest(
-    //         `${endpoints.status}?type=owner`
-    //     );
-
-    //     if (status.status === 200) {
-    //         ownerStatus.current = ownerStatus.current.concat(
-    //             status.data.owner
-    //         );
-    //     }
-    // }, []);
-
-    // useEffect(() => {
-    //     loadingStatus();
-    // }, [loadingStatus]);
 
     useEffect(() => {
         loadingData();
@@ -139,9 +110,10 @@ export const OwnerTableView = () => {
                                         field={col.field}
                                         header={col.header}
                                         sortable
-                                        body={(value) => {
-            
+                                        body={(value, {rowIndex}) => {
                                             switch (col.field) {
+                                                case "index":
+                                                    return rowIndex + 1;
                                                 case "owner_id":
                                                     return (
                                                         <NavigateId
@@ -149,12 +121,6 @@ export const OwnerTableView = () => {
                                                             value={value[col.field]}
                                                         />
                                                     );
-                                                case "expired_at":
-                                                    return <span>{moment(value[col.field]).format("yy-MM-DD")}</span>
-                                                case "amount":
-                                                    return <span> {value[col.field]?.toLocaleString()} Ks </span>
-                                                case "status":
-                                                    return <Status status={value[col.field]} />;
                                                 default:
                                                     return value[col.field];
                                             }

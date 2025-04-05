@@ -1,0 +1,43 @@
+{
+    "primary": "#007bff",
+    "secondary": "#6c757d",
+    "success": "#28a745",
+    "danger": "#dc3545",
+    "warning": "#ffc107",
+    "info": "#17a2b8",
+    "light": "#f8f9fa",
+    "dark": "#343a40",
+    "white": "#ffffff",
+    "black": "#000000",
+  
+    "background": "#f4f6f9",
+    "sidebar_background": "#343a40",
+    "sidebar_text": "#ffffff",
+    "sidebar_hover": "#495057",
+  
+    "header_background": "#ffffff",
+    "header_text": "#212529",
+  
+    "button_primary": "#007bff",
+    "button_secondary": "#6c757d",
+    "button_success": "#28a745",
+    "button_danger": "#dc3545",
+  
+    "table_header_background": "#f1f1f1",
+    "table_row_hover": "#f9f9f9",
+  
+    "text_primary": "#212529",
+    "text_secondary": "#6c757d",
+    "text_muted": "#adb5bd",
+  
+    "border_color": "#dee2e6",
+    "input_background": "#ffffff",
+    "input_border": "#ced4da",
+    "input_focus_border": "#80bdff",
+    "input_focus_shadow": "rgba(0, 123, 255, 0.25)",
+  
+    "card_background": "#ffffff",
+    "card_border": "#e0e0e0",
+    "card_shadow": "rgba(0, 0, 0, 0.05)"
+  }
+  

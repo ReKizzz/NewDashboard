@@ -16,9 +16,6 @@ import { Dropdown } from 'primereact/dropdown';
 import { ownerPayload } from '../ownerPayload';
 import { ownerService } from '../ownerService';
 import { ownerAccService } from '../../ownerAccCreate/ownerAccService';
-// import { ownerCardService } from '../../ownerCard/ownerService';
-import { AppEditor } from '../../../shares/AppEditor';
-import { getRequest } from '../../../helpers/api';
 import { cornerService } from '../../cornerCreate/cornerService';
 import { cityService } from '../../cityCreate/cityService';
 import { townshipService } from '../../townshipCreate/townshipService';
@@ -344,27 +341,6 @@ export const OwnerCreate = () => {
                                 <ValidationMessage field="street_id" />
                             </div>
 
-                            {/* <div className="col-12 md:col-4 lg:col-4 py-3">
-                                <label htmlFor="land" className='input-label'>{translate.land} (required*) </label>
-                                <div className="p-inputgroup mt-2">
-                                    <Dropdown
-                                        inputId='land'
-                                        autoComplete='land'
-                                        name='land'
-                                        filter
-                                        value={payload.land_no}
-                                        onChange={(e) => payloadHandler(payload, e.value, 'land_no', (updateValue) => {
-                                            setPayload(updateValue);
-                                        })}
-                                        options={landList}
-                                        placeholder="Select a land"
-                                        disabled={loading}
-                                        className="p-inputtext-sm"
-                                    />
-                                </div>
-                                <ValidationMessage field="land_id" />
-                            </div> */}
-
                             <div className=' col-12 md:col-6 lg:col-4 py-3'>
                                 <div className="flex flex-column gap-2">
                                     <label htmlFor="land_no" className=' text-black'>{translate.land} (required*)</label>
@@ -519,18 +495,84 @@ export const OwnerCreate = () => {
                                     </div>
                                 </div>
                             </div>
-
-                            <FormMainAction
-                                cancel={translate.cancel}
-                                onCancel={() => navigate(paths.owner)}
-                                submit={translate.submit}
-                                onSubmit={submitOwnerCreate}
-                                loading={loading}
-                            />
-
                         </div>
-
                     </Card>
+                    
+                    <Card style={{ marginTop: "20px"}}>
+                        <div className='grid'>
+                        <h1 className='col-12 flex align-items-center justify-content-center'>Land Detail</h1>
+                            <div className="col-12 md:col-4 lg:col-4 py-3">
+                                <label htmlFor="land" className='input-label'>{translate.land_title} (required*) </label>
+                                <div className="p-inputgroup mt-2">
+                                    <Dropdown
+                                        inputId='land'
+                                        autoComplete='land'
+                                        name='land'
+                                        filter
+                                        value={payload.land_no}
+                                        onChange={(e) => payloadHandler(payload, e.value, 'land_no', (updateValue) => {
+                                            setPayload(updateValue);
+                                        })}
+                                        options={landList}
+                                        placeholder="Select a land"
+                                        disabled={loading}
+                                        className="p-inputtext-sm"
+                                    />
+                                </div>
+                                <ValidationMessage field="land_id" />
+                            </div> 
+
+                            <div className="col-12 md:col-3 lg:col-4 py-3">
+                                <label htmlFor="dob" className='input-label text-black'>Issuance Date (required*)</label>
+                                <div className="p-inputgroup mt-2">
+                                    <Calendar
+                                        name="date"
+                                        className="p-inputtext-sm md:mr-2 sm:w-full"
+                                        placeholder="Select deposit of date"
+                                        selectionMode={"single"}
+                                        maxDate={new Date()}
+                                        value={payload.created_at ? moment(payload.created_at).toDate() : new Date()}
+                                        tooltip="Deposit date"
+                                        tooltipOptions={{ ...tooltipOptions }}
+                                        disabled={loading}
+                                        onChange={(e) => payloadHandler(payload, e.target.value, 'created_at', (updateValue) => {
+                                            setPayload(updateValue);
+                                        })}
+                                    />
+                                </div>
+                                    <ValidationMessage field="created_at" />
+                            </div>
+
+                            <div className="col-12 md:col-3 lg:col-4 py-3">
+                                <label htmlFor="dob" className='input-label text-black'>Expired/Renew (required*)</label>
+                                <div className="p-inputgroup mt-2">
+                                    <Calendar
+                                        name="date"
+                                        className="p-inputtext-sm md:mr-2 sm:w-full"
+                                        placeholder="Select deposit of date"
+                                        selectionMode={"single"}
+                                        maxDate={new Date()}
+                                        value={payload.created_at ? moment(payload.created_at).toDate() : new Date()}
+                                        tooltip="Deposit date"
+                                        tooltipOptions={{ ...tooltipOptions }}
+                                        disabled={loading}
+                                        onChange={(e) => payloadHandler(payload, e.target.value, 'created_at', (updateValue) => {
+                                            setPayload(updateValue);
+                                        })}
+                                    />
+                                </div>
+                                    <ValidationMessage field="created_at" />
+                            </div>
+
+                            </div>
+                    </Card>
+                    <FormMainAction
+                        cancel={translate.cancel}
+                        onCancel={() => navigate(paths.owner)}
+                        submit={translate.submit}
+                        onSubmit={submitOwnerCreate}
+                        loading={loading}
+                    />
                 </div>
             </div>
 

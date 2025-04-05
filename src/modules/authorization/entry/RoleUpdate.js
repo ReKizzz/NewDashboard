@@ -14,31 +14,6 @@ import { MultiSelect } from 'primereact/multiselect';
 import { FormMainAction } from '../../../shares/FormMainAction';
 import { Checkbox } from 'primereact/checkbox';
 
-const formatMultiSelect = (value, preValue) => {
-    const permissionFormat = value?.map((per) => {
-        let id = [];
-        if (per?.id) {
-            id.push(...id, per?.id);
-        }
-        if (per?.code) {
-            id.push(...id, per?.code);
-        }
-        return id?.flat();
-    });
-
-    const concetPreValue = preValue?.map((per) => {
-        let id = [];
-        id.push(per.id)
-        return id;
-    });
-
-    const result = permissionFormat.concat(concetPreValue);
-    const final = result.flat()?.filter((value, index, self) => self.indexOf(value) === index);
-
-    return final;
-
-}
-
 export const RoleUpdate = ({ dataSource, callback }) => {
 
     const [loading, setLoading] = useState(false);
@@ -57,17 +32,17 @@ export const RoleUpdate = ({ dataSource, callback }) => {
      * **/
     const submitUpdateRole = async () => {
         setLoading(true);
-        const permissionFormat = formatMultiSelect(payload?.permissions, dataSource?.role.permissions)
         const mainPayload = {
             name: payload.name,
-            description: payload.description,
-            is_merchant: isMerchant,
-            permissions: permissionFormat
+            description: payload.description
         }
 
-        await authorizationService.roleUpdate(dispatch, dataSource.id, mainPayload);
+        const response = await authorizationService.roleUpdate(dispatch, dataSource.id, mainPayload);
         callback()
         setLoading(false);
+        if (response){
+            navigate(paths.role)
+        }
     }
 
 
@@ -126,54 +101,6 @@ export const RoleUpdate = ({ dataSource, callback }) => {
                         />
                     </div>
                     <ValidationMessage field="description" />
-                </div>
-
-                <div className=" col-12 md:col-6 lg:col-4 py-3">
-                    <div className="flex flex-row align-items-center h-full gap-2">
-                        <Checkbox
-                            className="p-inputtext-sm text-black"
-                            inputId="is_merchant"
-                            name="is merchant"
-                            autoComplete="is merchant"
-                            aria-describedby="is merchant help"
-                            tooltip="Member is merchant"
-                            tooltipOptions={{ ...tooltipOptions }}
-                            placeholder="Enter member is merchant"
-                            disabled={loading}
-                            checked={isMerchant ? isMerchant : ''}
-                            onChange={(e) => {
-                                setIsMerchant(e.checked);
-                            }
-                            }
-                        />
-                        <label htmlFor="is_merchant" className=" text-black">
-                            {translate.is_merchant}
-                        </label>
-                        <ValidationMessage field={"is_merchant"} />
-                    </div>
-                </div>
-
-                <div className="col-12 md:col-4 lg:col-4 py-3">
-                    <label htmlFor='permission' className='input-label'> {translate.permission} </label>
-                    <div className="p-inputgroup mt-2">
-                        <MultiSelect
-                            inputId='permission'
-                            value={payload ? payload?.permissions : null}
-                            onChange={(e) => {
-                                payloadHandler(payload, e.value, 'permissions', (updateValue) => {
-                                    setPayload(updateValue);
-                                })
-                            }}
-                            filter
-                            display="chip"
-                            optionLabel="name"
-                            options={dataSource ? dataSource?.permissionList : null}
-                            placeholder="Select a permission"
-                            disabled={loading}
-                            className="p-inputtext-sm"
-                        />
-                    </div>
-                    <ValidationMessage field="permissions" />
                 </div>
 
                 <FormMainAction

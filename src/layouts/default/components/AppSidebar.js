@@ -28,6 +28,7 @@ export const AppSidebar = () => {
 
   const { translate } = useSelector((state) => state.setting);
   const [selectedKeys, setSelectedKeys] = useState(null);
+  const sidebarColor = useSelector((state) => state.setting.sidebarColor);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const state = useSelector((state) => state.share);
@@ -44,8 +45,9 @@ export const AppSidebar = () => {
   };
 
   return (
-    <div className="sidebar col-2 d-flex flex-column justify-content-between">
+    <div className="sidebar col-2 d-flex flex-column justify-content-between" style={{ backgroundColor: sidebarColor }}>
       <Tree
+        style={{ flex: 1, overflowY: 'auto', height: "100vh"}}
         value={items}
         selectionMode="single"
         nodeTemplate={nodeTemplate}
