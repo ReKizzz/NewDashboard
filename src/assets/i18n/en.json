@@ -245,5 +245,10 @@
     "meter_no": "Meter No",
     "meter_bill_code": "Meter Bill Code",
     "wifi_user_id": "Wifi User Id",
-    "land_title": "Land Title"
+    "land_title": "Land Title",
+    "contract_date": "Contract Date",
+    "contract_end_date": "Contract End Date",
+    "total_months": "Total Months",
+    "price_per_month": "Price Per Month",
+    "note": "Note"
 }

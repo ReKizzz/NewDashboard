@@ -22,7 +22,11 @@ import { townshipService } from '../../townshipCreate/townshipService';
 import { wardService } from '../../wardCreate/wardService';
 import { streetService } from '../../streetCreate/streetService';
 import { landService } from '../../landCreate/landService';
-import { wifiService } from '../../wifiCreate/wifiService'
+import { wifiService } from '../../wifiCreate/wifiService';
+import { Button } from "primereact/button";
+import { renterService } from '../../renterCreate/renterService'
+import { InputTextarea } from 'primereact/inputtextarea';
+
 
 export const OwnerCreate = () => {
 
@@ -37,11 +41,73 @@ export const OwnerCreate = () => {
     const [streetList, setStreetList] = useState([]);
     const [landList, setLandList] = useState([]);
     const [wifiList, setWifiList] = useState([]);
+    const [renterList, setRenterList] = useState([]);
     const total = useRef(0);
     
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { translate } = useSelector(state => state.setting);
+    const [selectedOption, setSelectedOption] = useState('-');
+    const [contracts, setContracts] = useState([
+        {
+          contract_date: null,
+          contract_end_date: null,
+          total_months: "",
+          price_per_month: "",
+          note: "",
+          photos: [],
+        },
+      ]);
+      
+
+      const handleAddContract = () => {
+        setContracts([
+            ...contracts,
+            {
+                contract_date: null,
+                contract_end_date: null,
+                total_months: "",
+                price_per_month: "",
+                note: "",
+                photos: [],
+            },
+        ]);
+    };
+    const handleRemoveContract = (index) => {
+        const updatedContracts = contracts.filter((_, contractIndex) => contractIndex !== index);
+        setContracts(updatedContracts);
+    };
+    
+    
+      
+    const [photos, setPhotos] = useState([]);
+
+    const handleFileChange = (e) => {
+        const files = Array.from(e.target.files);
+        const newPhotos = files.map((file) => ({
+            file,
+            preview: URL.createObjectURL(file),
+        }));
+        setPhotos((prev) => [...prev, ...newPhotos]);
+    };
+    
+    const handleRemovePhoto = (indexToRemove) => {
+        setPhotos((prev) => {
+            const updated = [...prev];
+            // Clean up object URL
+            URL.revokeObjectURL(updated[indexToRemove].preview);
+            updated.splice(indexToRemove, 1);
+            return updated;
+        });
+    };
+    
+    useEffect(() => {
+        // Cleanup previews on component unmount
+        return () => {
+            photos.forEach((p) => URL.revokeObjectURL(p.preview));
+        };
+    }, [photos]);
+    
 
     /**
     * Loading user Data
@@ -183,6 +249,23 @@ export const OwnerCreate = () => {
         wifiData();
     }, [wifiData]);
 
+    const renterData = useCallback(async () => {
+        setLoading(true);
+        const response = await renterService.index(dispatch);
+        if (response.status === 200) {
+            setRenterList(response.data.map(renter => ({
+                label: renter.name,
+                value: renter.id,
+            })));
+            total.current = response.data.total || response.data.length;
+        }
+        setLoading(false);
+    }, [dispatch]);
+
+    useEffect(() => {
+        renterData();
+    }, [renterData]);
+
     const submitOwnerCreate = async () => {
         setLoading(true);
         let updatePayload = { ...payload };
@@ -194,7 +277,7 @@ export const OwnerCreate = () => {
         }
         setLoading(false);
     }
-
+    
     // console.log(payload);
 
     return (
@@ -500,7 +583,7 @@ export const OwnerCreate = () => {
                     
                     <Card style={{ marginTop: "20px"}}>
                         <div className='grid'>
-                        <h1 className='col-12 flex align-items-center justify-content-center'>Land Detail</h1>
+                        <h1 className='col-12 flex align-items-center justify-content-center'>Land Details</h1>
                             <div className="col-12 md:col-4 lg:col-4 py-3">
                                 <label htmlFor="land" className='input-label'>{translate.land_title} (required*) </label>
                                 <div className="p-inputgroup mt-2">
@@ -531,16 +614,16 @@ export const OwnerCreate = () => {
                                         placeholder="Select deposit of date"
                                         selectionMode={"single"}
                                         maxDate={new Date()}
-                                        value={payload.created_at ? moment(payload.created_at).toDate() : new Date()}
+                                        value={payload.issuance_date ? moment(payload.issuance_date).toDate() : new Date()}
                                         tooltip="Deposit date"
                                         tooltipOptions={{ ...tooltipOptions }}
                                         disabled={loading}
-                                        onChange={(e) => payloadHandler(payload, e.target.value, 'created_at', (updateValue) => {
+                                        onChange={(e) => payloadHandler(payload, e.target.value, 'issuance_date', (updateValue) => {
                                             setPayload(updateValue);
                                         })}
                                     />
                                 </div>
-                                    <ValidationMessage field="created_at" />
+                                    <ValidationMessage field="issuance_date" />
                             </div>
 
                             <div className="col-12 md:col-3 lg:col-4 py-3">
@@ -552,20 +635,223 @@ export const OwnerCreate = () => {
                                         placeholder="Select deposit of date"
                                         selectionMode={"single"}
                                         maxDate={new Date()}
-                                        value={payload.created_at ? moment(payload.created_at).toDate() : new Date()}
+                                        value={payload.expired ? moment(payload.expired).toDate() : new Date()}
                                         tooltip="Deposit date"
                                         tooltipOptions={{ ...tooltipOptions }}
                                         disabled={loading}
-                                        onChange={(e) => payloadHandler(payload, e.target.value, 'created_at', (updateValue) => {
+                                        onChange={(e) => payloadHandler(payload, e.target.value, 'expired', (updateValue) => {
                                             setPayload(updateValue);
                                         })}
                                     />
                                 </div>
-                                    <ValidationMessage field="created_at" />
+                                    <ValidationMessage field="expired" />
                             </div>
 
                             </div>
                     </Card>
+
+                    <Card style={{ marginTop: "20px" }}>
+                        <select
+                            className="form-select"
+                            value={selectedOption}
+                            onChange={(e) => setSelectedOption(e.target.value)}
+                        >
+                            <option value="-">-</option>
+                            <option value="Renter">Renter</option>
+                        </select>
+
+                    {selectedOption === 'Renter' && (
+                        <div className=' grid'>
+                            <h1 className='col-12 flex align-items-center justify-content-center'>Renter Details</h1>
+                        <div className="col-12 md:col-4 lg:col-4 py-3">
+                            <label htmlFor="renter" className='input-label'>{translate.renter} (required*) </label>
+                            <div className="p-inputgroup mt-2">
+                                <Dropdown
+                                    inputId='renter'
+                                    autoComplete='renter name'
+                                    name='renter'
+                                    filter
+                                    value={payload.renter_id}
+                                    onChange={(e) => payloadHandler(payload, e.value, 'renter_id', (updateValue) => {
+                                        setPayload(updateValue);
+                                    })}
+                                    options={renterList}
+                                    placeholder="Select a owner"
+                                    disabled={loading}
+                                    className="p-inputtext-sm"
+                                />
+                            </div>
+                            <ValidationMessage field="renter_id" />
+                        </div>
+                        </div>
+                    )}
+                    </Card>
+
+                    {selectedOption === 'Renter' && contracts.map((contract, index) => (
+    <Card style={{ marginTop: "20px"}}>
+    <div className=' grid'>
+        <h1 className='col-12 flex align-items-center justify-content-center'>Contract Details</h1>
+        <div className="col-12 md:col-3 lg:col-4 py-3">
+            <label htmlFor="date" className='input-label text-black'>{translate.contract_date} (required*)</label>
+            <div className="p-inputgroup mt-2">
+                <Calendar
+                    name="date"
+                    className="p-inputtext-sm md:mr-2 sm:w-full"
+                    placeholder="Select contract of date"
+                    selectionMode={"single"}
+                    maxDate={new Date()}
+                    value={payload.contract_date ? moment(payload.contract_date).toDate() : new Date()}
+                    tooltip="Contract date"
+                    tooltipOptions={{ ...tooltipOptions }}
+                    disabled={loading}
+                    onChange={(e) => payloadHandler(payload, e.target.value, 'contract_date', (updateValue) => {
+                        setPayload(updateValue);
+                    })}
+                />
+            </div>
+                <ValidationMessage field="contract_date" />
+        </div>
+
+        <div className="col-12 md:col-3 lg:col-4 py-3">
+            <label htmlFor="date" className='input-label text-black'>{translate.contract_end_date} (required*)</label>
+            <div className="p-inputgroup mt-2">
+                <Calendar
+                    name="date"
+                    className="p-inputtext-sm md:mr-2 sm:w-full"
+                    placeholder="Select contract end of date"
+                    selectionMode={"single"}
+                    maxDate={new Date()}
+                    value={payload.contract_end_date ? moment(payload.contract_end_date).toDate() : new Date()}
+                    tooltip="Contract end date"
+                    tooltipOptions={{ ...tooltipOptions }}
+                    disabled={loading}
+                    onChange={(e) => payloadHandler(payload, e.target.value, 'contract_end_date', (updateValue) => {
+                        setPayload(updateValue);
+                    })}
+                />
+            </div>
+                <ValidationMessage field="contract_end_date" />
+        </div>
+
+        <div className=' col-12 md:col-6 lg:col-4 py-3'>
+            <div className="flex flex-column gap-2">
+                <label htmlFor="total_month" className=' text-black'>{translate.total_months} (required*)</label>
+                <InputText
+                    className="p-inputtext-sm text-black"
+                    id="total_months"
+                    name="total_months"
+                    autoComplete='total_months'
+                    aria-describedby="total_months-help"
+                    tooltip='total_months'
+                    tooltipOptions={{ ...tooltipOptions }}
+                    placeholder='Enter your total months'
+                    disabled={loading}
+                    value={payload.total_months}
+                    onChange={(e) => payloadHandler(payload, e.target.value, 'total_months', (updateValue) => {
+                        setPayload(updateValue);
+                    })}
+                />
+                <ValidationMessage field={"total_months"} />
+            </div>
+        </div>
+
+        <div className=' col-12 md:col-6 lg:col-4 py-3'>
+            <div className="flex flex-column gap-2">
+                <label htmlFor="price_per_month" className=' text-black'>{translate.price_per_month} (required*)</label>
+                <InputText
+                    className="p-inputtext-sm text-black"
+                    id="price_per_month"
+                    name="price_per_month"
+                    autoComplete='price_per_month'
+                    aria-describedby="price_per_month-help"
+                    tooltip='price_per_month'
+                    tooltipOptions={{ ...tooltipOptions }}
+                    placeholder='Enter your price per month'
+                    disabled={loading}
+                    value={payload.price_per_month}
+                    onChange={(e) => payloadHandler(payload, e.target.value, 'price_per_month', (updateValue) => {
+                        setPayload(updateValue);
+                    })}
+                />
+                <ValidationMessage field={"price_per_month"} />
+            </div>
+        </div>
+
+        <div className=' col-12 md:col-6 lg:col-4 py-3'>
+            <div className="flex flex-column gap-2">
+                <label htmlFor="note" className=' text-black'>{translate.note} (required*)</label>
+                <InputTextarea
+                    className="p-inputtext-sm text-black"
+                    id="note"
+                    name="note"
+                    autoComplete='note'
+                    aria-describedby="note-help"
+                    tooltip='note'
+                    tooltipOptions={{ ...tooltipOptions }}
+                    placeholder='Enter your note'
+                    disabled={loading}
+                    value={payload.note}
+                    onChange={(e) => payloadHandler(payload, e.target.value, 'note', (updateValue) => {
+                        setPayload(updateValue);
+                    })}
+                />
+                <ValidationMessage field={"note"} />
+            </div>
+        </div>
+
+        <div className="col-12 md:col-12 lg:col-12 py-3">
+<label htmlFor="image" className="input-label">
+{"Image"} <span>(required*)</span>
+</label>
+<div className="p-inputgroup mt-2">
+<InputText
+type="file"
+id="image"
+name="image"
+className="p-inputtext-sm"
+accept="image/*"
+disabled={loading}
+multiple
+onChange={handleFileChange}
+/>
+</div>
+
+{/* Previews */}
+<div className="mt-3 grid ">
+{photos.map((photo, index) => (
+<div key={index} className="relative col-3 overflow-hidden group">
+<img
+src={photo.preview}
+alt={`preview-${index}`}
+className="w-full h-full object-cover"
+/>
+<button
+type="button"
+onClick={() => handleRemovePhoto(index)}
+className="absolute top-0 right-0 bg-red-600 text-white text-xs px-1 rounded-bl hover:bg-red-700"
+>
+✕
+</button>
+</div>
+))}
+</div>
+
+<ValidationMessage field="image" />
+</div>
+
+
+    </div>
+                <Button
+                    label="Remove Contract"
+                    icon="pi pi-trash"
+                    className="p-button-danger"
+                    onClick={() => handleRemoveContract(index)}
+                />
+</Card>
+))}
+{selectedOption === 'Renter' && (
+    <Button style={{ marginTop: "20px" }} label="Add Contract" icon="pi pi-plus" onClick={handleAddContract} className="mb-3" />
+)}
                     <FormMainAction
                         cancel={translate.cancel}
                         onCancel={() => navigate(paths.owner)}
