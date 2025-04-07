@@ -16,14 +16,16 @@ const settingSlice = createSlice({
     name: 'setting',
     initialState: {
         language: defaultLanguage,
-        sidebarColor: getDefaultColor === "#FFFFFF" ? white : white,
         translate: getDefaultLanguage === "mm"
             ? mm
             : getDefaultLanguage === "uk"
             ? en
             : getDefaultLanguage === "cn"
             ? cn
-            : mm
+            : mm,
+        sidebarColor: localStorage.getItem("sidebarColor") || "#2c3e50",
+        sidebarFontColor: localStorage.getItem("sidebarFontColor") || "#ffffff",
+        sidebarHoverColor: localStorage.getItem("sidebarHoverColor") || "#3e5368",
     },
     reducers: {
         updateLanguage: (state, action) => {
@@ -39,12 +41,8 @@ const settingSlice = createSlice({
             }
         },
         updateColor: (state, action) => {
-            state.sidebarColor = action.payload;
-            const selectedColor = action.payload.code
-            
-            if (selectedColor === '#FFFFFF') {
-                state.sidebarColor = white;
-            }
+            const { key, value } = action.payload;
+            state[key] = value;
         }
     }
 });

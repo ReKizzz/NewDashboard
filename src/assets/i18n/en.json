@@ -245,5 +245,9 @@
     "meter_no": "Meter No",
     "meter_bill_code": "Meter Bill Code",
     "wifi_user_id": "Wifi User Id",
-    "land_title": "Land Title"
+    "land_title": "Land Title",
+
+    "change_sidebar_color": "Change Sidebar Color",
+    "change_font_color": "Change Font Color",
+    "change_hover_color": "Change Hover Color"
 }

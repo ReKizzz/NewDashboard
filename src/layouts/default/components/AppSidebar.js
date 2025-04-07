@@ -26,28 +26,40 @@ export const AppSidebar = () => {
     return value;
   });
 
-  const { translate } = useSelector((state) => state.setting);
   const [selectedKeys, setSelectedKeys] = useState(null);
-  const sidebarColor = useSelector((state) => state.setting.sidebarColor);
+  const {
+    translate,
+    sidebarColor,
+    sidebarFontColor,
+    sidebarHoverColor,
+  } = useSelector(state => state.setting);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const state = useSelector((state) => state.share);
-  const { showSidebar } = state;
-
-  const nodeTemplate = (node) => {
-    const label = node.label;
-    return <label>{translate[label]}</label>;
-  };
 
   const logout = async () => {
     removeAllData();
     navigate(paths.adminLogout);
   };
 
+  const nodeTemplate = (node) => {
+    const label = node.label;
+    return <label>{translate[label]}</label>;
+  };
+
   return (
-    <div className="sidebar col-2 d-flex flex-column justify-content-between" style={{ backgroundColor: sidebarColor }}>
+    <div className="sidebar col-2 d-flex flex-column justify-content-between" 
+      style={{
+        backgroundColor: sidebarColor,
+        color: sidebarFontColor,
+      }}>
       <Tree
-        style={{ flex: 1, overflowY: 'auto', height: "100vh"}}
+        style={{
+          backgroundColor: sidebarColor,
+          color: sidebarFontColor,
+          hover: sidebarHoverColor,
+          flex: 1, overflowY: 'auto', height: "100vh"
+        }}
         value={items}
         selectionMode="single"
         nodeTemplate={nodeTemplate}

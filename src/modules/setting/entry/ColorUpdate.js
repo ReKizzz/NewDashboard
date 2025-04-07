@@ -1,80 +1,83 @@
-import React, { useState } from "react";
-import { colors, defaultColor, keys } from "../../../constants/config";
-import { Dropdown } from "primereact/dropdown";
-import { ChevronDownIcon } from "primereact/icons/chevrondown";
-import { ChevronRightIcon } from "primereact/icons/chevronright";
-import { setData } from "../../../helpers/localstorage";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { setData } from "../../../helpers/localstorage";
 import { updateColor } from "../settingSlice";
+import { keys } from "../../../constants/config";
 
 export const ColorUpdate = () => {
-  const [selectedColor, setColor] = useState(defaultColor);
-
   const dispatch = useDispatch();
   const { translate } = useSelector(state => state.setting);
 
-  const onChangeColor = (e) => {
-    setColor(e);
-    setData(keys.COLOR, e);
-    dispatch(updateColor(e));
+  // Initial values from localStorage or default fallback
+  const [sidebarColor, setSidebarColor] = useState(localStorage.getItem("sidebarColor") || "#2c3e50");
+  const [fontColor, setFontColor] = useState(localStorage.getItem("sidebarFontColor") || "#ffffff");
+  const [hoverColor, setHoverColor] = useState(localStorage.getItem("sidebarHoverColor") || "#3e5368");
+
+  useEffect(() => {
+    const savedSidebarColor = localStorage.getItem("sidebarColor");
+    const savedFontColor = localStorage.getItem("sidebarFontColor");
+    const savedHoverColor = localStorage.getItem("sidebarHoverColor");
+
+    if (savedSidebarColor) setSidebarColor(savedSidebarColor);
+    if (savedFontColor) setFontColor(savedFontColor);
+    if (savedHoverColor) setHoverColor(savedHoverColor);
+  }, []);
+
+  // Handlers
+  const handleSidebarColorChange = (e) => {
+    const value = e.target.value;
+    setSidebarColor(value);
+    setData("sidebarColor", value);
+    dispatch(updateColor({ key: "sidebarColor", value }));
   };
 
-  const selectedColorTemplate = (option, props) => {
-    if (option) {
-      return (
-        <div className="flex align-items-center">
-          <div className="mr-2" style={{ width: "18px", height: "18px", backgroundColor: option.code, borderRadius: "50%" }}></div>
-          <div>{option.name}</div>
-        </div>
-      );
-    }
-    return <span>{props.placeholder}</span>;
+  const handleFontColorChange = (e) => {
+    const value = e.target.value;
+    setFontColor(value);
+    setData("sidebarFontColor", value);
+    dispatch(updateColor({ key: "sidebarFontColor", value }));
   };
 
-  const colorOptionTemplate = (option) => {
-    return (
-      <div className="flex align-items-center">
-        <div className="mr-2" style={{ width: "18px", height: "18px", backgroundColor: option.code, borderRadius: "50%" }}></div>
-        <div>{option.name}</div>
-      </div>
-    );
-  };
-
-  const panelFooterTemplate = () => {
-    return (
-      <div className="py-2 px-3">
-        {selectedColor ? (
-          <span>
-            <b>{selectedColor.name}</b> selected.
-          </span>
-        ) : (
-          "No color selected."
-        )}
-      </div>
-    );
+  const handleHoverColorChange = (e) => {
+    const value = e.target.value;
+    setHoverColor(value);
+    setData("sidebarHoverColor", value);
+    dispatch(updateColor({ key: "sidebarHoverColor", value }));
   };
 
   return (
-    <div className="flex flex-column gap-2">
-      <label htmlFor="color" className="text-black">
-        {translate.change_color}
+    <div className="flex flex-column gap-3">
+      <label htmlFor="sidebarColor" className="text-black font-bold">
+        {translate.change_sidebar_color}
       </label>
-      <Dropdown
-        value={selectedColor}
-        onChange={(e) => onChangeColor(e.value)}
-        options={colors}
-        optionLabel="name"
-        placeholder="Select a Color"
-        valueTemplate={selectedColorTemplate}
-        itemTemplate={colorOptionTemplate}
-        panelFooterTemplate={panelFooterTemplate}
-        dropdownIcon={(opts) => {
-          return opts.iconProps["data-pr-overlay-visible"] ? (
-            <ChevronRightIcon {...opts.iconProps} />
-          ) : (
-            <ChevronDownIcon {...opts.iconProps} />
-          );
-        }}
+      <input
+        type="color"
+        id="sidebarColor"
+        value={sidebarColor}
+        onChange={handleSidebarColorChange}
+        className="w-6rem"
+      />
+
+      <label htmlFor="fontColor" className="text-black font-bold">
+        {translate.change_font_color}
+      </label>
+      <input
+        type="color"
+        id="fontColor"
+        value={fontColor}
+        onChange={handleFontColorChange}
+        className="w-6rem"
+      />
+
+      <label htmlFor="hoverColor" className="text-black font-bold">
+        {translate.change_hover_color}
+      </label>
+      <input
+        type="color"
+        id="hoverColor"
+        value={hoverColor}
+        onChange={handleHoverColorChange}
+        className="w-6rem"
       />
     </div>
   );

@@ -197,5 +197,9 @@
     "township_list" : "乡镇名单",
     "township_create" : "乡镇创建",
     "township_update" : "乡镇更新",
-    "cover_photo" : "封面照片"
+    "cover_photo" : "封面照片",
+
+    "change_sidebar_color": "Change Sidebar Color",
+    "change_font_color": "Change Font Color",
+    "change_hover_color": "Change Hover Color"
 }

@@ -6,7 +6,7 @@ import { ChevronRightIcon } from "primereact/icons/chevronright";
 import { setData } from "../../../helpers/localstorage";
 import { useDispatch, useSelector } from "react-redux";
 import { updateLanguage } from "../settingSlice";
-
+ 
 export const LanguageUpdate = () => {
   const [selectedLanguage, setLanguage] = useState(defaultLanguage);
 
@@ -66,7 +66,7 @@ export const LanguageUpdate = () => {
   };
 
   return (
-    <div className="flex flex-column gap-2">
+    <div className="flex flex-column gap-2 mb-3">
       <label htmlFor="name" className="text-black">
         {translate.change_language}
       </label>

@@ -206,5 +206,9 @@
     "wifi": "အင်တာနက်",
     "wifi_list": "အင်တာနက်စာရင်း",
     "meter": "မီတာ",
-    "meter_list": "မီတာစာရင်း"
+    "meter_list": "မီတာစာရင်း",
+
+    "change_sidebar_color": "Change Sidebar Color",
+    "change_font_color": "Change Font Color",
+    "change_hover_color": "Change Hover Color"
 }
