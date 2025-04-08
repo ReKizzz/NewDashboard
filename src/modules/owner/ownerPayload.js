@@ -31,8 +31,10 @@ export const ownerPayload = {
         reason: "",
     },
     columns: [
-        { field: "index", header: "No", sortable: false, show: true, width: 100 },
-        { field: "owner_id", header: "Owner ID", sortable: true, show: true, width: 250 },
+        { field: "index", header: "No", sortable: false, show: true, width: 100, frozen:false },
+        { field: "owner_id", header: "Owner ID", sortable: true, show: true, width: 250, frozen: true },
+        { field: "property", header: "Property Type", sortable: true, show: true, width: 250, frozen:false },
+        { field: "status", header: "Status", sortable: true, show: true, width: 250, frozen:false },
         { field: "corner_id", header: "Corner ID", sortable: true, show: true, width: 250 },
         { field: "city_id", header: "City ID", sortable: true, show: true, width: 250 },
         { field: "township_id", header: "Township ID", sortable: true, show: true, width: 250 },
@@ -41,7 +43,6 @@ export const ownerPayload = {
         { field: "wifi_id", header: "WiFi ID", sortable: true, show: true, width: 250 },
         { field: "land_no", header: "Land No.", sortable: true, show: true, width: 200 },
         { field: "house_no", header: "House No.", sortable: true, show: true, width: 200 },
-        { field: "property", header: "Property Type", sortable: true, show: true, width: 250 },
         { field: "meter_no", header: "Meter No.", sortable: true, show: true, width: 200 },
         { field: "meter_bill_code", header: "Meter Bill Code", sortable: true, show: true, width: 250 },
         { field: "wifi_user_id", header: "WiFi User ID", sortable: true, show: true, width: 250 },
@@ -56,6 +57,7 @@ export const ownerPayload = {
         { field: "notes", header: "Notes", sortable: true, show: true, width: 300 },
         { field: "photos", header: "Photos", sortable: true, show: true, width: 300 },
     ],
+    
     paginateParams: {
         page: 1,
         per_page: paginateOptions.rows,
