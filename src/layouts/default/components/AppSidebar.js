@@ -45,9 +45,12 @@ export const AppSidebar = () => {
   };
 
   return (
-    <div className="sidebar col-2 d-flex flex-column justify-content-between" style={{ backgroundColor: sidebarColor }}>
+    <div
+      className="sidebar col-2 d-flex flex-column justify-content-between"
+      style={{ backgroundColor: sidebarColor }}
+    >
       <Tree
-        style={{ flex: 1, overflowY: 'auto', height: "100vh"}}
+        style={{ flex: 1, overflowY: "auto", height: "100vh" }}
         value={items}
         selectionMode="single"
         nodeTemplate={nodeTemplate}
@@ -64,7 +67,7 @@ export const AppSidebar = () => {
       <Button
         label={translate["log_out"]}
         className="p-button-text p-button-plain logout"
-        style={{ color: "gray", width: "80%" }}
+        style={{ color: "white", width: "80%" }}
         onClick={() => logout()}
       />
     </div>

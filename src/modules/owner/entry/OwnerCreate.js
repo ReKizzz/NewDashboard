@@ -78,13 +78,16 @@ export const OwnerCreate = () => {
   };
 
   const [photos, setPhotos] = useState([]);
+  console.log(photos);
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
+    console.log(files, "file");
     const newPhotos = files.map((file) => ({
       file,
       preview: URL.createObjectURL(file),
     }));
+    console.log(newPhotos, "new");
     setPhotos((prev) => [...prev, ...newPhotos]);
   };
 
@@ -281,14 +284,30 @@ export const OwnerCreate = () => {
 
   const submitOwnerCreate = async () => {
     setLoading(true);
+
+    // Prepare payload with the description and other data
     let updatePayload = { ...payload };
     updatePayload.description = desc;
 
-    const result = await ownerService.store(updatePayload, dispatch);
-    if (result.data) {
-      navigate(`${paths.owner}`);
+    // Add photos as an array to the payload
+    updatePayload.photos = photos.map((photo) => photo.file); // Send only the file property
+
+    try {
+      const result = await ownerService.store(updatePayload, dispatch);
+      if (result.data) {
+        // On successful result, navigate to the owner list
+        navigate(`${paths.ownerList}`);
+      } else {
+        // Handle failure here (e.g., show a message to the user)
+        console.error("Failed to create owner:", result.error);
+      }
+    } catch (error) {
+      // Handle any errors from the API request
+      console.error("Error occurred while creating owner:", error);
+      // Optionally show an alert or notification about the error
+    } finally {
+      setLoading(false); // Stop loading regardless of success or failure
     }
-    setLoading(false);
   };
 
   // console.log(payload);
@@ -912,7 +931,6 @@ export const OwnerCreate = () => {
                         className="p-inputtext-sm md:mr-2 sm:w-full"
                         placeholder="Select contract end of date"
                         selectionMode={"single"}
-                        maxDate={new Date()}
                         value={
                           payload.end_of_contract_date
                             ? moment(payload.end_of_contract_date).toDate()

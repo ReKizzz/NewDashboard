@@ -11,8 +11,10 @@ import { ownerPayload } from "../ownerPayload";
 import { setPaginate } from "../ownerSlice";
 import { ownerService } from "../ownerService";
 import { Button } from "primereact/button";
+import { useNavigate } from "react-router-dom";
 
 export const OwnerTableView = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { owners, paginateParams } = useSelector((state) => state.owner);
   const { translate } = useSelector((state) => state.setting);
@@ -114,7 +116,20 @@ export const OwnerTableView = () => {
           style={{ minWidth: "200px" }}
           frozen
           className="font-bold"
+          body={(rowData) => (
+            <span
+              onClick={() => navigate(`/owner-detail/${rowData.id}`)}
+              style={{
+                color: "blue",
+                cursor: "pointer",
+                textDecoration: "underline",
+              }}
+            >
+              {rowData.owner_id}
+            </span>
+          )}
         />
+
         <Column
           field="property"
           header="Property"
