@@ -1,53 +1,38 @@
-import { Sidebar } from "primereact/sidebar";
-import { Image } from "primereact/image";
 import { Tree } from "primereact/tree";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { sidebarToggle } from "../../../shares/shareSlice";
-import logo from "../../../assets/images/logo.jpeg";
-import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 import { items } from "../defaultPaths";
 import { paths } from "../../../constants/paths";
 import { removeAllData } from "../../../helpers/localstorage";
 
 export const AppSidebar = () => {
-  let itemList = [];
-
-  items.map((value) => {
-    if (value.children) {
-      value.children.map((child) => {
-        itemList.push(child);
-        return child;
-      });
-    } else {
-      itemList.push(value);
-    }
-    return value;
-  });
-
-  const { translate } = useSelector((state) => state.setting);
   const [selectedKeys, setSelectedKeys] = useState(null);
-  const sidebarColor = useSelector((state) => state.setting.sidebarColor);
+
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const state = useSelector((state) => state.share);
-  const { showSidebar } = state;
+  const { translate, sidebarColor } = useSelector((state) => state.setting);
+
+  console.log(sidebarColor);
+
+  // Extract flat item list for navigation
+  const itemList = items.flatMap((value) =>
+    value.children ? value.children : [value]
+  );
 
   const nodeTemplate = (node) => {
-    const label = node.label;
-    return <label>{translate[label]}</label>;
+    return <label>{translate[node.label]}</label>;
   };
 
-  const logout = async () => {
+  const logout = () => {
     removeAllData();
     navigate(paths.adminLogout);
   };
 
   return (
     <div
-      className="sidebar col-2 d-flex flex-column justify-content-between"
-      style={{ backgroundColor: sidebarColor }}
+      className={`sidebar col-2 d-flex flex-column justify-content-between`}
+      style={{ background: sidebarColor.code }}
     >
       <Tree
         style={{ flex: 1, overflowY: "auto", height: "100vh" }}
@@ -68,7 +53,7 @@ export const AppSidebar = () => {
         label={translate["log_out"]}
         className="p-button-text p-button-plain logout"
         style={{ color: "white", width: "80%" }}
-        onClick={() => logout()}
+        onClick={logout}
       />
     </div>
   );
