@@ -249,5 +249,10 @@
 
     "change_sidebar_color": "Change Sidebar Color",
     "change_font_color": "Change Font Color",
-    "change_hover_color": "Change Hover Color"
+    "change_hover_color": "Change Hover Color",
+    "contract_date": "Contract Date",
+    "contract_end_date": "Contract End Date",
+    "total_months": "Total Months",
+    "price_per_month": "Price Per Month",
+    "note": "Note"
 }
