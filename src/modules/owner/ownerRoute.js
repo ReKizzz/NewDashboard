@@ -5,6 +5,7 @@ import { OwnerList } from "./views/OwnerList";
 import { RenterList } from "./views/RenterList";
 import { WifiList } from "./views/WifiList";
 import { MeterList } from "./views/MeterList";
+import OwnerUpdateView from "./views/OwnerUpdateView";
 
 export const ownerRoutes = [
   {
@@ -66,6 +67,19 @@ export const ownerRoutes = [
     id: "ownerDetail",
     path: `/${paths.ownerDetail}/:id`,
     element: <OwnerDetail />,
+    loader: () => {
+      return {
+        breadcrumbs: [
+          { label: "List", url: paths.ownerList },
+          { label: "Create", url: paths.ownerCreate },
+        ],
+      };
+    },
+  },
+  {
+    id: "ownerUpdateList",
+    path: `/${paths.ownerUpdate}/:id`,
+    element: <OwnerUpdateView />,
     loader: () => {
       return {
         breadcrumbs: [

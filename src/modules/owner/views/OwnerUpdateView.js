@@ -1,7 +1,7 @@
 import React from "react";
 import { BreadCrumb } from "../../../shares/BreadCrumb";
-import { OwnerDetailList } from "../list/OwnerDetailList";
-const OwnerDetail = () => {
+import { OwnerUpdate } from "../entry/OwnerUpdate";
+const OwnerUpdateView = () => {
   return (
     <div className=" grid">
       <div className=" col-12">
@@ -9,10 +9,10 @@ const OwnerDetail = () => {
       </div>
 
       <div className="col-12">
-        <OwnerDetailList />
+        <OwnerUpdate />
       </div>
     </div>
   );
 };
 
-export default OwnerDetail;
+export default OwnerUpdateView;

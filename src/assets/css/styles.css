@@ -708,7 +708,7 @@ h6 {
 .custom-data-table {
   background-color: #f8f9fa !important;
   color: #333 !important;
-  height: 55vh;
+  height: auto;
   display: flex;
   flex-direction: column;
 }

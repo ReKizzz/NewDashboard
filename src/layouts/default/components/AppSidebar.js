@@ -48,13 +48,6 @@ export const AppSidebar = () => {
           setSelectedKeys(e.value);
         }}
       />
-
-      <Button
-        label={translate["log_out"]}
-        className="p-button-text p-button-plain logout"
-        style={{ color: "white", width: "80%" }}
-        onClick={logout}
-      />
     </div>
   );
 };

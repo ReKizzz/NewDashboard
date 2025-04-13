@@ -2,6 +2,7 @@ export const paths = {
   dashboard: "/dashboard",
 
   ownerList: "/owner-list",
+  ownerUpdate: "/owner-update",
   renterList: "/renter-list",
   wifiList: "/wifi-list",
   meterList: "/meter-list",

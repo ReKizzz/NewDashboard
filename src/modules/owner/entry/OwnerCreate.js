@@ -54,7 +54,7 @@ export const OwnerCreate = () => {
       total_months: "",
       price_per_month: "",
       note: "",
-      photos: []
+      photos: [],
     },
   ]);
 
@@ -88,14 +88,17 @@ export const OwnerCreate = () => {
 
   const handleFileChange = (e, index) => {
     const files = Array.from(e.target.files);
-  
+
     const newPhotos = files.map((file) => ({
       file,
       preview: URL.createObjectURL(file),
     }));
-  
+
     const updatedContracts = [...contracts];
-    updatedContracts[index].photos = [...updatedContracts[index].photos, ...newPhotos];
+    updatedContracts[index].photos = [
+      ...updatedContracts[index].photos,
+      ...newPhotos,
+    ];
     setContracts(updatedContracts);
   };
 
@@ -151,16 +154,19 @@ export const OwnerCreate = () => {
     // if (hasValidContract) {
     //   updatePayload.contracts = contracts;
     // }
-  
+
     const formData = formBuilder(payload, ownerPayload.create);
 
     try {
       const result = await ownerService.store(formData, dispatch);
-      
+
       if (result.data) {
         if (contracts && contracts.length > 0) {
           for (const contract of contracts) {
-            await ownerService.store2({...contract, "owner_data_id":result?.data?.id}, dispatch);
+            await ownerService.store2(
+              { ...contract, owner_data_id: result?.data?.id },
+              dispatch
+            );
           }
           navigate(`${paths.ownerList}`);
         }
@@ -731,7 +737,7 @@ export const OwnerCreate = () => {
                         )
                       }
                       options={renterList}
-                      placeholder="Select a owner"
+                      placeholder="Select a renter"
                       disabled={loading}
                       className="p-inputtext-sm"
                     />
@@ -765,11 +771,18 @@ export const OwnerCreate = () => {
                         disabled={loading}
                         value={
                           contract.contract_date
-                            ? moment(contract.contract_date, "YYYY-MM-DD").toDate()
+                            ? moment(
+                                contract.contract_date,
+                                "YYYY-MM-DD"
+                              ).toDate()
                             : null
                         }
                         onChange={(e) =>
-                          updateContractField(index, "contract_date", moment(e.value).format("YYYY-MM-DD"))
+                          updateContractField(
+                            index,
+                            "contract_date",
+                            moment(e.value).format("YYYY-MM-DD")
+                          )
                         }
                       />
                     </div>
@@ -791,11 +804,18 @@ export const OwnerCreate = () => {
                         disabled={loading}
                         value={
                           contract.end_of_contract_date
-                            ? moment(contract.end_of_contract_date, "YYYY-MM-DD").toDate()
+                            ? moment(
+                                contract.end_of_contract_date,
+                                "YYYY-MM-DD"
+                              ).toDate()
                             : null
                         }
                         onChange={(e) =>
-                          updateContractField(index, "end_of_contract_date",moment(e.value).format("YYYY-MM-DD"))
+                          updateContractField(
+                            index,
+                            "end_of_contract_date",
+                            moment(e.value).format("YYYY-MM-DD")
+                          )
                         }
                       />
                     </div>
@@ -819,7 +839,11 @@ export const OwnerCreate = () => {
                         disabled={loading}
                         value={contract.total_months}
                         onChange={(e) =>
-                          updateContractField(index, "total_months", e.target.value)
+                          updateContractField(
+                            index,
+                            "total_months",
+                            e.target.value
+                          )
                         }
                       />
                       <ValidationMessage field={"total_months"} />
@@ -843,7 +867,11 @@ export const OwnerCreate = () => {
                         disabled={loading}
                         value={contract.price_per_month}
                         onChange={(e) =>
-                          updateContractField(index, "price_per_month", e.target.value)
+                          updateContractField(
+                            index,
+                            "price_per_month",
+                            e.target.value
+                          )
                         }
                       />
                       <ValidationMessage field={"price_per_month"} />
@@ -916,7 +944,6 @@ export const OwnerCreate = () => {
 
                     <ValidationMessage field={`image-${index}`} />
                   </div>
-                  
                 </div>
                 {index !== 0 && (
                   <Button
@@ -926,7 +953,6 @@ export const OwnerCreate = () => {
                     onClick={() => handleRemoveContract(index)}
                   />
                 )}
-
               </Card>
             ))}
           {selectedOption === "Renter" && (
