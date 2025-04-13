@@ -26,6 +26,7 @@ import { wifiService } from "../../wifiCreate/wifiService";
 import { Button } from "primereact/button";
 import { renterService } from "../../renterCreate/renterService";
 import { InputTextarea } from "primereact/inputtextarea";
+import { formBuilder } from "../../../helpers/formBuilder";
 
 export const OwnerCreate = () => {
   const [loading, setLoading] = useState(false);
@@ -49,11 +50,11 @@ export const OwnerCreate = () => {
   const [contracts, setContracts] = useState([
     {
       contract_date: null,
-      contract_end_date: null,
+      end_of_contract_date: null,
       total_months: "",
       price_per_month: "",
       note: "",
-      photos: [],
+      photos: []
     },
   ]);
 
@@ -62,7 +63,7 @@ export const OwnerCreate = () => {
       ...contracts,
       {
         contract_date: null,
-        contract_end_date: null,
+        end_of_contract_date: null,
         total_months: "",
         price_per_month: "",
         note: "",
@@ -77,240 +78,101 @@ export const OwnerCreate = () => {
     setContracts(updatedContracts);
   };
 
-  const [photos, setPhotos] = useState([]);
-  console.log(photos);
+  const updateContractField = (index, field, value) => {
+    const updatedContracts = [...contracts];
+    updatedContracts[index][field] = value;
+    setContracts(updatedContracts);
+  };
 
-  const handleFileChange = (e) => {
+  const [photos, setPhotos] = useState([]);
+
+  const handleFileChange = (e, index) => {
     const files = Array.from(e.target.files);
-    console.log(files, "file");
+  
     const newPhotos = files.map((file) => ({
       file,
       preview: URL.createObjectURL(file),
     }));
-    console.log(newPhotos, "new");
-    setPhotos((prev) => [...prev, ...newPhotos]);
+  
+    const updatedContracts = [...contracts];
+    updatedContracts[index].photos = [...updatedContracts[index].photos, ...newPhotos];
+    setContracts(updatedContracts);
   };
 
-  const handleRemovePhoto = (indexToRemove) => {
-    setPhotos((prev) => {
-      const updated = [...prev];
-      // Clean up object URL
-      URL.revokeObjectURL(updated[indexToRemove].preview);
-      updated.splice(indexToRemove, 1);
-      return updated;
-    });
+  const handleRemovePhoto = (contractIndex, photoIndex) => {
+    const updatedContracts = [...contracts];
+    updatedContracts[contractIndex].photos.splice(photoIndex, 1);
+    setContracts(updatedContracts);
   };
 
   useEffect(() => {
-    // Cleanup previews on component unmount
     return () => {
       photos.forEach((p) => URL.revokeObjectURL(p.preview));
     };
   }, [photos]);
 
-  /**
-   * Loading user Data
-   */
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    const response = await ownerAccService.index(dispatch);
-    if (response.status === 200) {
-      setOwnerList(
-        response.data.map((owner) => ({
-          label: owner.name,
-          value: owner.id,
-        }))
-      );
-      total.current = response.data.total || response.data.length;
-    }
-    setLoading(false);
-  }, [dispatch]);
+  const fetchOptions = useCallback(
+    async (service, setList) => {
+      setLoading(true);
+      const response = await service.index(dispatch);
+      if (response.status === 200) {
+        setList(
+          response.data.map((item) => ({
+            label: item.name,
+            value: item.id,
+          }))
+        );
+        total.current = response.data.total || response.data.length;
+      }
+      setLoading(false);
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  const cornerData = useCallback(async () => {
-    setLoading(true);
-    const response = await cornerService.index(dispatch);
-    if (response.status === 200) {
-      setCornerList(
-        response.data.map((corner) => ({
-          label: corner.name,
-          value: corner.id,
-        }))
-      );
-      total.current = response.data.total || response.data.length;
-    }
-    setLoading(false);
-  }, [dispatch]);
-
-  useEffect(() => {
-    cornerData();
-  }, [cornerData]);
-
-  const cityData = useCallback(async () => {
-    setLoading(true);
-    const response = await cityService.index(dispatch);
-    if (response.status === 200) {
-      setCityList(
-        response.data.map((city) => ({
-          label: city.name,
-          value: city.id,
-        }))
-      );
-      total.current = response.data.total || response.data.length;
-    }
-    setLoading(false);
-  }, [dispatch]);
-
-  useEffect(() => {
-    cityData();
-  }, [cityData]);
-
-  const townshipData = useCallback(async () => {
-    setLoading(true);
-    const response = await townshipService.index(dispatch);
-    if (response.status === 200) {
-      setTownshipList(
-        response.data.map((township) => ({
-          label: township.name,
-          value: township.id,
-        }))
-      );
-      total.current = response.data.total || response.data.length;
-    }
-    setLoading(false);
-  }, [dispatch]);
-
-  useEffect(() => {
-    townshipData();
-  }, [townshipData]);
-
-  const wardData = useCallback(async () => {
-    setLoading(true);
-    const response = await wardService.index(dispatch);
-    if (response.status === 200) {
-      setWardList(
-        response.data.map((ward) => ({
-          label: ward.name,
-          value: ward.id,
-        }))
-      );
-      total.current = response.data.total || response.data.length;
-    }
-    setLoading(false);
-  }, [dispatch]);
-
-  useEffect(() => {
-    wardData();
-  }, [wardData]);
-
-  const streetData = useCallback(async () => {
-    setLoading(true);
-    const response = await streetService.index(dispatch);
-    if (response.status === 200) {
-      setStreetList(
-        response.data.map((street) => ({
-          label: street.name,
-          value: street.id,
-        }))
-      );
-      total.current = response.data.total || response.data.length;
-    }
-    setLoading(false);
-  }, [dispatch]);
-
-  useEffect(() => {
-    streetData();
-  }, [streetData]);
-
-  const landData = useCallback(async () => {
-    setLoading(true);
-    const response = await landService.index(dispatch);
-    if (response.status === 200) {
-      setLandList(
-        response.data.map((land) => ({
-          label: land.name,
-          value: land.id,
-        }))
-      );
-      total.current = response.data.total || response.data.length;
-    }
-    setLoading(false);
-  }, [dispatch]);
-
-  useEffect(() => {
-    landData();
-  }, [landData]);
-
-  const wifiData = useCallback(async () => {
-    setLoading(true);
-    const response = await wifiService.index(dispatch);
-    if (response.status === 200) {
-      setWifiList(
-        response.data.map((wifi) => ({
-          label: wifi.name,
-          value: wifi.id,
-        }))
-      );
-      total.current = response.data.total || response.data.length;
-    }
-    setLoading(false);
-  }, [dispatch]);
-
-  useEffect(() => {
-    wifiData();
-  }, [wifiData]);
-
-  const renterData = useCallback(async () => {
-    setLoading(true);
-    const response = await renterService.index(dispatch);
-    if (response.status === 200) {
-      setRenterList(
-        response.data.map((renter) => ({
-          label: renter.name,
-          value: renter.id,
-        }))
-      );
-      total.current = response.data.total || response.data.length;
-    }
-    setLoading(false);
-  }, [dispatch]);
-
-  useEffect(() => {
-    renterData();
-  }, [renterData]);
+    fetchOptions(ownerAccService, setOwnerList);
+    fetchOptions(cornerService, setCornerList);
+    fetchOptions(cityService, setCityList);
+    fetchOptions(townshipService, setTownshipList);
+    fetchOptions(wardService, setWardList);
+    fetchOptions(streetService, setStreetList);
+    fetchOptions(landService, setLandList);
+    fetchOptions(wifiService, setWifiList);
+    fetchOptions(renterService, setRenterList);
+  }, [fetchOptions]);
 
   const submitOwnerCreate = async () => {
     setLoading(true);
 
-    // Prepare payload with the description and other data
-    let updatePayload = { ...payload };
-    updatePayload.description = desc;
-
-    // Add photos as an array to the payload
-    updatePayload.photos = photos.map((photo) => photo.file); // Send only the file property
+    // const hasValidContract = contracts.some((contract) =>
+    //   contract.contract_date || contract.end_of_contract_date || contract.total_months || contract.price_per_month || contract.note || (contract.photos && contract.photos.length > 0)
+    // );
+    // let updatePayload = { ...payload };
+    // if (hasValidContract) {
+    //   updatePayload.contracts = contracts;
+    // }
+  
+    const formData = formBuilder(payload, ownerPayload.create);
 
     try {
-      const result = await ownerService.store(updatePayload, dispatch);
+      const result = await ownerService.store(formData, dispatch);
+      
       if (result.data) {
-        // On successful result, navigate to the owner list
-        navigate(`${paths.ownerList}`);
+        if (contracts && contracts.length > 0) {
+          for (const contract of contracts) {
+            await ownerService.store2({...contract, "owner_data_id":result?.data?.id}, dispatch);
+          }
+          navigate(`${paths.ownerList}`);
+        }
       } else {
-        // Handle failure here (e.g., show a message to the user)
         console.error("Failed to create owner:", result.error);
       }
     } catch (error) {
-      // Handle any errors from the API request
       console.error("Error occurred while creating owner:", error);
-      // Optionally show an alert or notification about the error
     } finally {
-      setLoading(false); // Stop loading regardless of success or failure
+      setLoading(false);
     }
   };
-
-  // console.log(payload);
 
   return (
     <>
@@ -728,6 +590,7 @@ export const OwnerCreate = () => {
           </Card>
 
           <Card style={{ marginTop: "20px" }}>
+            <Loading loading={loading} />
             <div className="grid">
               <h1 className="col-12 flex align-items-center justify-content-center">
                 Land Details
@@ -742,12 +605,12 @@ export const OwnerCreate = () => {
                     autoComplete="land"
                     name="land"
                     filter
-                    value={payload.land_no}
+                    value={payload.land_id}
                     onChange={(e) =>
                       payloadHandler(
                         payload,
                         e.value,
-                        "land_no",
+                        "land_id",
                         (updateValue) => {
                           setPayload(updateValue);
                         }
@@ -772,11 +635,10 @@ export const OwnerCreate = () => {
                     className="p-inputtext-sm md:mr-2 sm:w-full"
                     placeholder="Select deposit of date"
                     selectionMode={"single"}
-                    maxDate={new Date()}
                     value={
                       payload.issuance_date
-                        ? moment(payload.issuance_date).toDate()
-                        : new Date()
+                        ? moment(payload.issuance_date, "YYYY-MM-DD").toDate()
+                        : null
                     }
                     tooltip="Deposit date"
                     tooltipOptions={{ ...tooltipOptions }}
@@ -784,7 +646,7 @@ export const OwnerCreate = () => {
                     onChange={(e) =>
                       payloadHandler(
                         payload,
-                        e.target.value,
+                        moment(e.value).format("YYYY-MM-DD"),
                         "issuance_date",
                         (updateValue) => {
                           setPayload(updateValue);
@@ -806,11 +668,10 @@ export const OwnerCreate = () => {
                     className="p-inputtext-sm md:mr-2 sm:w-full"
                     placeholder="Select deposit of date"
                     selectionMode={"single"}
-                    maxDate={new Date()}
                     value={
                       payload.expired
-                        ? moment(payload.expired).toDate()
-                        : new Date()
+                        ? moment(payload.expired, "YYYY-MM-DD").toDate()
+                        : null
                     }
                     tooltip="Deposit date"
                     tooltipOptions={{ ...tooltipOptions }}
@@ -818,7 +679,7 @@ export const OwnerCreate = () => {
                     onChange={(e) =>
                       payloadHandler(
                         payload,
-                        e.target.value,
+                        moment(e.value).format("YYYY-MM-DD"),
                         "expired",
                         (updateValue) => {
                           setPayload(updateValue);
@@ -833,8 +694,9 @@ export const OwnerCreate = () => {
           </Card>
 
           <Card style={{ marginTop: "20px" }}>
+            <Loading loading={loading} />
             <select
-              className="form-select"
+              className="block p-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
               value={selectedOption}
               onChange={(e) => setSelectedOption(e.target.value)}
             >
@@ -883,6 +745,7 @@ export const OwnerCreate = () => {
           {selectedOption === "Renter" &&
             contracts.map((contract, index) => (
               <Card style={{ marginTop: "20px" }}>
+                <Loading loading={loading} />
                 <div className=" grid">
                   <h1 className="col-12 flex align-items-center justify-content-center">
                     Contract Details
@@ -897,24 +760,16 @@ export const OwnerCreate = () => {
                         className="p-inputtext-sm md:mr-2 sm:w-full"
                         placeholder="Select contract of date"
                         selectionMode={"single"}
-                        maxDate={new Date()}
-                        value={
-                          payload.contract_date
-                            ? moment(payload.contract_date).toDate()
-                            : new Date()
-                        }
                         tooltip="Contract date"
                         tooltipOptions={{ ...tooltipOptions }}
                         disabled={loading}
+                        value={
+                          contract.contract_date
+                            ? moment(contract.contract_date, "YYYY-MM-DD").toDate()
+                            : null
+                        }
                         onChange={(e) =>
-                          payloadHandler(
-                            payload,
-                            e.target.value,
-                            "contract_date",
-                            (updateValue) => {
-                              setPayload(updateValue);
-                            }
-                          )
+                          updateContractField(index, "contract_date", moment(e.value).format("YYYY-MM-DD"))
                         }
                       />
                     </div>
@@ -923,7 +778,7 @@ export const OwnerCreate = () => {
 
                   <div className="col-12 md:col-3 lg:col-4 py-3">
                     <label htmlFor="date" className="input-label text-black">
-                      {translate.contract_end_date} (required*)
+                      {translate.end_of_contract_date} (required*)
                     </label>
                     <div className="p-inputgroup mt-2">
                       <Calendar
@@ -931,23 +786,16 @@ export const OwnerCreate = () => {
                         className="p-inputtext-sm md:mr-2 sm:w-full"
                         placeholder="Select contract end of date"
                         selectionMode={"single"}
-                        value={
-                          payload.end_of_contract_date
-                            ? moment(payload.end_of_contract_date).toDate()
-                            : new Date()
-                        }
                         tooltip="Contract end date"
                         tooltipOptions={{ ...tooltipOptions }}
                         disabled={loading}
+                        value={
+                          contract.end_of_contract_date
+                            ? moment(contract.end_of_contract_date, "YYYY-MM-DD").toDate()
+                            : null
+                        }
                         onChange={(e) =>
-                          payloadHandler(
-                            payload,
-                            e.target.value,
-                            "end_of_contract_date",
-                            (updateValue) => {
-                              setPayload(updateValue);
-                            }
-                          )
+                          updateContractField(index, "end_of_contract_date",moment(e.value).format("YYYY-MM-DD"))
                         }
                       />
                     </div>
@@ -969,16 +817,9 @@ export const OwnerCreate = () => {
                         tooltipOptions={{ ...tooltipOptions }}
                         placeholder="Enter your total months"
                         disabled={loading}
-                        value={payload.total_months}
+                        value={contract.total_months}
                         onChange={(e) =>
-                          payloadHandler(
-                            payload,
-                            e.target.value,
-                            "total_months",
-                            (updateValue) => {
-                              setPayload(updateValue);
-                            }
-                          )
+                          updateContractField(index, "total_months", e.target.value)
                         }
                       />
                       <ValidationMessage field={"total_months"} />
@@ -1000,16 +841,9 @@ export const OwnerCreate = () => {
                         tooltipOptions={{ ...tooltipOptions }}
                         placeholder="Enter your price per month"
                         disabled={loading}
-                        value={payload.price_per_month}
+                        value={contract.price_per_month}
                         onChange={(e) =>
-                          payloadHandler(
-                            payload,
-                            e.target.value,
-                            "price_per_month",
-                            (updateValue) => {
-                              setPayload(updateValue);
-                            }
-                          )
+                          updateContractField(index, "price_per_month", e.target.value)
                         }
                       />
                       <ValidationMessage field={"price_per_month"} />
@@ -1031,16 +865,9 @@ export const OwnerCreate = () => {
                         tooltipOptions={{ ...tooltipOptions }}
                         placeholder="Enter your notes"
                         disabled={loading}
-                        value={payload.notes}
+                        value={contract.note}
                         onChange={(e) =>
-                          payloadHandler(
-                            payload,
-                            e.target.value,
-                            "notes",
-                            (updateValue) => {
-                              setPayload(updateValue);
-                            }
-                          )
+                          updateContractField(index, "note", e.target.value)
                         }
                       />
                       <ValidationMessage field={"notes"} />
@@ -1048,37 +875,37 @@ export const OwnerCreate = () => {
                   </div>
 
                   <div className="col-12 md:col-12 lg:col-12 py-3">
-                    <label htmlFor="image" className="input-label">
-                      {"Image"} <span>(required*)</span>
+                    <label htmlFor={`image-${index}`} className="input-label">
+                      Image <span>(required*)</span>
                     </label>
                     <div className="p-inputgroup mt-2">
                       <InputText
                         type="file"
-                        id="image"
+                        id={`image-${index}`}
                         name="image"
                         className="p-inputtext-sm"
                         accept="image/*"
                         disabled={loading}
                         multiple
-                        onChange={handleFileChange}
+                        onChange={(e) => handleFileChange(e, index)}
                       />
                     </div>
 
                     {/* Previews */}
-                    <div className="mt-3 grid ">
-                      {photos.map((photo, index) => (
+                    <div className="mt-3 grid">
+                      {contract.photos.map((photo, photoIndex) => (
                         <div
-                          key={index}
+                          key={photoIndex}
                           className="relative col-3 overflow-hidden group"
                         >
                           <img
                             src={photo.preview}
-                            alt={`preview-${index}`}
+                            alt={`preview-${photoIndex}`}
                             className="w-full h-full object-cover"
                           />
                           <button
                             type="button"
-                            onClick={() => handleRemovePhoto(index)}
+                            onClick={() => handleRemovePhoto(index, photoIndex)}
                             className="absolute top-0 right-0 bg-red-600 text-white text-xs px-1 rounded-bl hover:bg-red-700"
                           >
                             ✕
@@ -1087,15 +914,19 @@ export const OwnerCreate = () => {
                       ))}
                     </div>
 
-                    <ValidationMessage field="image" />
+                    <ValidationMessage field={`image-${index}`} />
                   </div>
+                  
                 </div>
-                <Button
-                  label="Remove Contract"
-                  icon="pi pi-trash"
-                  className="p-button-danger"
-                  onClick={() => handleRemoveContract(index)}
-                />
+                {index !== 0 && (
+                  <Button
+                    label="Remove Contract"
+                    icon="pi pi-trash"
+                    className="p-button-danger"
+                    onClick={() => handleRemoveContract(index)}
+                  />
+                )}
+
               </Card>
             ))}
           {selectedOption === "Renter" && (

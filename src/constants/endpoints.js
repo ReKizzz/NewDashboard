@@ -42,6 +42,7 @@ export const endpoints = {
     owner : 'ownerdata',
     ownerAcc: 'owner',
     corner: 'corner',
+    contract: 'contract',
     city: 'city',
     township: 'township',
     ward: 'ward',

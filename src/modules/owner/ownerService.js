@@ -27,6 +27,23 @@ export const ownerService = {
     return response;
   },
 
+  store2: async (payload, dispatch) => {
+    const response = await postRequest(endpoints.contract, payload);
+    await httpServiceHandler(dispatch, response);
+
+    if (response.status === 200) {
+      dispatch(
+        updateNotification({
+          show: true,
+          summary: "Success",
+          severity: "success",
+          detail: response.message,
+        })
+      );
+    }
+    return response;
+  },
+
   index: async (dispatch, params) => {
     const response = await getRequest(endpoints.owner, params);
     await httpServiceHandler(dispatch, response);

@@ -9,10 +9,17 @@ export const ownerPayload = {
     ward_id: "",
     street_id: "",
     land_no: "",
+    land_id: "",
     house_no: "",
     property: "",
     meter_no: "",
     meter_bill_code: "",
+    wifi_id: "",
+    wifi_user_id: "",
+    renter_id: "",
+    issuance_date: "",
+    expired: "",
+    contracts: []
   },
   update: {
     owner_id: "",
@@ -26,6 +33,8 @@ export const ownerPayload = {
     property: "",
     meter_no: "",
     meter_bill_code: "",
+    wifi_id: "",
+    wifi_user_id: ""
   },
   delete: {
     owner_id: "",
