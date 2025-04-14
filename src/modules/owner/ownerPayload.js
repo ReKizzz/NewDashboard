@@ -21,6 +21,14 @@ export const ownerPayload = {
     expired: "",
     contracts: []
   },
+  contractCreate: {
+    contract_date: "",
+    end_of_contract_date: "",
+    total_months: "",
+    price_per_month: "",
+    note: "",
+    photos: []
+  },
   update: {
     owner_id: "",
     corner_id: "",
