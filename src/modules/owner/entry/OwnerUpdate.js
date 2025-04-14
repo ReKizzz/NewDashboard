@@ -544,7 +544,7 @@ export const OwnerUpdate = () => {
             </Card>
           )}
 
-          {payload.contracts && (
+          {payload.contracts && payload.renter_id && (
             <Card
               style={{ marginTop: "40px" }}
               title={translate.contract_update_list}
@@ -712,8 +712,21 @@ export const OwnerUpdate = () => {
                                 preview: URL.createObjectURL(file),
                               }));
 
+                              const existingPhotos =
+                                payload.contracts[index].photos || [];
+                              const combinedPhotos = [
+                                ...existingPhotos,
+                                ...newPhotos,
+                              ];
+
+                              const updatedContract = {
+                                ...payload.contracts[index],
+                                photos: combinedPhotos,
+                              };
+
                               const updatedContracts = [...payload.contracts];
-                              updatedContracts[index].photos = newPhotos;
+                              updatedContracts[index] = updatedContract;
+
                               setPayload({
                                 ...payload,
                                 contracts: updatedContracts,
@@ -721,21 +734,61 @@ export const OwnerUpdate = () => {
                             }}
                           />
 
-                          {/* Preview thumbnails */}
-                          <div className="flex flex-wrap gap-3 mt-3">
-                            {contract.photos?.map((photo, photoIndex) => (
-                              <img
-                                key={photoIndex}
-                                src={photo.preview}
-                                style={{
-                                  width: "100px",
-                                  height: "100px",
-                                  objectFit: "cover",
-                                  borderRadius: "6px",
-                                  border: "1px solid #ccc",
-                                }}
-                              />
-                            ))}
+                          {/* Preview thumbnails with remove option */}
+                          {/* Preview thumbnails with remove option */}
+                          <div className="flex flex-wrap gap-5 mt-3">
+                            {contract.photos?.map((photo, photoIndex) => {
+                              const previewUrl =
+                                typeof photo === "string"
+                                  ? `http://127.0.0.1:8000/storage/${photo}`
+                                  : photo.preview;
+
+                              return (
+                                <div
+                                  key={photoIndex}
+                                  className="relative"
+                                  style={{ width: "100px", height: "100px" }}
+                                >
+                                  <img
+                                    src={previewUrl}
+                                    style={{
+                                      width: "100%",
+                                      height: "100%",
+                                      objectFit: "cover",
+                                      borderRadius: "6px",
+                                      border: "1px solid #ccc",
+                                    }}
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const updatedPhotos =
+                                        contract.photos.filter(
+                                          (_, i) => i !== photoIndex
+                                        );
+
+                                      const updatedContract = {
+                                        ...payload.contracts[index],
+                                        photos: updatedPhotos,
+                                      };
+
+                                      const updatedContracts = [
+                                        ...payload.contracts,
+                                      ];
+                                      updatedContracts[index] = updatedContract;
+
+                                      setPayload({
+                                        ...payload,
+                                        contracts: updatedContracts,
+                                      });
+                                    }}
+                                    className="absolute top-1 right-1 bg-white text-red-600 rounded-full shadow px-1 py-0 text-xs hover:bg-red-100"
+                                  >
+                                    ✕
+                                  </button>
+                                </div>
+                              );
+                            })}
                           </div>
                         </div>
                       </div>

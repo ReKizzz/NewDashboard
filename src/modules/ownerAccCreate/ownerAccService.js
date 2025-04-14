@@ -9,9 +9,7 @@ export const ownerAccService = {
     const response = await getRequest(endpoints.ownerAcc, params);
     await httpServiceHandler(dispatch, response);
     if (response.status === 200) {
-      dispatch(
-        index(response.data.data ? response.data.data : response.data)
-      );
+      dispatch(index(response.data.data ? response.data.data : response.data));
     }
     return response;
   },
@@ -40,7 +38,7 @@ export const ownerAccService = {
 
     if (response.status === 200) {
       response.data.icon = "";
-      dispatch(show(response.data))
+      dispatch(show(response.data));
     }
 
     return response;
@@ -83,8 +81,8 @@ export const ownerAccService = {
   },
 
   export: async (dispatch) => {
-    const response = await getRequest('/export-ownerAcc');
-    await httpServiceHandler(dispatch,response);
+    const response = await getRequest("/export-ownerAcc");
+    await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
       dispatch(
@@ -98,5 +96,5 @@ export const ownerAccService = {
     }
 
     return response;
-  }
+  },
 };

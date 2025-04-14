@@ -257,10 +257,7 @@ export const OwnerDetailList = () => {
                     style={{ display: "flex", gap: "5px", flexWrap: "wrap" }}
                   >
                     {rowData.photos.map((photo, index) => {
-                      const previewUrl =
-                        typeof photo === "string"
-                          ? photo
-                          : `http://127.0.0.1:8000/storage/images/photo.preview`;
+                      const previewUrl = `http://127.0.0.1:8000/storage/${photo}`;
                       return (
                         <img
                           key={index}

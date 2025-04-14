@@ -11,20 +11,36 @@ import { paths } from "../../../constants/paths";
 import { Card } from "primereact/card";
 import { setPaginate } from "../ownerAccSlice";
 import { useNavigate } from "react-router-dom"; // Importing useNavigate hook
+import { Paginator } from "primereact/paginator";
 
 export const OwnerAccTable = () => {
   const dispatch = useDispatch();
 
-  const { ownerAccPaginateParams, owners } = useSelector((state) => state.owner);
+  const { ownerAccPaginateParams, owners } = useSelector(
+    (state) => state.owner
+  );
   console.log(owners, "data");
   const { translate } = useSelector((state) => state.setting);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-
+  const first = useRef(0);
   const total = useRef(0);
   const columns = useRef(ownerAccPayload.ownerAccColumns);
-  const showColumns = useRef(columns.current?.filter((col) => col.show === true));
+  const showColumns = useRef(
+    columns.current?.filter((col) => col.show === true)
+  );
+
+  const onPageChange = (event) => {
+    first.current = event.page * ownerAccPaginateParams.per_page;
+    dispatch(
+      setPaginate({
+        ...ownerAccPaginateParams,
+        page: event?.page + 1,
+        per_page: event?.rows,
+      })
+    );
+  };
 
   const onSort = (event) => {
     const sortOrder = event.sortOrder === 1 ? "ASC" : "DESC";
@@ -39,7 +55,10 @@ export const OwnerAccTable = () => {
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const response = await ownerAccService.index(dispatch, ownerAccPaginateParams);
+    const response = await ownerAccService.index(
+      dispatch,
+      ownerAccPaginateParams
+    );
     if (response.status === 200) {
       total.current = response.data.total || response.data.length;
     }
@@ -51,7 +70,9 @@ export const OwnerAccTable = () => {
   }, [fetchData]);
 
   const handleDelete = async (id) => {
-    const confirmation = window.confirm("Are you sure you want to delete this account?");
+    const confirmation = window.confirm(
+      "Are you sure you want to delete this account?"
+    );
     if (confirmation) {
       const response = await ownerAccService.delete(dispatch, id);
       if (response.status === 200) {
@@ -92,7 +113,7 @@ export const OwnerAccTable = () => {
                 style={{ minWidth: "250px" }}
                 field={col.field}
                 header={col.header}
-                body={(rowData, {rowIndex}) => {
+                body={(rowData, { rowIndex }) => {
                   switch (col.field) {
                     case "index":
                       return rowIndex + 1;
@@ -106,7 +127,9 @@ export const OwnerAccTable = () => {
                           <Button
                             icon="pi pi-pencil"
                             className="p-button-success btn-edit"
-                            onClick={() => navigate(`${paths.ownerAccUpdate}/${rowData.id}`)}
+                            onClick={() =>
+                              navigate(`${paths.ownerAccUpdate}/${rowData.id}`)
+                            }
                           />
                           <Button
                             icon="pi pi-trash"
@@ -124,6 +147,17 @@ export const OwnerAccTable = () => {
             );
           })}
         </DataTable>
+        {/* <Paginator
+          first={first.current}
+          rows={ownerAccPaginateParams?.per_page}
+          totalRecords={total?.current ? total.current : 0}
+          rowsPerPageOptions={paginateOptions?.rowsPerPageOptions}
+          template={
+            "FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+          }
+          currentPageReportTemplate="Total - {totalRecords} | {currentPage} of {totalPages}"
+          onPageChange={onPageChange}
+        /> */}
       </Card>
     </div>
   );

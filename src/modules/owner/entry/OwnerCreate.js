@@ -55,6 +55,7 @@ export const OwnerCreate = () => {
       price_per_month: "",
       note: "",
       photos: [],
+      newPhotos: [],
     },
   ]);
 
@@ -68,6 +69,7 @@ export const OwnerCreate = () => {
         price_per_month: "",
         note: "",
         photos: [],
+        newPhotos: [],
       },
     ]);
   };
@@ -97,6 +99,10 @@ export const OwnerCreate = () => {
     const updatedContracts = [...contracts];
     updatedContracts[index].photos = [
       ...updatedContracts[index].photos,
+      ...files,
+    ];
+    updatedContracts[index].newPhotos = [
+      ...updatedContracts[index].newPhotos,
       ...newPhotos,
     ];
     setContracts(updatedContracts);
@@ -105,14 +111,15 @@ export const OwnerCreate = () => {
   const handleRemovePhoto = (contractIndex, photoIndex) => {
     const updatedContracts = [...contracts];
     updatedContracts[contractIndex].photos.splice(photoIndex, 1);
+    updatedContracts[contractIndex].newPhotos.splice(photoIndex, 1);
     setContracts(updatedContracts);
   };
 
-  useEffect(() => {
-    return () => {
-      photos.forEach((p) => URL.revokeObjectURL(p.preview));
-    };
-  }, [photos]);
+  // useEffect(() => {
+  //   return () => {
+  //     photos.forEach((p) => URL.revokeObjectURL(p.preview));
+  //   };
+  // }, [photos]);
 
   const fetchOptions = useCallback(
     async (service, setList) => {
@@ -147,14 +154,6 @@ export const OwnerCreate = () => {
   const submitOwnerCreate = async () => {
     setLoading(true);
 
-    // const hasValidContract = contracts.some((contract) =>
-    //   contract.contract_date || contract.end_of_contract_date || contract.total_months || contract.price_per_month || contract.note || (contract.photos && contract.photos.length > 0)
-    // );
-    // let updatePayload = { ...payload };
-    // if (hasValidContract) {
-    //   updatePayload.contracts = contracts;
-    // }
-
     const formData = formBuilder(payload, ownerPayload.create);
 
     try {
@@ -163,10 +162,20 @@ export const OwnerCreate = () => {
       if (result.data) {
         if (contracts && contracts.length > 0) {
           for (const contract of contracts) {
-            await ownerService.store2(
-              { ...contract, owner_data_id: result?.data?.id },
-              dispatch
+            const formData = new FormData();
+            formData.append("contract_date", contract?.contract_date);
+            formData.append(
+              "end_of_contract_date",
+              contract?.end_of_contract_date
             );
+            formData.append("total_months", contract?.total_months);
+            formData.append("price_per_month", contract?.price_per_month);
+            formData.append("note", contract?.note);
+            formData.append("owner_data_id", result?.data?.id);
+            contract?.photos?.forEach((image, index) => {
+              formData.append(`photos[${index}]`, image);
+            });
+            await ownerService.store2(formData, dispatch);
           }
           navigate(`${paths.ownerList}`);
         }
@@ -737,7 +746,7 @@ export const OwnerCreate = () => {
                         )
                       }
                       options={renterList}
-                      placeholder="Select a renter"
+                      placeholder="Select a owner"
                       disabled={loading}
                       className="p-inputtext-sm"
                     />
@@ -921,7 +930,7 @@ export const OwnerCreate = () => {
 
                     {/* Previews */}
                     <div className="mt-3 grid">
-                      {contract.photos.map((photo, photoIndex) => (
+                      {contract.newPhotos.map((photo, photoIndex) => (
                         <div
                           key={photoIndex}
                           className="relative col-3 overflow-hidden group"

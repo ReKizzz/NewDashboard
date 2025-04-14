@@ -64,7 +64,7 @@ export const ownerService = {
   },
 
   update: async (dispatch, id, payload) => {
-    const response = await putRequest(`${endpoints.owner}/${id}`, payload);
+    const response = await postRequest(`${endpoints.owner}/${id}`, payload);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
