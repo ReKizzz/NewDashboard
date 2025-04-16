@@ -269,5 +269,6 @@
   "renter_detail_list": "Renter Detail List",
   "contract_detail_list": "Contract Detail List",
   "contract_update_list": "Contract Update List",
-  "image": "Image"
+  "image": "Image",
+  "contract_update_new": "Contract Update New Form"
 }

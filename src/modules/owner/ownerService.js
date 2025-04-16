@@ -109,4 +109,14 @@ export const ownerService = {
 
     return response;
   },
+  show2: async (dispatch, id) => {
+    const response = await getRequest(`${endpoints.owner}/${id}/2`);
+    await httpServiceHandler(dispatch, response);
+
+    if (response.status === 200) {
+      dispatch(show(response.data));
+    }
+
+    return response;
+  },
 };

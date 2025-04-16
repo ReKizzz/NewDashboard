@@ -19,7 +19,7 @@ export const ownerPayload = {
     renter_id: "",
     issuance_date: "",
     expired: "",
-    contracts: []
+    contracts: [],
   },
   update: {
     owner_id: "",
@@ -34,7 +34,7 @@ export const ownerPayload = {
     meter_no: "",
     meter_bill_code: "",
     wifi_id: "",
-    wifi_user_id: ""
+    wifi_user_id: "",
   },
   delete: {
     owner_id: "",
