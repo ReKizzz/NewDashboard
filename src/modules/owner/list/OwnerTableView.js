@@ -111,6 +111,11 @@ export const OwnerTableView = () => {
         scrollHeight="400px"
       >
         <Column
+          header="#"
+          body={(rowData, options) => options.rowIndex + 1}
+          style={{ minWidth: "50px", textAlign: "center" }}
+        />
+        <Column
           field="owner_id"
           header="Owner Id"
           style={{ minWidth: "200px" }}
@@ -202,12 +207,20 @@ export const OwnerTableView = () => {
         <Column
           header="Actions"
           body={(rowData) => (
-            <Button
+            <>
+              <Button
+                icon="pi pi-pencil"
+                className="p-button-warning btn-edit"
+                style={{ marginTop: "10px", marginRight: "10px" }}
+                onClick={() => navigate(`/owner-update/${rowData.id}`)}
+              />
+              <Button
               icon="pi pi-trash"
               className="p-button-danger btn-edit"
               style={{ marginTop: "10px" }}
               onClick={() => handleDelete(rowData.id)}
             />
+          </>
           )}
           style={{ minWidth: "120px" }}
         />

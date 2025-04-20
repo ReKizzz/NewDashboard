@@ -231,7 +231,7 @@ export const OwnerCreate = () => {
                     className="p-inputtext-sm"
                   />
                 </div>
-                <ValidationMessage field="user_id" />
+                <ValidationMessage field="owner_id" />
               </div>
 
               <div className="col-12 md:col-4 lg:col-4 py-3">
@@ -713,13 +713,24 @@ export const OwnerCreate = () => {
             <select
               className="block p-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
               value={selectedOption}
-              onChange={(e) => setSelectedOption(e.target.value)}
+              onChange={(e) => {
+                setSelectedOption(e.target.value);
+                payloadHandler(
+                  payload,
+                  e.target.value,
+                  "status",
+                  (updateValue) => {
+                    setPayload(updateValue);
+                  }
+                )
+              }
+              }
             >
-              <option value="-">-</option>
-              <option value="Renter">Renter</option>
+              <option value="UNRENT">-</option>
+              <option value="RENT">RENT</option>
             </select>
 
-            {selectedOption === "Renter" && (
+            {selectedOption === "RENT" && (
               <div className=" grid">
                 <h1 className="col-12 flex align-items-center justify-content-center">
                   Renter Details
@@ -757,7 +768,7 @@ export const OwnerCreate = () => {
             )}
           </Card>
 
-          {selectedOption === "Renter" &&
+          {selectedOption === "RENT" &&
             contracts.map((contract, index) => (
               <Card style={{ marginTop: "20px" }}>
                 <Loading loading={loading} />
@@ -964,7 +975,7 @@ export const OwnerCreate = () => {
                 )}
               </Card>
             ))}
-          {selectedOption === "Renter" && (
+          {selectedOption === "RENT" && (
             <Button
               style={{ marginTop: "20px" }}
               label="Add Contract"

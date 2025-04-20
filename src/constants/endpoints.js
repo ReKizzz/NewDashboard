@@ -2,6 +2,7 @@ import { env } from "./config"
 
 /** env[0] = Local | env[1] = Production */
 export const baseURL = env[1];
+export const baseURL2 = env[0];
 
 export const endpoints = {
     login: "auth/login",
@@ -16,7 +17,7 @@ export const endpoints = {
     generalStatus: "general",
     paymentType: "payment_type",
     item: "item",
-    image: `${baseURL}/storage/images`,
+    image: `${baseURL2}/storage`,
     status: "status",
     point: "point",
     delivery: "delivery-address",

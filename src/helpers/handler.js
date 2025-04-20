@@ -95,6 +95,7 @@ export const httpServiceHandler = async (dispatch, result) => {
   }
 
   if (result.status === 422) {
+    dispatch(updateNotification(result.message));
     await dispatch(updateError(result.error));
   }
 

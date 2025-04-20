@@ -27,13 +27,13 @@ import { wifiService } from "../../wifiCreate/wifiService";
 import { renterService } from "../../renterCreate/renterService";
 import { AppEditor } from "../../../shares/AppEditor";
 import { InputTextarea } from "primereact/inputtextarea";
+import { endpoints } from "../../../constants/endpoints";
+import { formBuilder } from "../../../helpers/formBuilder";
 
 export const OwnerUpdate = () => {
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState(ownerPayload.update);
-  console.log(payload);
   const [ownerList, setOwnerList] = useState([]);
-  console.log(ownerList);
   const [ownerAcc, setOwnerAccList] = useState([]);
   const [cornerList, setCornerList] = useState([]);
   const [cityList, setCityList] = useState([]);
@@ -52,51 +52,62 @@ export const OwnerUpdate = () => {
   const dispatch = useDispatch();
   const { translate } = useSelector((state) => state.setting);
   const { owner } = useSelector((state) => state.owner);
-  const [contracts, setContracts] = useState([
-    {
-      contract_date: null,
-      end_of_contract_date: null,
-      total_months: "",
-      price_per_month: "",
-      note: "",
-      photos: [],
-      newPhotos: [],
-    },
-  ]);
+  const [contracts, setContracts] = useState([]);
 
   const handleFileChange = (e, index) => {
     const files = Array.from(e.target.files);
-
+  
     const newPhotos = files.map((file) => ({
       file,
       preview: URL.createObjectURL(file),
     }));
-
+  
     const updatedContracts = [...contracts];
-    updatedContracts[index].photos = [
-      ...updatedContracts[index].photos,
-      ...files,
-    ];
-    updatedContracts[index].newPhotos = [
-      ...updatedContracts[index].newPhotos,
-      ...newPhotos,
-    ];
+    const oldContract = contracts[index];
+  
+    const updatedContract = {
+      ...oldContract,
+      photos: [...(oldContract.photos || []), ...newPhotos],
+      newPhotos: [...(oldContract.photos || []), ...files],
+    };
+  
+    updatedContracts[index] = updatedContract;
     setContracts(updatedContracts);
   };
 
-  const handleRemovePhoto = (contractIndex, photoIndex) => {
-    const updatedContracts = [...contracts];
-    updatedContracts[contractIndex].photos.splice(photoIndex, 1);
-    updatedContracts[contractIndex].newPhotos.splice(photoIndex, 1);
-    setContracts(updatedContracts);
-  };
-  /**
-   * Loading user Data
-   */
+const handleRemovePhoto = (contractIndex, photoIndex) => {
+  const updatedContracts = contracts.map((contract, i) => {
+    if (i !== contractIndex) return contract;
+
+    const updatedPhotos = [...contract.photos];
+    updatedPhotos.splice(photoIndex, 1);
+
+    const updatedNewPhotos = [...contract.newPhotos];
+    updatedNewPhotos.splice(photoIndex, 1);
+
+    return {
+      ...contract,
+      photos: updatedPhotos,
+      newPhotos: updatedNewPhotos,
+    };
+  });
+  setContracts(updatedContracts);
+};
+ 
   const loadingUserData = useCallback(async () => {
     setLoading(true);
     try {
       const result = await ownerService.show2(dispatch, params.id);
+      
+      const fetchedContracts = result?.data?.contracts || [];
+
+      const contractsWithNewPhotos = fetchedContracts.map((contract) => ({
+        ...contract,
+        newPhotos: contract.photos
+      }));
+
+      setContracts(contractsWithNewPhotos);
+      setSelectedOption(result?.data?.status)
       const formatData =
         result.data?.map((owner) => ({
           label: owner?.name,
@@ -180,40 +191,51 @@ export const OwnerUpdate = () => {
   };
 
   const submitOwnerUpdate = async () => {
-    setLoading(true);
+      setLoading(true);
+  
+      const formData = formBuilder(payload, ownerPayload.update);
+  
+      try {
+        const result = await ownerService.update(dispatch, params?.id, formData);
+  
+        if (result.data) {
+          if (contracts && contracts.length > 0) {
+            const allContractsHaveId = contracts.every((contract) => !!contract.id);
+            for (const contract of contracts) {
+              const contractformData = new FormData();
+              contractformData.append("contract_date", contract?.contract_date);
+              contractformData.append(
+                "end_of_contract_date",
+                contract?.end_of_contract_date
+              );
+              contractformData.append("total_months", contract?.total_months);
+              contractformData.append("price_per_month", contract?.price_per_month);
+              contractformData.append("note", contract?.note);
+              contractformData.append("owner_data_id", result?.data?.id);
+              contract?.newPhotos?.forEach((image, index) => {
+                contractformData.append(`photos[${index}]`, image);
+              });
+              if (allContractsHaveId) {
+                await ownerService.store3(dispatch, contract.id, contractformData);
+              }else{
+                await ownerService.store2(contractformData, dispatch);
+              }
+            }
+            navigate(`${paths.ownerList}`);
+          }
+        } else {
+          console.error("Failed to create owner:", result.error);
+        }
+      } catch (error) {
+        console.error("Error occurred while creating owner:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    try {
-      const updatePayload = {
-        ...payload,
-        expired_at: payload.expired_at
-          ? moment(payload.expired_at).format("YYYY-MM-DD")
-          : null,
-        description: desc,
-        contracts: contracts.map((contract) => ({
-          contract_date: contract.contract_date
-            ? moment(contract.contract_date).format("YYYY-MM-DD")
-            : null,
-          end_of_contract_date: contract.end_of_contract_date
-            ? moment(contract.end_of_contract_date).format("YYYY-MM-DD")
-            : null,
-          total_months: contract.total_months,
-          price_per_month: contract.price_per_month,
-          note: contract.note,
-          photos: contract.photos, // Handle file uploads separately if needed
-        })),
-      };
-
-      await ownerService.update(dispatch, params.id, updatePayload);
-
-      // You can add a success UI change here (e.g. toast, redirect, etc.)
-      console.log("Owner update successful");
-    } catch (error) {
-      console.error("Failed to update owner:", error);
-      // You can add an error notification here
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(()=>{
+    console.log(contracts)
+  },[contracts])
 
   return (
     <>
@@ -626,6 +648,7 @@ export const OwnerUpdate = () => {
             style={{ marginTop: "40px" }}
             title={translate.land_update_list}
           >
+            <Loading loading={loading} />
             <div className=" grid">
               <div className="col-12 md:col-4 lg:col-4 py-3">
                 <div className="flex flex-column gap-2">
@@ -709,13 +732,25 @@ export const OwnerUpdate = () => {
             style={{ marginTop: "40px" }}
             title={translate.renter_update_list}
           >
+            <Loading loading={loading} />
             <select
               className="block p-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
               value={selectedOption}
-              onChange={(e) => setSelectedOption(e.target.value)}
+              onChange={(e) => {
+                setSelectedOption(e.target.value);
+                payloadHandler(
+                  payload,
+                  e.target.value,
+                  "status",
+                  (updateValue) => {
+                    setPayload(updateValue);
+                  }
+                )
+              }
+              }
             >
-              <option value="-">-</option>
-              <option value="Renter">Renter</option>
+               <option value="UNRENT">-</option>
+               <option value="RENT">RENT</option>
             </select>
 
             {selectedOption === "Renter" && (
@@ -749,283 +784,11 @@ export const OwnerUpdate = () => {
               </div>
             )}
           </Card>
-          {payload.contracts &&
-            payload.renter_id &&
-            selectedOption === "Renter" && (
-              <Card
-                style={{ marginTop: "40px" }}
-                title={translate.contract_update_list}
-              >
-                <div className="grid">
-                  {payload.contracts.map((contract, index) => (
-                    <div
-                      key={contract.id}
-                      className="col-12 mb-4 border p-3 rounded"
-                    >
-                      <h5 className="mb-2">Contract {index + 1}</h5>
 
-                      <div className="grid">
-                        <div className="col-12 md:col-4 lg:col-4 py-3">
-                          <div className="flex flex-column gap-2">
-                            <label
-                              htmlFor="contract_date"
-                              className="text-black"
-                            >
-                              {translate.contract_date}
-                            </label>
-                            <Calendar
-                              id="contract_date"
-                              name="contract_date"
-                              className="p-inputtext-sm w-full"
-                              placeholder="Enter your contract date"
-                              tooltip="Contract Date"
-                              tooltipOptions={{ ...tooltipOptions }}
-                              disabled={loading}
-                              value={
-                                contract.contract_date
-                                  ? new Date(contract.contract_date)
-                                  : null
-                              }
-                              onChange={(e) =>
-                                payloadHandler(
-                                  payload,
-                                  e.value,
-                                  "contract_date",
-                                  setPayload
-                                )
-                              }
-                              dateFormat="yy-mm-dd"
-                            />
-                          </div>
-                          <ValidationMessage field={"contract_date"} />
-                        </div>
+      
 
-                        <div className="col-12 md:col-4 lg:col-4 py-3">
-                          <div className="flex flex-column gap-2">
-                            <label
-                              htmlFor="end_of_contract_date"
-                              className="text-black"
-                            >
-                              {translate.end_of_contract_date}
-                            </label>
-                            <Calendar
-                              id="end_of_contract_date"
-                              name="end_of_contract_date"
-                              className="p-inputtext-sm w-full"
-                              placeholder="Enter your contract end date"
-                              tooltip="Contract End Date"
-                              tooltipOptions={{ ...tooltipOptions }}
-                              disabled={loading}
-                              value={
-                                contract.end_of_contract_date
-                                  ? new Date(contract.end_of_contract_date)
-                                  : null
-                              }
-                              onChange={(e) =>
-                                payloadHandler(
-                                  payload,
-                                  e.value,
-                                  "end_of_contract_date",
-                                  setPayload
-                                )
-                              }
-                              dateFormat="yy-mm-dd"
-                            />
-                          </div>
-                          <ValidationMessage field={"end_of_contract_date"} />
-                        </div>
-
-                        <div className="col-12 md:col-4 lg:col-4 py-3">
-                          <div className="flex flex-column gap-2">
-                            <label
-                              htmlFor="total_months"
-                              className="text-black"
-                            >
-                              {translate.total_months}
-                            </label>
-                            <InputText
-                              name="total_months"
-                              className="p-inputtext-sm"
-                              placeholder="Enter your total months"
-                              tooltip="Total Months"
-                              tooltipOptions={{ ...tooltipOptions }}
-                              disabled={loading}
-                              value={contract.total_months}
-                              onChange={(e) =>
-                                payloadHandler(
-                                  payload,
-                                  e.target.value,
-                                  "total_months",
-                                  setPayload
-                                )
-                              }
-                            />
-                          </div>
-                          <ValidationMessage field={"total_months"} />
-                        </div>
-
-                        <div className="col-12 md:col-4 lg:col-4 py-3">
-                          <div className="flex flex-column gap-2">
-                            <label
-                              htmlFor="price_per_month"
-                              className="text-black"
-                            >
-                              {translate.price_per_month}
-                            </label>
-                            <InputText
-                              name="price_per_month"
-                              className="p-inputtext-sm"
-                              placeholder="Enter your price per month"
-                              tooltip="Price Per Month"
-                              tooltipOptions={{ ...tooltipOptions }}
-                              disabled={loading}
-                              value={contract.price_per_month}
-                              onChange={(e) =>
-                                payloadHandler(
-                                  payload,
-                                  e.target.value,
-                                  "price_per_month",
-                                  setPayload
-                                )
-                              }
-                            />
-                          </div>
-                          <ValidationMessage field={"price_per_month"} />
-                        </div>
-
-                        <div className="col-12 md:col-4 lg:col-4 py-3">
-                          <div className="flex flex-column gap-2">
-                            <label htmlFor="note" className="text-black">
-                              {translate.note}
-                            </label>
-                            <InputTextarea
-                              name="notes"
-                              className="p-inputtext-sm"
-                              placeholder="Enter your notes"
-                              tooltip="Notes"
-                              tooltipOptions={{ ...tooltipOptions }}
-                              disabled={loading}
-                              value={contract.notes}
-                              onChange={(e) =>
-                                payloadHandler(
-                                  payload,
-                                  e.target.value,
-                                  "notes",
-                                  setPayload
-                                )
-                              }
-                            />
-                          </div>
-                          <ValidationMessage field={"notes"} />
-                        </div>
-
-                        <div className="col-12">
-                          <div className="col-12 md:col-6 lg:col-6 py-3">
-                            <label className="text-black mb-2 block">
-                              {translate.image}
-                            </label>
-
-                            {/* File input */}
-                            <input
-                              type="file"
-                              accept="image/*"
-                              multiple
-                              onChange={(e) => {
-                                const files = Array.from(e.target.files);
-                                const newPhotos = files.map((file) => ({
-                                  file,
-                                  preview: URL.createObjectURL(file),
-                                }));
-
-                                const existingPhotos =
-                                  payload.contracts[index].photos || [];
-                                const combinedPhotos = [
-                                  ...existingPhotos,
-                                  ...newPhotos,
-                                ];
-
-                                const updatedContract = {
-                                  ...payload.contracts[index],
-                                  photos: combinedPhotos,
-                                };
-
-                                const updatedContracts = [...payload.contracts];
-                                updatedContracts[index] = updatedContract;
-
-                                setPayload({
-                                  ...payload,
-                                  contracts: updatedContracts,
-                                });
-                              }}
-                            />
-
-                            {/* Preview thumbnails with remove option */}
-                            {/* Preview thumbnails with remove option */}
-                            <div className="flex flex-wrap gap-5 mt-3">
-                              {contract.photos?.map((photo, photoIndex) => {
-                                const previewUrl =
-                                  typeof photo === "string"
-                                    ? `http://127.0.0.1:8000/storage/${photo}`
-                                    : photo.preview;
-
-                                return (
-                                  <div
-                                    key={photoIndex}
-                                    className="relative"
-                                    style={{ width: "100px", height: "100px" }}
-                                  >
-                                    <img
-                                      src={previewUrl}
-                                      style={{
-                                        width: "100%",
-                                        height: "100%",
-                                        objectFit: "cover",
-                                        borderRadius: "6px",
-                                        border: "1px solid #ccc",
-                                      }}
-                                    />
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        const updatedPhotos =
-                                          contract.photos.filter(
-                                            (_, i) => i !== photoIndex
-                                          );
-
-                                        const updatedContract = {
-                                          ...payload.contracts[index],
-                                          photos: updatedPhotos,
-                                        };
-
-                                        const updatedContracts = [
-                                          ...payload.contracts,
-                                        ];
-                                        updatedContracts[index] =
-                                          updatedContract;
-
-                                        setPayload({
-                                          ...payload,
-                                          contracts: updatedContracts,
-                                        });
-                                      }}
-                                      className="absolute top-1 right-1 bg-white text-red-600 rounded-full shadow px-1 py-0 text-xs hover:bg-red-100"
-                                    >
-                                      ✕
-                                    </button>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            )}
-          {selectedOption === "Renter" &&
-            contracts.map((contract, index) => (
+          {selectedOption === "RENT" &&
+            contracts?.map((contract, index) => (
               <Card
                 title={translate.contract_update_new}
                 style={{ marginTop: "20px" }}
@@ -1197,13 +960,18 @@ export const OwnerUpdate = () => {
 
                     {/* Previews */}
                     <div className="mt-3 grid">
-                      {contract.newPhotos.map((photo, photoIndex) => (
+                      {contract.photos?.map((photo, photoIndex) => {
+                        const previewUrl =
+                        typeof photo === "string"
+                          ? `${endpoints.image}/${photo}`
+                          : photo.preview;
+                        return (
                         <div
                           key={photoIndex}
                           className="relative col-3 overflow-hidden group"
                         >
                           <img
-                            src={photo.preview}
+                            src={previewUrl}
                             alt={`preview-${photoIndex}`}
                             className="w-full h-full object-cover"
                           />
@@ -1215,7 +983,8 @@ export const OwnerUpdate = () => {
                             ✕
                           </button>
                         </div>
-                      ))}
+                        )
+                      })}
                     </div>
 
                     <ValidationMessage field={`image-${index}`} />
@@ -1231,7 +1000,7 @@ export const OwnerUpdate = () => {
                 )}
               </Card>
             ))}
-          {selectedOption === "Renter" && (
+          {selectedOption === "RENT" && (
             <Button
               style={{ marginTop: "20px" }}
               label="Add Contract"

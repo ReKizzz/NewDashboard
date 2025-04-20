@@ -20,19 +20,18 @@ const RenterUpdate = () => {
     const [loading, setLoading] = useState(false);
     const [payload, setPayload] = useState(renterPayload.update);
     const { owner } = useSelector((state) => state.owner);
-    console.log(owner,"acc")
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const loadingData = useCallback(async () => {
-            setLoading(true);
-            await renterService.show(dispatch, params.id);
-            setLoading(false);
-        }, [params.id, dispatch])
-    
-        useEffect(() => {
-            loadingData()
-        }, [loadingData])
+        setLoading(true);
+        await renterService.show(dispatch, params.id);
+        setLoading(false);
+    }, [params.id, dispatch])
+
+    useEffect(() => {
+        loadingData()
+    }, [loadingData])
 
     useEffect(() => {
         if (owner) {

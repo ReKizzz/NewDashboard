@@ -6,6 +6,8 @@ import { Card } from "primereact/card";
 import { useNavigate, useParams } from "react-router-dom";
 import { ownerService } from "../ownerService";
 import { show } from "../ownerSlice";
+import { Button } from "primereact/button";
+import { endpoints } from "../../../constants/endpoints";
 
 export const OwnerDetailList = () => {
   const navigate = useNavigate();
@@ -123,6 +125,18 @@ export const OwnerDetailList = () => {
             field="wifi_user_id"
             header="Wifi User Id"
             style={{ minWidth: "200px", zIndex: "-1" }}
+          />
+          <Column
+            header="Actions"
+            body={(rowData) => (
+              <Button
+                icon="pi pi-pencil"
+                className="p-button-warning btn-edit"
+                style={{ marginTop: "10px", marginRight: "10px" }}
+                onClick={() => navigate(`/owner-update/${rowData.id}`)}
+              />
+            )}
+            style={{ minWidth: "120px" }}
           />
         </DataTable>
       </Card>
@@ -257,7 +271,7 @@ export const OwnerDetailList = () => {
                     style={{ display: "flex", gap: "5px", flexWrap: "wrap" }}
                   >
                     {rowData.photos.map((photo, index) => {
-                      const previewUrl = `http://127.0.0.1:8000/storage/${photo}`;
+                      const previewUrl = `${endpoints.image}/${photo}`;
                       return (
                         <img
                           key={index}

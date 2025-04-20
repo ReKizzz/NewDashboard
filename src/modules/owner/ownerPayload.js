@@ -17,6 +17,7 @@ export const ownerPayload = {
     wifi_id: "",
     wifi_user_id: "",
     renter_id: "",
+    status: "UNRENT",
     issuance_date: "",
     expired: "",
     contracts: [],
@@ -34,6 +35,7 @@ export const ownerPayload = {
     meter_no: "",
     meter_bill_code: "",
     wifi_id: "",
+    status: "",
     wifi_user_id: "",
   },
   delete: {
