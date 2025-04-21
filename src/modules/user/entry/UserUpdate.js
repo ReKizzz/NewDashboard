@@ -17,6 +17,7 @@ import { Loading } from "../../../shares/Loading";
 import { formBuilder } from "../../../helpers/formBuilder";
 import { FormMainAction } from "../../../shares/FormMainAction";
 import moment from "moment";
+import { authorizationService } from "../../authorization/authorizatonService";
 
 export const UserUpdate = () => {
   const dispatch = useDispatch();
@@ -29,10 +30,32 @@ export const UserUpdate = () => {
   const [loading, setLoading] = useState(false);
   const [userStatus, setUserStatus] = useState([]);
   const [payload, setPayload] = useState(userPayload.update);
+  const [role, setRole] = useState([]);
 
   /**
    * Loading Data
    */
+  const loadingRoleData = useCallback(async () => {
+    setLoading(true);
+
+    const result = await authorizationService.roleIndex(dispatch);
+    if (result.status === 200) {
+      const formatData = result.data?.map((role) => {
+        return {
+          label: role.name,
+          value: role.name,
+        };
+      });
+      setRole(formatData);
+    }
+
+    setLoading(false);
+  }, [dispatch]);
+
+  useEffect(() => {
+    loadingRoleData();
+  }, [loadingRoleData]);
+
   const loadingData = useCallback(async () => {
     setLoading(true);
     await userService.show(dispatch, params.id);
@@ -174,52 +197,34 @@ export const UserUpdate = () => {
           </div>
         </div>
 
-        {/* <div className=" col-12 md:col-6 lg:col-4 py-3">
-          <div className="flex flex-column gap-2">
-            <label htmlFor="position" className=" text-black"> {translate.position} </label>
-            <InputText
-              className="p-inputtext-sm text-black"
-              id="position"
-              name="position"
-              aria-describedby="position-help"
-              tooltip={translate.position}
-              tooltipOptions={{ ...tooltipOptions }}
-              placeholder={translate.position}
-              disabled={loading}
-              value={payload.position || ""}
-              onChange={(e) => payloadHandler(payload, e.target.value, "position", (updateValue) => {
-                setPayload(updateValue);
-              })}
-            />
-            <ValidationMessage field={"position"} />
-          </div>
-        </div> */}
-
-        {/* <div className=" col-12 md:col-3 lg:col-3 py-3">
-          <div className="flex flex-column gap-2">
-            <label htmlFor="gender" className=" text-black">
-              {" "}
-              {translate.gender}{" "}
-            </label>
+        <div className="col-12 md:col-3 py-3">
+          <label htmlFor="partner_id" className="input-label">
+            Partner
+          </label>
+          <div className="p-inputgroup mt-2">
             <Dropdown
-              inputId="gender"
-              name="gender"
-              className="p-inputtext-sm"
-              options={["MALE", "FEMALE"]}
-              placeholder={translate.gender}
-              tooltip={translate.gender}
-              tooltipOptions={{ ...tooltipOptions }}
-              disabled={loading}
-              value={payload.gender || "MALE"}
+              id="role_names"
+              name="role_names"
+              className="p-inputtext-sm w-full"
+              value={payload.role_names}
+              options={role}
               onChange={(e) =>
-                payloadHandler(payload, e.value, "gender", (updateValue) => {
-                  setPayload(updateValue);
-                })
+                payloadHandler(
+                  payload,
+                  e.value,
+                  "role_names",
+                  (updateValue) => {
+                    setPayload(updateValue);
+                  }
+                )
               }
+              placeholder="Select a Role"
+              tooltip="Select the associated partner"
+              disabled={loading}
             />
-            <ValidationMessage field={"gender"} />
           </div>
-        </div> */}
+          <ValidationMessage field="role_names" />
+        </div>
 
         <FormMainAction
           cancel={translate.cancel}

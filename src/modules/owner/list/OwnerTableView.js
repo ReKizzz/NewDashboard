@@ -17,7 +17,8 @@ export const OwnerTableView = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { owners, paginateParams } = useSelector((state) => state.owner);
-  const { translate } = useSelector((state) => state.setting);
+  const { translate, sidebarColor } = useSelector((state) => state.setting);
+  console.log(sidebarColor);
 
   const [loading, setLoading] = useState(false);
   // const [showAuditColumn, setShowAuditColumn] = useState(false);
@@ -90,7 +91,10 @@ export const OwnerTableView = () => {
   return (
     <Card title={translate.owner_list}>
       <DataTable
-        className="custom-data-table"
+        style={{ backgroundColor: sidebarColor.code }}
+        tableStyle={{ backgroundColor: sidebarColor.code }} // ✅ this applies to actual <table>
+        scrollable
+        scrollHeight="400px"
         dataKey="id"
         size="normal"
         value={owners}
@@ -107,13 +111,12 @@ export const OwnerTableView = () => {
         emptyMessage="No Records."
         globalFilterFields={ownerPayload.columns}
         sortMode={paginateOptions.sortMode}
-        scrollable
-        scrollHeight="400px"
       >
         <Column
           header="#"
           body={(rowData, options) => options.rowIndex + 1}
           style={{ minWidth: "50px", textAlign: "center" }}
+          frozen
         />
         <Column
           field="owner_id"
@@ -215,12 +218,12 @@ export const OwnerTableView = () => {
                 onClick={() => navigate(`/owner-update/${rowData.id}`)}
               />
               <Button
-              icon="pi pi-trash"
-              className="p-button-danger btn-edit"
-              style={{ marginTop: "10px" }}
-              onClick={() => handleDelete(rowData.id)}
-            />
-          </>
+                icon="pi pi-trash"
+                className="p-button-danger btn-edit"
+                style={{ marginTop: "10px" }}
+                onClick={() => handleDelete(rowData.id)}
+              />
+            </>
           )}
           style={{ minWidth: "120px" }}
         />

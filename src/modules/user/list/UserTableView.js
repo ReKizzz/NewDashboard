@@ -86,35 +86,35 @@ export const UserTableView = () => {
    * On Change Filter
    * @param {*} e
    */
-  const onFilter = (e) => {
-    let updatePaginateParams = { ...paginateParams };
+  // const onFilter = (e) => {
+  //   let updatePaginateParams = { ...paginateParams };
 
-    if (e === "ALL") {
-      updatePaginateParams.filter = "";
-      updatePaginateParams.value = "";
-    } else {
-      updatePaginateParams.filter = "status";
-      updatePaginateParams.value = e;
-    }
+  //   if (e === "ALL") {
+  //     updatePaginateParams.filter = "";
+  //     updatePaginateParams.value = "";
+  //   } else {
+  //     updatePaginateParams.filter = "status";
+  //     updatePaginateParams.value = e;
+  //   }
 
-    dispatch(setPaginate(updatePaginateParams));
-    dispatch(setStatusFilter(e));
-  };
+  //   dispatch(setPaginate(updatePaginateParams));
+  //   dispatch(setStatusFilter(e));
+  // };
 
-  const onFilterByDate = (e) => {
-    let updatePaginateParams = { ...paginateParams };
+  // const onFilterByDate = (e) => {
+  //   let updatePaginateParams = { ...paginateParams };
 
-    if (e.startDate === "" || e.endDate === "") {
-      delete updatePaginateParams.start_date;
-      delete updatePaginateParams.end_date;
-    } else {
-      updatePaginateParams.start_date = moment(e.startDate).format("yy-MM-DD");
-      updatePaginateParams.end_date = moment(e.endDate).format("yy-MM-DD");
-    }
+  //   if (e.startDate === "" || e.endDate === "") {
+  //     delete updatePaginateParams.start_date;
+  //     delete updatePaginateParams.end_date;
+  //   } else {
+  //     updatePaginateParams.start_date = moment(e.startDate).format("yy-MM-DD");
+  //     updatePaginateParams.end_date = moment(e.endDate).format("yy-MM-DD");
+  //   }
 
-    dispatch(setDateFilter(e));
-    dispatch(setPaginate(updatePaginateParams));
-  };
+  //   dispatch(setDateFilter(e));
+  //   dispatch(setPaginate(updatePaginateParams));
+  // };
 
   /**
    *  Loading Data
@@ -130,25 +130,6 @@ export const UserTableView = () => {
 
     setLoading(false);
   }, [dispatch, paginateParams]);
-
-  /**
-   * loading User Status
-   */
-  const loadingStatus = useCallback(async () => {
-    const userStatusResponse = await getRequest(
-      `${endpoints.status}?type=user`
-    );
-
-    if (userStatusResponse.status === 200) {
-      userStatus.current = userStatus.current.concat(
-        userStatusResponse.data.user
-      );
-    }
-  }, []);
-
-  useEffect(() => {
-    loadingStatus();
-  }, [loadingStatus]);
 
   useEffect(() => {
     loadingData();
@@ -231,6 +212,7 @@ export const UserTableView = () => {
         emptyMessage="No user accounts found."
         globalFilterFields={userPayload.columns}
         header={<HeaderRender />}
+        footer={<FooterRender />}
       >
         {showColumns &&
           showColumns.current?.map((col, index) => {
@@ -250,10 +232,12 @@ export const UserTableView = () => {
                           value={value[col.field]}
                         />
                       );
-                    // case "status":
-                    //     return <Status status={value[col.field]} />;
-                    case "email_verified_at":
-                      return <span>{datetime.long(value[col.field])}</span>;
+                    case "role":
+                      return value?.roles?.map((role) => role.name);
+                    case "status":
+                      return <Status status={value[col.field]} />;
+                    // case "email_verified_at":
+                    //   return <span>{datetime.long(value[col.field])}</span>;
                     default:
                       return value[col.field];
                   }
