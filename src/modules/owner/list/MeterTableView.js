@@ -133,6 +133,12 @@ export const MeterTableView = () => {
           style={{ minWidth: "200px", zIndex: "-1" }}
         /> */}
         <Column
+          header="#"
+          body={(rowData, options) => options.rowIndex + 1}
+          style={{ minWidth: "50px", textAlign: "center" }}
+          frozen
+        />
+        <Column
           field="city_id"
           header="City Id"
           style={{ minWidth: "200px", zIndex: "-1" }}

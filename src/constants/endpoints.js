@@ -41,6 +41,7 @@ export const endpoints = {
     exportShop : 'export-shop',
     exportUser : 'export-user',
     owner : 'ownerdata',
+    changepassword: "change-password",
     ownerAcc: 'owner',
     corner: 'corner',
     contract: 'contract',

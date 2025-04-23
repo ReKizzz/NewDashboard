@@ -31,6 +31,7 @@ export const UserUpdate = () => {
   const [userStatus, setUserStatus] = useState([]);
   const [payload, setPayload] = useState(userPayload.update);
   const [role, setRole] = useState([]);
+  const [newPassword, setNewPassword] = useState("")
 
   /**
    * Loading Data
@@ -81,6 +82,15 @@ export const UserUpdate = () => {
     setLoading(false);
     return;
   };
+
+  const submitChange = async () => {
+    setLoading(true);    
+    const response = await authorizationService.changepassword(dispatch, params.id, {"password": newPassword});
+    if(response.status === 200){
+      navigate(paths.user);
+    }
+    setLoading(false);
+  }
 
   useEffect(() => {
     loadingData();
@@ -197,11 +207,11 @@ export const UserUpdate = () => {
           </div>
         </div>
 
-        <div className="col-12 md:col-3 py-3">
-          <label htmlFor="partner_id" className="input-label">
-            Partner
-          </label>
-          <div className="p-inputgroup mt-2">
+        <div className="col-12 md:col-6 lg:col-4 py-3">
+          <div className="flex flex-column gap-2">
+            <label htmlFor="status" className="text-black">
+              {translate.role} <span>(required*)</span>
+            </label>
             <Dropdown
               id="role_names"
               name="role_names"
@@ -222,8 +232,39 @@ export const UserUpdate = () => {
               tooltip="Select the associated partner"
               disabled={loading}
             />
+            <ValidationMessage field="role_names" />
           </div>
-          <ValidationMessage field="role_names" />
+        </div>
+        
+
+        <div className="col-12 md:col-6 lg:col-4 py-3">
+          <div className="flex flex-column gap-2">
+            <label htmlFor="status" className="text-black">
+              {translate.status} <span>(required*)</span>
+            </label>
+            <Dropdown
+              inputId="status"
+              value={payload.status}
+              options={[
+                { label: "ACTIVE", value: "ACTIVE" },
+                { label: "INACTIVE", value: "INACTIVE" },
+              ]}
+              onChange={(e) =>
+                payloadHandler(
+                  payload,
+                  e.value,
+                  "status",
+                  (updateValue) => {
+                    setPayload(updateValue);
+                  }
+                )
+              }
+              placeholder={translate.status}
+              className="p-inputtext-sm "
+              disabled={loading}
+            />
+            <ValidationMessage field="status" />
+          </div>
         </div>
 
         <FormMainAction
@@ -231,6 +272,38 @@ export const UserUpdate = () => {
           onCancel={() => navigate(paths.user)}
           submit={translate.update}
           onSubmit={() => submitUpdateUser()}
+          loading={loading}
+        />
+      </div>
+
+      <div className="grid">
+
+        <div className=" col-12 md:col-6 lg:col-4 py-3">
+          <div className="flex flex-column gap-2">
+            <label htmlFor="password" className=" text-black">
+              {" "}
+              {translate.password} {" "}
+            </label>
+            <InputText
+              className="p-inputtext-sm text-black"
+              id="password"
+              name="password"
+              aria-describedby="password-help"
+              tooltip={translate.password}
+              tooltipOptions={{ ...tooltipOptions }}
+              placeholder="Enter your Password"
+              disabled={loading}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            <ValidationMessage field={"password"} />
+          </div>
+        </div>
+        
+        <FormMainAction
+          cancel={translate.cancel}
+          onCancel={() => navigate(paths.user)}
+          submit={translate.update}
+          onSubmit={() => submitChange()}
           loading={loading}
         />
       </div>

@@ -162,6 +162,12 @@ export const RoleTableView = () => {
                 header={<HeaderRender />}
                 footer={<FooterRender />}
             >
+                <Column
+                    header="#"
+                    body={(rowData, options) => options.rowIndex + 1}
+                    style={{ minWidth: "50px", textAlign: "center" }}
+                    frozen
+                />
                 {showColumns && showColumns.current?.map((col, index) => {
                     return (
                         <Column

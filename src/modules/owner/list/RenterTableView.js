@@ -111,6 +111,12 @@ export const RenterTableView = () => {
         scrollHeight="400px"
       >
         <Column
+          header="#"
+          body={(rowData, options) => options.rowIndex + 1}
+          style={{ minWidth: "50px", textAlign: "center" }}
+          frozen
+        />
+        <Column
           field="owner_id"
           header="Owner Id"
           style={{ minWidth: "200px" }}

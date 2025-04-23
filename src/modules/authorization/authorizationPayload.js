@@ -14,6 +14,14 @@ export const authorizationPayload = {
         permissions : []
     },
     roleColumns: [
+        {
+            field: "index",
+            header: "No",
+            sortable: false,
+            show: true,
+            width: 100,
+            frozen: false,
+          },
         { field: "name", header: "Full Name", sortable: true, show: true },
         { field: "description", header: 'Description', sortable: true, show: true }
     ],

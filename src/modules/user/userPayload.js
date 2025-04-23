@@ -19,6 +19,7 @@ export const userPayload = {
     status: "",
   },
   columns: [
+
     {
       field: "name",
       header: "Full Name",

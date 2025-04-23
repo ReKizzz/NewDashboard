@@ -138,6 +138,12 @@ export const WifiTableView = () => {
           style={{ minWidth: "200px", zIndex: "-1" }}
         /> */}
         <Column
+          header="#"
+          body={(rowData, options) => options.rowIndex + 1}
+          style={{ minWidth: "50px", textAlign: "center" }}
+          frozen
+        />
+        <Column
           field="township_id"
           header="Township Id"
           style={{ minWidth: "200px", zIndex: "-1" }}

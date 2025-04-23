@@ -79,4 +79,16 @@ export const authorizationService = {
         }
         return response;
     },
+    changepassword: async (dispatch, id, payload) => {
+        const response = await postRequest(`${endpoints.changepassword}/${id}`, payload);
+        await httpServiceHandler(dispatch, response);
+
+        if(response.status === 200) {
+            dispatch(updateNotification({
+                variant : 'success',
+                  message : response.message
+            }))
+        }
+        return response;
+    },
 }
