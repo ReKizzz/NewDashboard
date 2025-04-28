@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Card } from "primereact/card";
 import { useNavigate, useParams } from "react-router-dom";
 import { ownerService } from "../ownerService";
-import { show } from "../ownerSlice";
 import { Button } from "primereact/button";
 import { endpoints } from "../../../constants/endpoints";
+import moment from "moment";
 
 export const OwnerDetailList = () => {
   const navigate = useNavigate();
@@ -172,11 +172,15 @@ export const OwnerDetailList = () => {
             field="issuance_date"
             header="Issuance Date"
             style={{ minWidth: "200px", zIndex: "-1" }}
+            body={(rowData) =>
+              moment(rowData.issuance_date).format("YYYY-MM-DD")
+            }
           />
           <Column
             field="expired"
             header="Expire"
             style={{ minWidth: "200px", zIndex: "-1" }}
+            body={(rowData) => moment(rowData.expired).format("YYYY-MM-DD")}
           />
         </DataTable>
       </Card>
@@ -209,6 +213,74 @@ export const OwnerDetailList = () => {
                 </span>
               )}
             />
+            <Column
+              field="contract_date"
+              header="Start Of Stay"
+              style={{ minWidth: "200px" }}
+              body={(rowData) => {
+                const contracts = rowData.contracts || [];
+                if (contracts.length === 0) return null;
+
+                const firstContract = contracts[0];
+
+                return (
+                  <div>
+                    {moment(firstContract.contract_date).format("YYYY-MM-DD")}
+                  </div>
+                );
+              }}
+            />
+
+            <Column
+              field="end_of_contract_date"
+              header="Contract End"
+              style={{ minWidth: "200px" }}
+              body={(rowData) => {
+                const contracts = rowData.contracts || [];
+                if (contracts.length === 0) return null;
+
+                const lastContract = contracts[contracts.length - 1];
+
+                return (
+                  <div>
+                    {moment(lastContract.end_of_contract_date).format(
+                      "YYYY-MM-DD"
+                    )}
+                  </div>
+                );
+              }}
+            />
+            <Column
+              header="Length Of Stay"
+              style={{ minWidth: "250px" }}
+              body={(rowData) => {
+                const contracts = rowData.contracts || [];
+                if (contracts.length === 0) return null;
+
+                const firstContract = contracts[0];
+                const lastContract = contracts[contracts.length - 1];
+
+                let start = moment(firstContract.contract_date);
+                const end = moment(lastContract.end_of_contract_date);
+
+                const years = end.diff(start, "years");
+                start.add(years, "years");
+
+                const months = end.diff(start, "months");
+                start.add(months, "months");
+
+                const days = end.diff(start, "days");
+
+                const parts = [];
+                if (years > 0)
+                  parts.push(`${years} year${years > 1 ? "s" : ""}`);
+                if (months > 0)
+                  parts.push(`${months} month${months > 1 ? "s" : ""}`);
+                if (days > 0) parts.push(`${days} day${days > 1 ? "s" : ""}`);
+
+                return <div>{parts.length > 0 ? parts.join(" ") : "-"}</div>;
+              }}
+            />
           </DataTable>
         </Card>
       )}
@@ -240,14 +312,20 @@ export const OwnerDetailList = () => {
                     textDecoration: "underline",
                   }}
                 >
-                  {rowData.contract_date}
+                  {moment(rowData.contract_date).format("YYYY-MM-DD")}
                 </span>
               )}
             />
+
             <Column
               field="end_of_contract_date"
               header="Contract End Date"
               style={{ minWidth: "200px" }}
+              body={(rowData) => (
+                <span>
+                  {moment(rowData.end_of_contract_date).format("YYYY-MM-DD")}
+                </span>
+              )}
             />
             <Column
               field="price_per_month"

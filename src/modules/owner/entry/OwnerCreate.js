@@ -58,6 +58,7 @@ export const OwnerCreate = () => {
       newPhotos: [],
     },
   ]);
+  console.log(contracts, "new");
 
   const handleAddContract = () => {
     setContracts([
@@ -73,6 +74,44 @@ export const OwnerCreate = () => {
       },
     ]);
   };
+
+  const autoCalculateTotalMonths = (index, startDate, endDate) => {
+    if (startDate && endDate) {
+      const start = moment(startDate, "YYYY-MM-DD");
+      const end = moment(endDate, "YYYY-MM-DD");
+
+      let totalText = "0 month";
+
+      if (end.isAfter(start)) {
+        const totalMonths = end.diff(start, "months");
+        const years = Math.floor(totalMonths / 12);
+        const months = totalMonths % 12;
+
+        const totalDays = end.diff(start, "days");
+        const daysInMonth = moment(start)
+          .add(totalMonths, "months")
+          .diff(start, "days");
+        const days = totalDays - totalMonths * daysInMonth;
+
+        const parts = [];
+        if (years > 0) parts.push(`${years} year${years > 1 ? "s" : ""}`);
+        if (months > 0) parts.push(`${months} month${months > 1 ? "s" : ""}`);
+        if (days > 0) parts.push(`${days} day${days > 1 ? "s" : ""}`);
+
+        totalText = parts.join(" ");
+      }
+
+      setContracts((prevContracts) => {
+        const updatedContracts = [...prevContracts];
+        updatedContracts[index] = {
+          ...updatedContracts[index],
+          total_months: totalText,
+        };
+        return updatedContracts;
+      });
+    }
+  };
+
   const handleRemoveContract = (index) => {
     const updatedContracts = contracts.filter(
       (_, contractIndex) => contractIndex !== index
@@ -722,9 +761,8 @@ export const OwnerCreate = () => {
                   (updateValue) => {
                     setPayload(updateValue);
                   }
-                )
-              }
-              }
+                );
+              }}
             >
               <option value="UNRENT">-</option>
               <option value="RENT">RENT</option>
@@ -782,10 +820,10 @@ export const OwnerCreate = () => {
                     </label>
                     <div className="p-inputgroup mt-2">
                       <Calendar
-                        name="date"
+                        name="contract_date"
                         className="p-inputtext-sm md:mr-2 sm:w-full"
-                        placeholder="Select contract of date"
-                        selectionMode={"single"}
+                        placeholder="Select contract date"
+                        selectionMode="single"
                         tooltip="Contract date"
                         tooltipOptions={{ ...tooltipOptions }}
                         disabled={loading}
@@ -797,13 +835,22 @@ export const OwnerCreate = () => {
                               ).toDate()
                             : null
                         }
-                        onChange={(e) =>
+                        onChange={(e) => {
+                          const selectedDate = moment(e.value).format(
+                            "YYYY-MM-DD"
+                          );
                           updateContractField(
                             index,
                             "contract_date",
-                            moment(e.value).format("YYYY-MM-DD")
-                          )
-                        }
+                            selectedDate
+                          );
+
+                          autoCalculateTotalMonths(
+                            index,
+                            selectedDate,
+                            contracts[index].end_of_contract_date
+                          );
+                        }}
                       />
                     </div>
                     <ValidationMessage field="contract_date" />
@@ -815,10 +862,10 @@ export const OwnerCreate = () => {
                     </label>
                     <div className="p-inputgroup mt-2">
                       <Calendar
-                        name="date"
+                        name="end_of_contract_date"
                         className="p-inputtext-sm md:mr-2 sm:w-full"
-                        placeholder="Select contract end of date"
-                        selectionMode={"single"}
+                        placeholder="Select contract end date"
+                        selectionMode="single"
                         tooltip="Contract end date"
                         tooltipOptions={{ ...tooltipOptions }}
                         disabled={loading}
@@ -830,13 +877,22 @@ export const OwnerCreate = () => {
                               ).toDate()
                             : null
                         }
-                        onChange={(e) =>
+                        onChange={(e) => {
+                          const selectedDate = moment(e.value).format(
+                            "YYYY-MM-DD"
+                          );
                           updateContractField(
                             index,
                             "end_of_contract_date",
-                            moment(e.value).format("YYYY-MM-DD")
-                          )
-                        }
+                            selectedDate
+                          );
+
+                          autoCalculateTotalMonths(
+                            index,
+                            contracts[index].contract_date,
+                            selectedDate
+                          );
+                        }}
                       />
                     </div>
                     <ValidationMessage field="end_of_contract_date" />
@@ -851,21 +907,15 @@ export const OwnerCreate = () => {
                         className="p-inputtext-sm text-black"
                         id="total_months"
                         name="total_months"
-                        autoComplete="total_months"
+                        autoComplete="off"
                         aria-describedby="total_months-help"
                         tooltip="total_months"
                         tooltipOptions={{ ...tooltipOptions }}
-                        placeholder="Enter your total months"
-                        disabled={loading}
-                        value={contract.total_months}
-                        onChange={(e) =>
-                          updateContractField(
-                            index,
-                            "total_months",
-                            e.target.value
-                          )
-                        }
+                        placeholder="Total months will auto-calculate"
+                        readOnly
+                        value={contract.total_months || ""}
                       />
+
                       <ValidationMessage field={"total_months"} />
                     </div>
                   </div>

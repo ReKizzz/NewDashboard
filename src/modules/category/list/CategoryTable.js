@@ -12,7 +12,7 @@ export const CategoryTable = () => {
   const { categoryPaginateParams, categories } = useSelector(
     (state) => state.category
   );
-  const { translate } = useSelector((state) => state.setting);
+  const { translate, sidebarColor } = useSelector((state) => state.setting);
   const [loading, setLoading] = useState(false);
   const [showAuditColumn, setShowAuditColumn] = useState(false);
 
@@ -42,10 +42,13 @@ export const CategoryTable = () => {
               <i className=" pi pi-user" style={{ fontSize: "3rem" }}></i>
             </div>
           </div>
-          <div className="mt-auto h-40 count-view total flex align-items-center justify-content-center">
+          <div
+            className="mt-auto h-40 count-view total flex align-items-center justify-content-center"
+            style={{ background: sidebarColor.code }}
+          >
             <Link
               to={paths.ownerList}
-              className="text-white cursor-pointer"
+              className="text-black cursor-pointer"
               style={{ textDecoration: "none" }}
             >
               {translate.owner_list}
@@ -66,10 +69,13 @@ export const CategoryTable = () => {
               <i className=" pi pi-user" style={{ fontSize: "3rem" }}></i>
             </div>
           </div>
-          <div className="mt-auto h-40 count-view total flex align-items-center justify-content-center">
+          <div
+            className="mt-auto h-40 count-view total flex align-items-center justify-content-center"
+            style={{ background: sidebarColor.code }}
+          >
             <Link
               to={paths.renterList}
-              className="text-white cursor-pointer"
+              className="text-black cursor-pointer"
               style={{ textDecoration: "none" }}
             >
               {translate.renter_list}
@@ -90,10 +96,13 @@ export const CategoryTable = () => {
               <i className=" pi pi-wifi" style={{ fontSize: "3rem" }}></i>
             </div>
           </div>
-          <div className="mt-auto h-40 count-view total flex align-items-center justify-content-center">
+          <div
+            className="mt-auto h-40 count-view total flex align-items-center justify-content-center"
+            style={{ background: sidebarColor.code }}
+          >
             <Link
               to={paths.wifiList}
-              className="text-white cursor-pointer"
+              className="text-black cursor-pointer"
               style={{ textDecoration: "none" }}
             >
               {translate.wifi_list}
@@ -114,10 +123,13 @@ export const CategoryTable = () => {
               <i className=" pi pi-bolt" style={{ fontSize: "3rem" }}></i>
             </div>
           </div>
-          <div className="mt-auto h-40 count-view total flex align-items-center justify-content-center">
+          <div
+            className="mt-auto h-40 count-view total flex align-items-center justify-content-center"
+            style={{ background: sidebarColor.code }}
+          >
             <Link
               to={paths.meterList}
-              className="text-white cursor-pointer"
+              className="text-black cursor-pointer"
               style={{ textDecoration: "none" }}
             >
               {translate.meter_list}
