@@ -5,15 +5,9 @@ import { BlankTemplate } from "./layouts/default/pages/BlankTemplate";
 import { Login } from "./modules/auth/entry/Login";
 import { userRoutes } from "./modules/user/userRoutes";
 import { adminRoutes } from "./modules/admin/adminRoutes";
-import { deliveryRoutes } from "./modules/delivery/deliveryRoutes";
-import { mediaRoutes } from "./modules/media/mediaRoute";
-import { orderRoutes } from "./modules/order/orderRoutes";
 import { categoryRoutes } from "./modules/category/categoryRoutes";
 import { authorizationRoute } from "./modules/authorization/authorizationRoute";
 import { settingRoutes } from "./modules/setting/settingRoutes";
-import { discountRoutes } from "./modules/discount/discountRoutes";
-import { memberOrderRoutes } from "./modules/memberOrder/memberOrderRoute";
-import { countryRoutes } from "./modules/country/countryRoutes";
 import { ownerRoutes } from "./modules/owner/ownerRoute";
 import { ownerAccRoutes } from "./modules/ownerAccCreate/ownerAccRoutes";
 import { cornerRoutes } from "./modules/cornerCreate/cornerRoutes";
@@ -26,43 +20,37 @@ import { landRoutes } from "./modules/landCreate/landRoutes";
 import { renterRoutes } from "./modules/renterCreate/renterRoutes";
 
 export const routers = createBrowserRouter([
-    {
-        path: "/",
-        element: <DefaultLayout />,
-        errorElement: <NotFound />,
-        children: [
-            ...userRoutes,
-            ...adminRoutes,
-            ...categoryRoutes,
-            ...deliveryRoutes,
-            ...mediaRoutes,
-            ...orderRoutes,
-            ...discountRoutes,
-            ...memberOrderRoutes,
-            ...authorizationRoute,
-            ...settingRoutes,
-            ...countryRoutes,
-            ...ownerRoutes,
-            ...ownerAccRoutes,
-            ...cornerRoutes,
-            ...cityRoutes,
-            ...townshipRoutes,
-            ...wardRoutes,
-            ...streetRoutes,
-            ...wifiRoutes,
-            ...landRoutes,
-            ...renterRoutes
-        ]
-    },
-    {
-        path: "auth",
-        element: <BlankTemplate />,
-        errorElement: <NotFound />,
-        children: [
-            {
-                path: "login",
-                element: <Login />
-            }
-        ]
-    }
-])
+  {
+    path: "/",
+    element: <DefaultLayout />,
+    errorElement: <NotFound />,
+    children: [
+      ...userRoutes,
+      ...adminRoutes,
+      ...categoryRoutes,
+      ...authorizationRoute,
+      ...settingRoutes,
+      ...ownerRoutes,
+      ...ownerAccRoutes,
+      ...cornerRoutes,
+      ...cityRoutes,
+      ...townshipRoutes,
+      ...wardRoutes,
+      ...streetRoutes,
+      ...wifiRoutes,
+      ...landRoutes,
+      ...renterRoutes,
+    ],
+  },
+  {
+    path: "auth",
+    element: <BlankTemplate />,
+    errorElement: <NotFound />,
+    children: [
+      {
+        path: "login",
+        element: <Login />,
+      },
+    ],
+  },
+]);
